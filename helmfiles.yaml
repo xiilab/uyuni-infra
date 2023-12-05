@@ -1,0 +1,14 @@
+environments:
+  default:
+    values:
+      - environments/default.yaml
+
+helmDefaults:
+  wait: true
+  waitForJobs: true
+  timeout: 600
+
+helmfiles:
+- path: applications/uyuni/helmfile.yaml
+  values:
+  - {{ toYaml .Values | nindent 4 }}
