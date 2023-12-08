@@ -1,0 +1,23 @@
+common:
+  ingress:
+    domain: "default.com"
+
+uyuni:
+  nodePort: 30100
+  keycloakUrl: http://192.168.1.235:30051/auth
+
+  frontend:
+    repository: xiilab/uyuni-suite-frontend
+    imageTag: 0.4.84-stag
+
+  core:
+    repository: xiilab/uyuni-backend-core
+    imageTag: master
+
+  batch:
+    repository: xiilab/uyuni-backend-batch
+    imageTag: master
+
+  noti:
+    repository: xiilab/uyuni-backend-noti
+    imageTag: master

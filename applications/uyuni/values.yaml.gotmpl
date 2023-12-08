@@ -11,19 +11,19 @@ uyuni:
       repository: "{{ .Values.uyuni.core.repository }}"
       pullPolicy: IfNotPresent
       # Overrides the image tag whose default is the chart appVersion.
-      tag: "{{ .Values.uyuni.noti.imageTag }}"
+      tag: "{{ .Values.uyuni.core.imageTag }}"
   batch:
     image:
       repository: "{{ .Values.uyuni.batch.repository }}"
       pullPolicy: IfNotPresent
       # Overrides the image tag whose default is the chart appVersion.
-      tag: "{{ .Values.uyuni.noti.imageTag }}"
+      tag: "{{ .Values.uyuni.batch.imageTag }}"
   monitor:
     image:
       repository: "{{ .Values.uyuni.monitor.repository }}"
       pullPolicy: IfNotPresent
       # Overrides the image tag whose default is the chart appVersion.
-      tag: "{{ .Values.uyuni.noti.imageTag }}"
+      tag: "{{ .Values.uyuni.monitor.imageTag }}"
   mariadb:
     ## @param nameOverride String to partially override mariadb.fullname
     ##

@@ -1,10 +1,10 @@
 environments:
+  default:
+    values:
+      - environments/default/values.yaml
   dev:
     values:
-      - environments/dev.yaml
-  stag:
-    values:
-      - environments/stg.yaml
+      - environments/dev/values.yaml
 
 helmDefaults:
   wait: true
@@ -12,6 +12,6 @@ helmDefaults:
   timeout: 600
 
 helmfiles:
-  - path: applications/uyuni/helmfile.yaml
-    values:
-      - { { toYaml .Values | nindent 4 } }
+- path: applications/uyuni/helmfile.yaml
+  values:
+    - {{ toYaml .Values | nindent 4 }}
