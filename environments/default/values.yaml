@@ -6,9 +6,9 @@ uyuni:
   nodePort: 30100
   keycloakUrl: http://192.168.1.235:30051/auth
 
-  frontend:
-    repository: xiilab/uyuni-suite-frontend
-    imageTag: 0.4.84-stag
+#  frontend:
+#    repository: xiilab/uyuni-suite-frontend
+#    imageTag: 0.4.84-stag
 
   core:
     repository: xiilab/uyuni-backend-core
