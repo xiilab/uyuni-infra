@@ -1,10 +1,10 @@
 environments:
   default:
     values:
-      - environments/default/values.yaml
+    - environments/default/values.yaml
   dev:
     values:
-      - environments/dev/values.yaml
+    - environments/dev/values.yaml
 
 helmDefaults:
   wait: true
@@ -14,4 +14,4 @@ helmDefaults:
 helmfiles:
 - path: applications/uyuni/helmfile.yaml
   values:
-    - {{ toYaml .Values | nindent 4 }}
+  - {{ toYaml .Values | nindent 4 }}

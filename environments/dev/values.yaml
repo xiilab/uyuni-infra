@@ -18,6 +18,6 @@ uyuni:
     repository: xiilab/uyuni-backend-batch
     imageTag: master
 
-  noti:
-    repository: xiilab/uyuni-backend-noti
+  monitor:
+    repository: xiilab/uyuni-backend-monitor
     imageTag: master
