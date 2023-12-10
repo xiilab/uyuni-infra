@@ -12,12 +12,12 @@ uyuni:
 
   core:
     repository: xiilab/uyuni-backend-core
-    imageTag: master
+    imageTag: dev
 
   batch:
     repository: xiilab/uyuni-backend-batch
-    imageTag: master
+    imageTag: dev
 
   monitor:
     repository: xiilab/uyuni-backend-monitor
-    imageTag: master
+    imageTag: dev

@@ -1,21 +1,21 @@
 # Default values for uyuni.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
-uyuni:
-  core:
-    image:
-      repository: xiilab/uyuni-backend-core
-      tag: master
 
-  batch:
-    image:
-      repository: xiilab/uyuni-backend-batch
-      tag: master
+core:
+  image:
+    repository: xiilab/uyuni-backend-core
+    tag: master
 
-  monitor:
-    image:
-      repository: xiilab/uyuni-backend-monitor
-      tag: master
+batch:
+  image:
+    repository: xiilab/uyuni-backend-batch
+    tag: master
+
+monitor:
+  image:
+    repository: xiilab/uyuni-backend-monitor
+    tag: master
 
 imagePullSecrets: [ ]
 nameOverride: ""
