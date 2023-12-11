@@ -19,8 +19,8 @@ uyuni:
     imageTag: dev
 
   frontend:
-    repository: harbor.xiilab.com:32443/uyuni/front-end
-    imageTag: develop
+    repository: 
+    imageTag: 
     env:
     - name: KEYCLOAK_HOST
       value: https://auth.bigdata-car.kr
