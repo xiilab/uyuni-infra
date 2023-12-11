@@ -26,7 +26,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
 type: Opaque
 data:
-  mariadb-root-password: "WTQxaXFTTUFsNg=="
+  mariadb-root-password: "RTJuQmFKS1VDNQ=="
 ---
 # Source: uyuni/charts/mariadb/templates/primary/configmap.yaml
 apiVersion: v1
@@ -113,6 +113,28 @@ spec:
       name: http
   selector:
     app.kubernetes.io/name: core
+    app.kubernetes.io/instance: uyuni
+---
+# Source: uyuni/charts/frontend/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: uyuni-frontend
+  namespace: uyuni
+  labels:
+    helm.sh/chart: frontend-0.1.0
+    app.kubernetes.io/name: frontend
+    app.kubernetes.io/instance: uyuni
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  ports:
+    - port: 3000
+      targetPort: 3000
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: frontend
     app.kubernetes.io/instance: uyuni
 ---
 # Source: uyuni/charts/mariadb/templates/primary/svc.yaml
@@ -246,6 +268,74 @@ spec:
               containerPort: 8080
               protocol: TCP
 
+          resources:
+            {}
+---
+# Source: uyuni/charts/frontend/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: uyuni-frontend
+  namespace: uyuni
+  labels:
+    helm.sh/chart: frontend-0.1.0
+    app.kubernetes.io/name: frontend
+    app.kubernetes.io/instance: uyuni
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: frontend
+      app.kubernetes.io/instance: uyuni
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: frontend
+        app.kubernetes.io/instance: uyuni
+    spec:
+      securityContext:
+        {}
+      containers:
+        - name: frontend
+          securityContext:
+            {}
+          image: "harbor.xiilab.com:32443/uyuni/uyuni-frontend:"
+          imagePullPolicy: Always
+          
+          env:
+          - name: KEYCLOAK_HOST
+            value: "https://auth.bigdata-car.kr"
+          - name: KEYCLOAK_REALME
+            value: "test"
+          - name: KEYCLOAK_CLIENT_ID
+            value: "test"
+          - name: AUTH_CLIENT_ID
+            value: "test"
+          - name: AUTH_CLIENT_SECRET
+            value: "MEWDnE6z8WG2J54kdGGq5o9jI7S4PQev"
+          - name: AUTH_ISSUER
+            value: "https://auth.bigdata-car.kr/realms/test"
+          - name: NEXTAUTH_URL
+            value: "http://marketplace.xiilab.com/"
+          - name: NEXTAUTH_SECRET
+            value: "4ohzMZuO6li816GRSIl6qvESluvGSBayA42z6kVSaWE="
+          - name: NEXT_PUBLIC_API_URL
+            value: "http://marketplace.xiilab.com/"
+          
+          ports:
+            - name: http
+              containerPort: 3000
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
           resources:
             {}
 ---
