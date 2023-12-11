@@ -26,7 +26,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
 type: Opaque
 data:
-  mariadb-root-password: "RUhJaVNJazVSdg=="
+  mariadb-root-password: "YU94YUZMT0JSbw=="
 ---
 # Source: uyuni/charts/mariadb/templates/primary/configmap.yaml
 apiVersion: v1
