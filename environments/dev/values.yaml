@@ -6,10 +6,6 @@ uyuni:
   nodePort: 30100
   keycloakUrl: http://192.168.1.235:30051/auth
 
-#  frontend:
-#    repository: xiilab/uyuni-suite-frontend
-#    imageTag: 0.4.84-stag
-
   core:
     repository: xiilab/uyuni-backend-core
     imageTag: dev
@@ -23,8 +19,8 @@ uyuni:
     imageTag: dev
 
   frontend:
-    repository: 
-    imageTag: 
+    repository: harbor.xiilab.com:32443/uyuni/front-end
+    imageTag: develop
     env:
     - name: KEYCLOAK_HOST
       value: https://auth.bigdata-car.kr
