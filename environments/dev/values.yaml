@@ -23,7 +23,7 @@ uyuni:
     imageTag: dev
 
   frontend:
-    repository: harbor.xiilab.com:32443/uyuni/uyuni-frontend
+    repository: 
     imageTag: 
     env:
     - name: KEYCLOAK_HOST
