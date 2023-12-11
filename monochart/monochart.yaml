@@ -26,7 +26,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
 type: Opaque
 data:
-  mariadb-root-password: "YU94YUZMT0JSbw=="
+  mariadb-root-password: "TW5Ja3huSGNzQg=="
 ---
 # Source: uyuni/charts/mariadb/templates/primary/configmap.yaml
 apiVersion: v1
@@ -216,7 +216,7 @@ spec:
         - name: batch
           securityContext:
             {}
-          image: "xiilab/uyuni-backend-batch:1.16.0"
+          image: "xiilab/uyuni-backend-batch:dev"
           imagePullPolicy: IfNotPresent
 
           env:
@@ -257,7 +257,7 @@ spec:
         - name: core
           securityContext:
             {}
-          image: "xiilab/uyuni-backend-core:1.16.0"
+          image: "xiilab/uyuni-backend-core:dev"
           imagePullPolicy: IfNotPresent
           
           env:
@@ -301,7 +301,7 @@ spec:
         - name: frontend
           securityContext:
             {}
-          image: "xiilab/uyuni-backend-monitor:dev"
+          image: "harbor.xiilab.com:32443/uyuni/uyuni-frontend:develop-12f7cbe"
           imagePullPolicy: Always
           
           env:
@@ -369,7 +369,7 @@ spec:
         - name: monitor
           securityContext:
             {}
-          image: "xiilab/uyuni-backend-monitor:1.16.0"
+          image: "xiilab/uyuni-backend-monitor:dev"
           imagePullPolicy: IfNotPresent
           env:
           ports:

@@ -1,42 +1,37 @@
 common:
   ingress:
     domain: "default.com"
-
 uyuni:
   nodePort: 30100
   keycloakUrl: http://192.168.1.235:30051/auth
-
   core:
     repository: xiilab/uyuni-backend-core
     imageTag: dev
-
   batch:
     repository: xiilab/uyuni-backend-batch
     imageTag: dev
-
   monitor:
     repository: xiilab/uyuni-backend-monitor
     imageTag: dev
-
   frontend:
-    repository: xiilab/uyuni-backend-monitor
-    imageTag: dev
+    repository: harbor.xiilab.com:32443/uyuni/uyuni-frontend
+    imageTag: develop-12f7cbe
     env:
-    - name: KEYCLOAK_HOST
-      value: https://auth.bigdata-car.kr
-    - name: KEYCLOAK_REALME
-      value: test
-    - name: KEYCLOAK_CLIENT_ID
-      value: test
-    - name: AUTH_CLIENT_ID
-      value: test
-    - name: AUTH_CLIENT_SECRET
-      value: MEWDnE6z8WG2J54kdGGq5o9jI7S4PQev
-    - name: AUTH_ISSUER
-      value: https://auth.bigdata-car.kr/realms/test
-    - name: NEXTAUTH_URL
-      value: http://marketplace.xiilab.com/
-    - name: NEXTAUTH_SECRET
-      value: 4ohzMZuO6li816GRSIl6qvESluvGSBayA42z6kVSaWE=
-    - name: NEXT_PUBLIC_API_URL
-      value: http://marketplace.xiilab.com/
+      - name: KEYCLOAK_HOST
+        value: https://auth.bigdata-car.kr
+      - name: KEYCLOAK_REALME
+        value: test
+      - name: KEYCLOAK_CLIENT_ID
+        value: test
+      - name: AUTH_CLIENT_ID
+        value: test
+      - name: AUTH_CLIENT_SECRET
+        value: MEWDnE6z8WG2J54kdGGq5o9jI7S4PQev
+      - name: AUTH_ISSUER
+        value: https://auth.bigdata-car.kr/realms/test
+      - name: NEXTAUTH_URL
+        value: http://marketplace.xiilab.com/
+      - name: NEXTAUTH_SECRET
+        value: 4ohzMZuO6li816GRSIl6qvESluvGSBayA42z6kVSaWE=
+      - name: NEXT_PUBLIC_API_URL
+        value: http://marketplace.xiilab.com/
