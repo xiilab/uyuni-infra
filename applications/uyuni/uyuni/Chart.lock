@@ -1,0 +1,18 @@
+dependencies:
+- name: core
+  repository: file://./charts/core
+  version: 0.1.1
+- name: batch
+  repository: file://./charts/batch
+  version: 0.1.1
+- name: monitor
+  repository: file://./charts/monitor
+  version: 0.1.1
+- name: mariadb
+  repository: file://./charts/mariadb
+  version: 12.2.9
+- name: frontend
+  repository: file://./charts/frontend
+  version: 0.1.0
+digest: sha256:7155a5b1a0d0728c1e5a9044ce115f0f04afe2c4386073ee5e444f407fe47e56
+generated: "2023-12-11T14:45:42.219953+09:00"

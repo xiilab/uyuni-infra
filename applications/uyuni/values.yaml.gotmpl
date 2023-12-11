@@ -16,3 +16,15 @@ monitor:
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
     tag: "{{ .Values.uyuni.monitor.imageTag }}" 
+
+frontend:
+  image:
+    repository: "{{ .Values.uyuni.frontend.repository }}"
+    pullPolicy: Always
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "{{ .Values.uyuni.frontend.imageTag }}" 
+  env:
+  {{- range $key, $obj := .Values.uyuni.frontend.env }}
+  - name: {{ $obj.name }}
+    value: {{ $obj.value | quote }}
+  {{- end }}

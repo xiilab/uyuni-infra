@@ -16,3 +16,7 @@ uyuni:
   monitor:
     repository: xiilab/uyuni-backend-monitor
     imageTag: master
+
+  frontend:
+    repository: xiilab/uyuni-frontend
+    imageTag: master
