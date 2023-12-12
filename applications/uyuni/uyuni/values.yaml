@@ -17,6 +17,11 @@ monitor:
     repository: xiilab/uyuni-backend-monitor
     tag: master
 
+frontend:
+  image:
+    repository: xiilab/uyuni-frontend
+    tag: master
+
 imagePullSecrets: [ ]
 nameOverride: ""
 fullnameOverride: ""

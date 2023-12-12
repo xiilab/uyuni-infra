@@ -4,13 +4,7 @@ core:
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
     tag: "{{ .Values.uyuni.core.imageTag }}"
-  {{ if .Values.uyuni.core.env }}
-  env:
-  {{- range $key, $obj := .Values.uyuni.core.env }}
-  - name: {{ $obj.name }}
-    value: {{ $obj.value | quote }}
-  {{- end }}
-  {{end}}
+
 
 
 batch:
@@ -20,13 +14,6 @@ batch:
     # Overrides the image tag whose default is the chart appVersion.
     tag: "{{ .Values.uyuni.batch.imageTag }}"
   
-  {{ if .Values.uyuni.batch.env }}
-  env:
-  {{- range $key, $obj := .Values.uyuni.batch.env }}
-  - name: {{ $obj.name }}
-    value: {{ $obj.value | quote }}
-  {{- end }}
-  {{end}}
 
 
 monitor:
@@ -36,14 +23,6 @@ monitor:
     # Overrides the image tag whose default is the chart appVersion.
     tag: "{{ .Values.uyuni.monitor.imageTag }}" 
   
-  {{ if .Values.uyuni.monitor.env }}
-  env:
-  {{- range $key, $obj := .Values.uyuni.monitor.env }}
-  - name: {{ $obj.name }}
-    value: {{ $obj.value | quote }}
-  {{- end }}
-  {{end}}
-
 
 frontend:
   image:
