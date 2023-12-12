@@ -4,18 +4,46 @@ core:
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
     tag: "{{ .Values.uyuni.core.imageTag }}"
+  {{ if .Values.uyuni.core.env }}
+  env:
+  {{- range $key, $obj := .Values.uyuni.core.env }}
+  - name: {{ $obj.name }}
+    value: {{ $obj.value | quote }}
+  {{- end }}
+  {{end}}
+
+
 batch:
   image:
     repository: "{{ .Values.uyuni.batch.repository }}"
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
     tag: "{{ .Values.uyuni.batch.imageTag }}"
+  
+  {{ if .Values.uyuni.batch.env }}
+  env:
+  {{- range $key, $obj := .Values.uyuni.batch.env }}
+  - name: {{ $obj.name }}
+    value: {{ $obj.value | quote }}
+  {{- end }}
+  {{end}}
+
+
 monitor:
   image:
     repository: "{{ .Values.uyuni.monitor.repository }}"
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
     tag: "{{ .Values.uyuni.monitor.imageTag }}" 
+  
+  {{ if .Values.uyuni.monitor.env }}
+  env:
+  {{- range $key, $obj := .Values.uyuni.monitor.env }}
+  - name: {{ $obj.name }}
+    value: {{ $obj.value | quote }}
+  {{- end }}
+  {{end}}
+
 
 frontend:
   image:
@@ -23,8 +51,10 @@ frontend:
     pullPolicy: Always
     # Overrides the image tag whose default is the chart appVersion.
     tag: "{{ .Values.uyuni.frontend.imageTag }}" 
+  {{ if .Values.uyuni.frontend.env }}
   env:
   {{- range $key, $obj := .Values.uyuni.frontend.env }}
   - name: {{ $obj.name }}
     value: {{ $obj.value | quote }}
   {{- end }}
+  {{end}}
