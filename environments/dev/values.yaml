@@ -6,13 +6,13 @@ uyuni:
   keycloakUrl: http://192.168.1.235:30051/auth
   core:
     repository: harbor.xiilab.com:32443/uyuni/server-core
-    imageTag: "develop-539fc45"
+    imageTag: "develop-6c43b0b"
   batch:
     repository: harbor.xiilab.com:32443/uyuni/server-batch
-    imageTag: "develop-539fc45"
+    imageTag: "develop-6c43b0b"
   monitor:
     repository: harbor.xiilab.com:32443/uyuni/server-monitor
-    imageTag: "develop-539fc45"
+    imageTag: "develop-6c43b0b"
   frontend:
     repository: harbor.xiilab.com:32443/uyuni/uyuni-frontend
     imageTag: develop-12f7cbe
