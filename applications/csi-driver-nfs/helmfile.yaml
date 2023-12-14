@@ -1,0 +1,14 @@
+repositories:
+  - name: nfs-provisioner 
+    url: https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/charts
+
+releases:
+- name: nfs-provisioner
+  namespace: "kube-system"
+  chart: csi-driver-nfs
+  wait: true
+  labels:
+    app: csi-driver-nfs
+    type: infra
+  values:
+  - values.yaml.gotmpl

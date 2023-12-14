@@ -15,3 +15,15 @@ helmfiles:
 - path: applications/uyuni/helmfile.yaml
   values:
   - {{ toYaml .Values | nindent 4 }}
+
+- path: applications/gpu-operator/helmfile.yaml
+  values:
+  - {{ toYaml .Values | nindent 4 }}
+
+- path: applications/prometheus/helmfile.yaml
+  values:
+  - {{ toYaml .Values | nindent 4 }}
+
+- path: applications/csi-driver-nfs/helmfile.yaml
+  values:
+  - {{ toYaml .Values | nindent 4 }}

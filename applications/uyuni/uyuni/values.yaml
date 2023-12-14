@@ -1,6 +1,10 @@
 # Default values for uyuni.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
+nfs:
+  server: 192.168.2.39
+  share: /kube-storage
+
 
 core:
   image:

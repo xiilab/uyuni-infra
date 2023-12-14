@@ -1,7 +1,12 @@
+nfs:
+  server: 10.61.3.2
+  share: /kube-storage
+
 uyuni:
   nodePort: 30100
   keycloakUrl: http://192.168.1.235:30051/auth
   namespace: uyuni
+  storageClass: nfs-csi
   mariadb:
     auth:
       rootPassword: root

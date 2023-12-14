@@ -1,3 +1,7 @@
+nfs:
+  server: "{{ .Values.nfs.server }}"
+  share: "{{ .Values.nfs.share }}"
+
 core:
   image:
     repository: "{{ .Values.uyuni.core.repository }}"
@@ -41,6 +45,8 @@ frontend:
 
 
 mariadb:
+  global:
+    storageClass: "{{ .Values.uyuni.storageClass }}"
   nameOverride: ''
   fullnameOverride: mariadb
   architecture: standalone

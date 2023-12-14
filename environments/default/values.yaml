@@ -2,6 +2,10 @@ common:
   ingress:
     domain: "default.com"
 
+nfs:
+  server: 192.168.2.39
+  share: /kube-storage
+
 uyuni:
   nodePort: 30100
   keycloakUrl: http://192.168.1.235:30051/auth
