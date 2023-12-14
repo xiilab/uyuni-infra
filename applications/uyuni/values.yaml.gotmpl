@@ -5,15 +5,12 @@ core:
     # Overrides the image tag whose default is the chart appVersion.
     tag: "{{ .Values.uyuni.core.imageTag }}"
 
-
-
 batch:
   image:
     repository: "{{ .Values.uyuni.batch.repository }}"
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
     tag: "{{ .Values.uyuni.batch.imageTag }}"
-  
 
 
 monitor:
@@ -37,3 +34,117 @@ frontend:
     value: {{ $obj.value | quote }}
   {{- end }}
   {{end}}
+
+
+mariadb:
+  nameOverride: ''
+  fullnameOverride: mariadb
+  architecture: standalone
+  auth:
+    rootPassword: {{ .Values.uyuni.mariadb.auth.rootPassword }}
+    database: {{ .Values.uyuni.mariadb.auth.database }}
+    username: {{ .Values.uyuni.mariadb.auth.username }}
+    password: {{ .Values.uyuni.mariadb.auth.password }}
+    replicationUser: {{ .Values.uyuni.mariadb.auth.replicationUser }}
+    replicationPassword: {{ .Values.uyuni.mariadb.auth.replicationPassword }}
+  primary:
+    tolerations:
+    - effect: NoSchedule
+      key: node-role.kubernetes.io/control-plane
+      operator: Exists
+    - effect: NoSchedule
+      key: node-role.kubernetes.io/master
+      operator: Exists
+    nodeSelector:
+      node-role.kubernetes.io/control-plane: ''
+    service:
+      type: NodePort
+      nodePorts:
+        mysql: '32000'
+    configuration: |-
+      [mysqld]
+      skip-name-resolve
+      explicit_defaults_for_timestamp
+      basedir=/opt/bitnami/mariadb
+      plugin_dir=/opt/bitnami/mariadb/plugin
+      port=3306
+      socket=/opt/bitnami/mariadb/tmp/mysql.sock
+      tmpdir=/opt/bitnami/mariadb/tmp
+      max_allowed_packet=16M
+      bind-address=*
+      pid-file=/opt/bitnami/mariadb/tmp/mysqld.pid
+      log-error=/opt/bitnami/mariadb/logs/mysqld.log
+      character-set-server=UTF8
+      collation-server=utf8_general_ci
+      slow_query_log=0
+      slow_query_log_file=/opt/bitnami/mariadb/logs/mysqld.log
+      long_query_time=10.0
+      interactive_timeout=1803
+      wait_timeout=1803
+
+      [client]
+      port=3306
+      socket=/opt/bitnami/mariadb/tmp/mysql.sock
+      default-character-set=UTF8
+      plugin_dir=/opt/bitnami/mariadb/plugin
+
+      [manager]
+      port=3306
+      socket=/opt/bitnami/mariadb/tmp/mysql.sock
+      pid-file=/opt/bitnami/mariadb/tmp/mysqld.pid
+    persistence:
+      enabled: true
+      existingClaim: ''
+      subPath: ''
+      storageClass: nfs-csi
+      annotations: {}
+      accessModes:
+      - ReadWriteOnce
+      size: 8Gi
+      selector: {}
+  secondary:
+    tolerations:
+    - effect: NoSchedule
+      key: node-role.kubernetes.io/control-plane
+      operator: Exists
+    - effect: NoSchedule
+      key: node-role.kubernetes.io/master
+      operator: Exists
+    nodeSelector:
+      node-role.kubernetes.io/control-plane: ''
+    configuration: |-
+      [mysqld]
+      skip-name-resolve
+      explicit_defaults_for_timestamp
+      basedir=/opt/bitnami/mariadb
+      port=3306
+      socket=/opt/bitnami/mariadb/tmp/mysql.sock
+      tmpdir=/opt/bitnami/mariadb/tmp
+      max_allowed_packet=16M
+      bind-address=0.0.0.0
+      pid-file=/opt/bitnami/mariadb/tmp/mysqld.pid
+      log-error=/opt/bitnami/mariadb/logs/mysqld.log
+      character-set-server=UTF8
+      collation-server=utf8_general_ci
+      slow_query_log=0
+      slow_query_log_file=/opt/bitnami/mariadb/logs/mysqld.log
+      long_query_time=10.0
+
+      [client]
+      port=3306
+      socket=/opt/bitnami/mariadb/tmp/mysql.sock
+      default-character-set=UTF8
+
+      [manager]
+      port=3306
+      socket=/opt/bitnami/mariadb/tmp/mysql.sock
+      pid-file=/opt/bitnami/mariadb/tmp/mysqld.pid
+    persistence:
+      enabled: true
+      subPath: ''
+      storageClass: nfs-csi
+      annotations: {}
+      accessModes:
+      - ReadWriteOnce
+      size: 8Gi
+      selector: {}
