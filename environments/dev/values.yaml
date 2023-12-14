@@ -1,6 +1,7 @@
 uyuni:
   nodePort: 30100
   keycloakUrl: http://192.168.1.235:30051/auth
+  namespace: uyuni
   mariadb:
     auth:
       rootPassword: root

@@ -4,7 +4,7 @@ repositories:
 
 releases:
 - name: uyuni
-  namespace: uyuni
+  namespace: "{{ .Values.uyuni.namespace }}"
   chart: uyuni
   wait: true
   labels:
