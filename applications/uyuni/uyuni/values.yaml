@@ -3,7 +3,7 @@
 # Declare variables to be passed into your templates.
 nfs:
   server: 192.168.2.39
-  share: /kube-storage
+  share: /kube_storage
 
 
 core:
