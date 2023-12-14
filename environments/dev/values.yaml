@@ -21,6 +21,10 @@ uyuni:
   frontend:
     repository: harbor.xiilab.com:32443/uyuni/uyuni-frontend
     imageTag: develop-12f7cbe
+    service:
+      type: NodePort
+      port: 3000
+      nodePort: 30080
     env:
       - name: KEYCLOAK_HOST
         value: https://10.61.3.8:30002

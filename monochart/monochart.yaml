@@ -131,9 +131,11 @@ metadata:
     app.kubernetes.io/version: "1.16.0"
     app.kubernetes.io/managed-by: Helm
 spec:
+  type: NodePort
   ports:
     - port: 3000
       targetPort: 3000
+      nodePort: 30080
       protocol: TCP
       name: http
   selector:

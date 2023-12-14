@@ -27,6 +27,10 @@ frontend:
     pullPolicy: Always
     # Overrides the image tag whose default is the chart appVersion.
     tag: "{{ .Values.uyuni.frontend.imageTag }}" 
+  service:
+    type: "{{ .Values.uyuni.frontend.service.type }}"
+    port: "{{ .Values.uyuni.frontend.service.port }}"
+    nodePort: "{{ .Values.uyuni.frontend.service.nodePort }}"
   {{ if .Values.uyuni.frontend.env }}
   env:
   {{- range $key, $obj := .Values.uyuni.frontend.env }}
