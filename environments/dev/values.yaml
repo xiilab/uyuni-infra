@@ -12,13 +12,13 @@ uyuni:
       replicationPassword: ''
   core:
     repository: harbor.xiilab.com:32443/uyuni/server-core
-    imageTag: "62-공통코드-작성-83bc49e"
+    imageTag: "develop-8a5be15"
   batch:
     repository: harbor.xiilab.com:32443/uyuni/server-batch
-    imageTag: "62-공통코드-작성-83bc49e"
+    imageTag: "develop-8a5be15"
   monitor:
     repository: harbor.xiilab.com:32443/uyuni/server-monitor
-    imageTag: "62-공통코드-작성-83bc49e"
+    imageTag: "develop-8a5be15"
   frontend:
     repository: harbor.xiilab.com:32443/uyuni/uyuni-frontend
     imageTag: develop-12f7cbe
