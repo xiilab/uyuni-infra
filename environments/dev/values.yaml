@@ -20,8 +20,8 @@ uyuni:
     repository: harbor.xiilab.com:32443/uyuni/server-monitor
     imageTag: "develop-79a0021"
   frontend:
-    repository: ""
-    imageTag: develop-a94015a
+    repository: "harbor.xiilab.com:32443/uyuni/uyuni-frontend"
+    imageTag: develop-012a5ed
     service:
       type: NodePort
       port: 3000
