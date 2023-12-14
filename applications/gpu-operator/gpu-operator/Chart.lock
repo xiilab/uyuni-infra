@@ -1,0 +1,6 @@
+dependencies:
+- name: node-feature-discovery
+  repository: file://charts/node-feature-discovery
+  version: 0.14.2
+digest: sha256:2bb179b4533a6f21bace190df967d8045929abe1524379f5dcd7b6fa63b875db
+generated: "2023-12-14T04:47:26.305938144Z"

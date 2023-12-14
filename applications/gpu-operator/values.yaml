@@ -1,0 +1,21 @@
+dcgmExporter:
+  enabled: true
+  repository: nvcr.io/nvidia/k8s
+  image: dcgm-exporter
+  version: 3.3.0-3.2.0-ubuntu22.04
+  imagePullPolicy: IfNotPresent
+  config:
+    name: metrics-config
+  env:
+    - name: DCGM_EXPORTER_LISTEN
+      value: ":9400"
+    - name: DCGM_EXPORTER_KUBERNETES
+      value: "true"
+    - name: DCGM_EXPORTER_COLLECTORS
+      value: "/etc/dcgm-exporter/dcgm-metrics.csv"
+
+driver:
+  enabled: false
+
+toolkit:
+  enabled: false    

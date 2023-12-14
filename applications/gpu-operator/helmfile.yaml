@@ -1,0 +1,15 @@
+repositories:
+  - name: nvidia
+    url: https://helm.ngc.nvidia.com/nvidia
+
+releases:
+  - name: gpu-operator
+    namespace: gpu-operator
+      #    chart: nvidia/gpu-operator
+    chart: gpu-operator
+    wait: true
+    labels:
+      app: gpu-operator
+      type: infra
+    values:
+    - values.yaml
