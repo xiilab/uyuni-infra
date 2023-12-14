@@ -307,7 +307,7 @@ spec:
         - name: frontend
           securityContext:
             {}
-          image: ":develop-c9bdba6"
+          image: ":develop-a94015a"
           imagePullPolicy: Always
           
           env:
