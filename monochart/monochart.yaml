@@ -4,7 +4,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: mariadb
-  namespace: "astrago.ai"
+  namespace: "uyuni"
   labels:
     app.kubernetes.io/name: mariadb
     helm.sh/chart: mariadb-12.2.9
@@ -18,7 +18,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: mariadb
-  namespace: "astrago.ai"
+  namespace: "uyuni"
   labels:
     app.kubernetes.io/name: mariadb
     helm.sh/chart: mariadb-12.2.9
@@ -34,7 +34,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: mariadb
-  namespace: "astrago.ai"
+  namespace: "uyuni"
   labels:
     app.kubernetes.io/name: mariadb
     helm.sh/chart: mariadb-12.2.9
@@ -79,7 +79,7 @@ apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
   name: nfs-csi
-  namespace: astrago.ai
+  namespace: uyuni
 provisioner: nfs.csi.k8s.io
 parameters:
   server: 10.61.3.2
@@ -165,7 +165,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: mariadb
-  namespace: "astrago.ai"
+  namespace: "uyuni"
   labels:
     app.kubernetes.io/name: mariadb
     helm.sh/chart: mariadb-12.2.9
@@ -404,7 +404,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: mariadb
-  namespace: "astrago.ai"
+  namespace: "uyuni"
   labels:
     app.kubernetes.io/name: mariadb
     helm.sh/chart: mariadb-12.2.9
@@ -425,7 +425,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/configuration: 4c76692beaca8efdf389a5428251ea79351c5668891e6a6e196237fb4a0e8823
+        checksum/configuration: c4b338e2e83abbf552a0a633bc45a2f3ec80d7230ba0583e01198dfa4a40efb9
       labels:
         app.kubernetes.io/name: mariadb
         helm.sh/chart: mariadb-12.2.9
