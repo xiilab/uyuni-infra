@@ -21,7 +21,7 @@ uyuni:
     imageTag: "develop-79a0021"
   frontend:
     repository: ""
-    imageTag: develop-7622a05
+    imageTag: develop-c9bdba6
     service:
       type: NodePort
       port: 3000
