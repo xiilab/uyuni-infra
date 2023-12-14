@@ -7,21 +7,25 @@ nfs:
 
 
 core:
+  namespace: uyuni
   image:
     repository: xiilab/uyuni-backend-core
     tag: master
 
 batch:
+  namespace: uyuni
   image:
     repository: xiilab/uyuni-backend-batch
     tag: master
 
 monitor:
+  namespace: uyuni
   image:
     repository: xiilab/uyuni-backend-monitor
     tag: master
 
 frontend:
+  namespace: uyuni
   image:
     repository: xiilab/uyuni-frontend
     tag: master

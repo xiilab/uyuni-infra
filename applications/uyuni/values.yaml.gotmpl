@@ -5,6 +5,7 @@ nfs:
   share: "{{ .Values.nfs.share }}"
 
 core:
+  namespace: "{{ .Values.uyuni.namespace }}"
   image:
     repository: "{{ .Values.uyuni.core.repository }}"
     pullPolicy: IfNotPresent
@@ -12,6 +13,7 @@ core:
     tag: "{{ .Values.uyuni.core.imageTag }}"
 
 batch:
+  namespace: "{{ .Values.uyuni.namespace }}"
   image:
     repository: "{{ .Values.uyuni.batch.repository }}"
     pullPolicy: IfNotPresent
@@ -20,6 +22,7 @@ batch:
 
 
 monitor:
+  namespace: "{{ .Values.uyuni.namespace }}"
   image:
     repository: "{{ .Values.uyuni.monitor.repository }}"
     pullPolicy: IfNotPresent
@@ -28,6 +31,7 @@ monitor:
   
 
 frontend:
+  namespace: "{{ .Values.uyuni.namespace }}"
   image:
     repository: "{{ .Values.uyuni.frontend.repository }}"
     pullPolicy: Always
