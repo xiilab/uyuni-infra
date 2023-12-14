@@ -5,7 +5,7 @@ nfs:
 uyuni:
   nodePort: 30100
   keycloakUrl: http://192.168.1.235:30051/auth
-  namespace: uyuni
+  namespace: astrago.ai
   storageClass: nfs-csi
   mariadb:
     auth:

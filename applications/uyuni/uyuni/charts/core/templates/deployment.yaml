@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: uyuni-backend-core
-  namespace: uyuni
+  namespace: {{ .Values.namespace }}
   labels:
     {{- include "backend.labels" . | nindent 4 }}
 spec:
