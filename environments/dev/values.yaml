@@ -1,6 +1,7 @@
 nfs:
   server: 10.61.3.2
-  share: /kube-storage
+  share: /kube_storage
+
 uyuni:
   nodePort: 30100
   keycloakUrl: http://192.168.1.235:30051/auth
