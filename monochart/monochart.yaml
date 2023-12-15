@@ -285,6 +285,16 @@ spec:
           imagePullPolicy: IfNotPresent
           
           env:
+          - name: SPRING_DATASOURCE_URL
+            value: "jdbc:mariadb://mariadb:3306/uyuni"
+          - name: SPRING_DATASOURCE_USERNAME
+            value: "uyuni"
+          - name: SPRING_DATASOURCE_PASSWORD
+            value: "xiirocks"
+          - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWT_ISSUER-URI
+            value: "http://10.61.3.8:30001/realms/myrealm"
+          - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWK-SET-URI
+            value: "http://10.61.3.8:30001/realms/myrealm/protocol/openid-connect/certs"
 
           
           ports:

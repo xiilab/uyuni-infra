@@ -11,6 +11,14 @@ core:
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
     tag: "{{ .Values.uyuni.core.imageTag }}"
+  {{ if .Values.uyuni.frontend.env }}
+  env:
+  {{- range $key, $obj := .Values.uyuni.core.env }}
+  - name: {{ $obj.name }}
+    value: {{ $obj.value | quote }}
+  {{- end }}
+  {{end}}
+
 
 batch:
   namespace: "{{ .Values.uyuni.namespace }}"
