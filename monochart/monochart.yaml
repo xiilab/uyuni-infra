@@ -7475,7 +7475,7 @@ spec:
     env: 
       []
   toolkit:
-    enabled: false
+    enabled: true
     repository: nvcr.io/nvidia/k8s
     image: container-toolkit
     version: "v1.14.3-ubuntu20.04"
