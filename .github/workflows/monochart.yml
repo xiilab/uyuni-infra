@@ -36,5 +36,10 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Run a multi-line script
         run: |
-          cd $GITHUB_WORKSPACE
           helmfile -e dev template > monochart/monochart.yaml
+          git config --global user.email "100milliongold@xiilab.com"
+          git config --global user.name "100milliongold"
+          git add .
+          git commit -m "update monochart"
+          git push
+          
