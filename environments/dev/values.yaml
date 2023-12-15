@@ -16,13 +16,13 @@ uyuni:
       replicationPassword: ''
   core:
     repository: harbor.xiilab.com:32443/uyuni/server-core
-    imageTag: "develop-79a0021"
+    imageTag: "develop-4c6dc69"
   batch:
     repository: harbor.xiilab.com:32443/uyuni/server-batch
-    imageTag: "develop-79a0021"
+    imageTag: "develop-4c6dc69"
   monitor:
     repository: harbor.xiilab.com:32443/uyuni/server-monitor
-    imageTag: "develop-79a0021"
+    imageTag: "develop-4c6dc69"
   frontend:
     repository: "harbor.xiilab.com:32443/uyuni/uyuni-frontend"
     imageTag: develop-19beb90
