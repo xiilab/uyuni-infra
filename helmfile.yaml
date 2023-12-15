@@ -1,0 +1,29 @@
+environments:
+  default:
+    values:
+    - environments/default/values.yaml
+  dev:
+    values:
+    - environments/dev/values.yaml
+
+helmDefaults:
+  wait: true
+  waitForJobs: true
+  timeout: 600
+
+helmfiles:
+- path: applications/prometheus/helmfile.yaml
+  values:
+  - {{ toYaml .Values | nindent 4 }}
+
+- path: applications/gpu-operator/helmfile.yaml
+  values:
+  - {{ toYaml .Values | nindent 4 }}
+
+- path: applications/csi-driver-nfs/helmfile.yaml
+  values:
+  - {{ toYaml .Values | nindent 4 }}    
+
+- path: applications/uyuni/helmfile.yaml
+  values:
+  - {{ toYaml .Values | nindent 4 }}
