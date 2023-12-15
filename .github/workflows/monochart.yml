@@ -37,4 +37,4 @@ jobs:
       - name: Run a multi-line script
         run: |
           cd $GITHUB_WORKSPACE
-          helmfile template
+          helmfile -e dev template > monochart/monochart.yaml
