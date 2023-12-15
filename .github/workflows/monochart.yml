@@ -31,7 +31,7 @@ jobs:
       - name: install helmfile
         run: |
           wget https://github.com/helmfile/helmfile/releases/download/v0.159.0/helmfile_0.159.0_linux_amd64.tar.gz -P /tmp/
-          tar -zxvf /tmp/helmfile_0.159.0_linux_amd64.tar.gz 
+          tar -zxvf /tmp/helmfile_0.159.0_linux_amd64.tar.gz -C /tmp/
           chmod +x /tmp/helmfile
           mv /tmp/helmfile /usr/local/bin
           
