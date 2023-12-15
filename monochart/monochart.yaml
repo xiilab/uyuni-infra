@@ -6363,6 +6363,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: metrics-config
+  namespace: gpu-operator
 data:
   dcgm-metrics.csv: |-
     # Format
