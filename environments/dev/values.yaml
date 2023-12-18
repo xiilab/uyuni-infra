@@ -39,7 +39,7 @@ uyuni:
     imageTag: "develop-15ddeba"
   frontend:
     repository: "harbor.xiilab.com:32443/uyuni/uyuni-frontend"
-    imageTag: develop-8a91e28
+    imageTag: develop-600c6eb
     service:
       type: NodePort
       port: 3000
