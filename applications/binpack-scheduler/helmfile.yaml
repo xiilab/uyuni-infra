@@ -1,8 +1,0 @@
-releases:
-  - name: binpack-scheduler
-    namespace: kube-system
-    chart: binpack-scheduler
-    wait: true
-    labels:
-      app: binpack-scheduler
-      type: infra
