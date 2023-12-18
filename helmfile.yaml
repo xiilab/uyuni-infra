@@ -20,10 +20,6 @@ helmfiles:
   values:
   - {{ toYaml .Values | nindent 4 }}
 
-- path: applications/csi-driver-nfs/helmfile.yaml
-  values:
-  - {{ toYaml .Values | nindent 4 }}    
-
 - path: applications/uyuni/helmfile.yaml
   values:
   - {{ toYaml .Values | nindent 4 }}
