@@ -4,7 +4,7 @@ metadata:
   labels:
     component: scheduler
     tier: control-plane
-  name: gpu-binpack-scheduler
+  name: binpack-scheduler
   namespace: kube-system
 spec:
   selector:
@@ -24,24 +24,18 @@ spec:
       - key: "node-role.kubernetes.io/master"
         operator: "Exists"
         effect: "NoSchedule"
-      serviceAccountName: gpu-binpack-scheduler
+      serviceAccountName: binpack-scheduler
       containers:
       - name: kube-scheduler
         command:
         - /usr/local/bin/kube-scheduler
-          #- --authentication-kubeconfig=/etc/kubernetes/scheduler.conf
-          #- --authorization-kubeconfig=/etc/kubernetes/scheduler.conf
-        - --bind-address=127.0.0.1
-          #- --kubeconfig=/etc/kubernetes/scheduler.conf
-        - --config=/etc/kubernetes/gpu-binpack-scheduler/gpu-binpack-scheduler-config.yaml
-        - --secure-port=10282
+        - --config=/etc/kubernetes/binpack-scheduler/gpu-binpack-scheduler-config.yaml
         image: registry.k8s.io/kube-scheduler:v1.28.4
         livenessProbe:
           failureThreshold: 8
           httpGet:
-            host: 127.0.0.1
             path: /healthz
-            port: 10282
+            port: 10259
             scheme: HTTPS
           initialDelaySeconds: 10
           periodSeconds: 10
@@ -49,9 +43,8 @@ spec:
         startupProbe:
           failureThreshold: 30
           httpGet:
-            host: 127.0.0.1
             path: /healthz
-            port: 10282
+            port: 10259
             scheme: HTTPS
           initialDelaySeconds: 10
           periodSeconds: 10
@@ -59,9 +52,11 @@ spec:
         resources:
           requests:
             cpu: 100m
+        securityContext:
+          privileged: false              
         volumeMounts:
           - name: config-volume
-            mountPath: /etc/kubernetes/gpu-binpack-scheduler
+            mountPath: /etc/kubernetes/binpack-scheduler
             readOnly: true
       priorityClassName: system-node-critical
       restartPolicy: Always
@@ -70,4 +65,4 @@ spec:
       volumes:
         - name: config-volume
           configMap:
-            name: gpu-binpack-scheduler-config
+            name: binpack-scheduler-config
