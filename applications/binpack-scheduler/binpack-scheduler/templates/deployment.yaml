@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    component: scheduler
+    tier: control-plane
+  name: gpu-binpack-scheduler
+  namespace: kube-system
+spec:
+  selector:
+    matchLabels:
+      component: scheduler
+      tier: control-plane
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        component: scheduler
+        tier: control-plane
+    spec:
+      nodeSelector:
+        node-role.kubernetes.io/control-plane: ""
+      tolerations:
+      - key: "node-role.kubernetes.io/master"
+        operator: "Exists"
+        effect: "NoSchedule"
+      serviceAccountName: gpu-binpack-scheduler
+      containers:
+      - name: kube-scheduler
+        command:
+        - /usr/local/bin/kube-scheduler
+          #- --authentication-kubeconfig=/etc/kubernetes/scheduler.conf
+          #- --authorization-kubeconfig=/etc/kubernetes/scheduler.conf
+        - --bind-address=127.0.0.1
+          #- --kubeconfig=/etc/kubernetes/scheduler.conf
+        - --config=/etc/kubernetes/gpu-binpack-scheduler/gpu-binpack-scheduler-config.yaml
+        - --secure-port=10282
+        image: registry.k8s.io/kube-scheduler:v1.28.4
+        livenessProbe:
+          failureThreshold: 8
+          httpGet:
+            host: 127.0.0.1
+            path: /healthz
+            port: 10282
+            scheme: HTTPS
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 15
+        startupProbe:
+          failureThreshold: 30
+          httpGet:
+            host: 127.0.0.1
+            path: /healthz
+            port: 10282
+            scheme: HTTPS
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 15
+        resources:
+          requests:
+            cpu: 100m
+        volumeMounts:
+          - name: config-volume
+            mountPath: /etc/kubernetes/gpu-binpack-scheduler
+            readOnly: true
+      priorityClassName: system-node-critical
+      restartPolicy: Always
+      hostNetwork: false
+      hostPID: false
+      volumes:
+        - name: config-volume
+          configMap:
+            name: gpu-binpack-scheduler-config
