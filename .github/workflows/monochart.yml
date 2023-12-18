@@ -38,7 +38,11 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Run a multi-line script
         run: |
-          helmfile -e dev template > monochart/monochart.yaml
+          helmfile -e dev -l app=flux template > monochart/flux.yaml
+          helmfile -e dev -l app=csi-driver-nfs template > monochart/csi-driver-nfs.yaml
+          helmfile -e dev -l app=prometheus template > monochart/prometheus.yaml
+          helmfile -e dev -l app=gpu-operator template > monochart/gpu-operator.yaml
+          helmfile -e dev -l app=uyuni template > monochart/uyuni.yaml
           
       # Runs a set of commands using the runners shell
       - uses: stefanzweifel/git-auto-commit-action@v5
