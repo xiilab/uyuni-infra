@@ -12,4 +12,4 @@ releases:
       app: prometheus
       type: infra
     values:
-    - values.yaml
+    - kube-prometheus-stack/custom_values.yaml
