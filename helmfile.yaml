@@ -24,6 +24,10 @@ helmfiles:
   values:
   - {{ toYaml .Values | nindent 4 }}     
 
+- path: applications/flux2/helmfile.yaml
+  values:
+  - {{ toYaml .Values | nindent 4 }}
+
 - path: applications/uyuni/helmfile.yaml
   values:
   - {{ toYaml .Values | nindent 4 }}

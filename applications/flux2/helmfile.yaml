@@ -1,0 +1,13 @@
+repositories:
+  - name: fluxcd-community
+    url: https://fluxcd-community.github.io/helm-charts
+
+releases:
+  - name: flux
+    namespace: flux-system
+      #    chart: fluxcd-community/flux2
+    chart: flux2
+    wait: true
+    labels:
+      app: flux
+      type: infra
