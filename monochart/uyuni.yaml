@@ -339,7 +339,7 @@ spec:
         - name: batch
           securityContext:
             {}
-          image: "harbor.xiilab.com:32443/uyuni/server-batch:develop-98b7cbf"
+          image: "harbor.xiilab.com:32443/uyuni/server-batch:develop-4170ca9"
           imagePullPolicy: IfNotPresent
 
           env:
@@ -380,7 +380,7 @@ spec:
         - name: core
           securityContext:
             {}
-          image: "harbor.xiilab.com:32443/uyuni/server-core:develop-98b7cbf"
+          image: "harbor.xiilab.com:32443/uyuni/server-core:develop-4170ca9"
           imagePullPolicy: IfNotPresent
           
           env:
@@ -498,7 +498,7 @@ spec:
         - name: monitor
           securityContext:
             {}
-          image: "harbor.xiilab.com:32443/uyuni/server-monitor:develop-98b7cbf"
+          image: "harbor.xiilab.com:32443/uyuni/server-monitor:develop-4170ca9"
           imagePullPolicy: IfNotPresent
           env:
           ports:
