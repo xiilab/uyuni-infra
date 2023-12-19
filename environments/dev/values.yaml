@@ -19,7 +19,7 @@ uyuni:
       replicationPassword: ''
   core:
     repository: harbor.xiilab.com:32443/uyuni/server-core
-    imageTag: "develop-15ddeba"
+    imageTag: "develop-652767e"
     env:
       - name: SPRING_DATASOURCE_URL
         value: jdbc:mariadb://mariadb:3306/uyuni
@@ -33,10 +33,10 @@ uyuni:
         value: http://10.61.3.8:30001/realms/myrealm/protocol/openid-connect/certs
   batch:
     repository: harbor.xiilab.com:32443/uyuni/server-batch
-    imageTag: "develop-15ddeba"
+    imageTag: "develop-652767e"
   monitor:
     repository: harbor.xiilab.com:32443/uyuni/server-monitor
-    imageTag: "develop-15ddeba"
+    imageTag: "develop-652767e"
   frontend:
     repository: "harbor.xiilab.com:32443/uyuni/uyuni-frontend"
     imageTag: develop-600c6eb
