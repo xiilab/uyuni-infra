@@ -27,7 +27,10 @@ batch:
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
     tag: "{{ .Values.uyuni.batch.imageTag }}"
-
+  service:
+    type: "{{ .Values.uyuni.batch.service.type }}"
+    port: "{{ .Values.uyuni.batch.service.port }}"
+    nodePort: "{{ .Values.uyuni.batch.service.nodePort }}"
 
 monitor:
   namespace: "{{ .Values.uyuni.namespace }}"
@@ -36,7 +39,10 @@ monitor:
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
     tag: "{{ .Values.uyuni.monitor.imageTag }}" 
-  
+  service:
+    type: "{{ .Values.uyuni.monitor.service.type }}"
+    port: "{{ .Values.uyuni.monitor.service.port }}"
+    nodePort: "{{ .Values.uyuni.monitor.service.nodePort }}"
 
 frontend:
   namespace: "{{ .Values.uyuni.namespace }}"
