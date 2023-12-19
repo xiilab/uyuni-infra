@@ -22,7 +22,7 @@ uyuni:
     imageTag: "develop-4170ca9"
     service:
       type: NodePort
-      port: 3002
+      port: 8080
       nodePort: 30082
     env:
       - name: SPRING_DATASOURCE_URL
@@ -43,7 +43,7 @@ uyuni:
     imageTag: "develop-4170ca9"
     service:
       type: NodePort
-      port: 3001
+      port: 8080
       nodePort: 30081
     env:
       - name: SPRING_MVC_PATHMATCH_MATCHING-STRATEGY
