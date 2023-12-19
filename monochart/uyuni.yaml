@@ -224,8 +224,8 @@ metadata:
 spec:
   type: NodePort
   ports:
-    - port: 3002
-      targetPort: 3002
+    - port: 8080
+      targetPort: 8080
       nodePort: 30082
       protocol: TCP
       name: http
@@ -300,8 +300,8 @@ metadata:
 spec:
   type: NodePort
   ports:
-    - port: 3001
-      targetPort: 3001
+    - port: 8080
+      targetPort: 8080
       nodePort: 30081
       protocol: TCP
       name: http
@@ -398,7 +398,7 @@ spec:
           
           ports:
             - name: http
-              containerPort: 3002
+              containerPort: 8080
               protocol: TCP
 
           resources:
@@ -503,7 +503,7 @@ spec:
           env:
           ports:
             - name: http
-              containerPort: 3001
+              containerPort: 8080
               protocol: TCP
           resources:
             {}
