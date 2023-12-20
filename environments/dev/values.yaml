@@ -52,7 +52,7 @@ uyuni:
         value: http://10.61.3.12:30090/
   frontend:
     repository: "harbor.xiilab.com:32443/uyuni/uyuni-frontend"
-    imageTag: develop-82a20c3
+    imageTag: develop-818213f
     service:
       type: NodePort
       port: 3000
