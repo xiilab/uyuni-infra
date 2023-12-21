@@ -13,6 +13,12 @@ metadata:
   annotations:
 automountServiceAccountToken: false
 ---
+# Source: uyuni/templates/astra-serviceaccount.yaml
+kind: ServiceAccount
+metadata:
+  name: astrago-sa
+  namespace: astrago
+---
 # Source: uyuni/templates/binpack-scheduler/serviceaccount.yaml
 apiVersion: v1
 kind: ServiceAccount
@@ -152,6 +158,20 @@ rules:
   - get
   - list
   - watch
+---
+# Source: uyuni/templates/astra-clusterrlebinding.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: astrago
+subjects:
+- kind: ServiceAccount
+  name: astrago-sa
+  namespace: astrago
+roleRef:
+  kind: ClusterRole
+  name: admin
+  apiGroup: rbac.authorization.k8s.io
 ---
 # Source: uyuni/templates/binpack-scheduler/rbac.yaml
 apiVersion: rbac.authorization.k8s.io/v1
