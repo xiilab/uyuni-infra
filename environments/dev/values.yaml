@@ -19,7 +19,7 @@ uyuni:
       replicationPassword: ''
   core:
     repository: harbor.xiilab.com:32443/uyuni/server-core
-    imageTag: "develop-9956169"
+    imageTag: "develop-82e64ba"
     service:
       type: NodePort
       port: 8080
@@ -37,10 +37,10 @@ uyuni:
         value: http://10.61.3.8:30001/realms/myrealm/protocol/openid-connect/certs
   batch:
     repository: harbor.xiilab.com:32443/uyuni/server-batch
-    imageTag: "develop-9956169"
+    imageTag: "develop-82e64ba"
   monitor:
     repository: harbor.xiilab.com:32443/uyuni/server-monitor
-    imageTag: "develop-9956169"
+    imageTag: "develop-82e64ba"
     service:
       type: NodePort
       port: 8080
