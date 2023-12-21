@@ -24,11 +24,10 @@ monitor:
     repository: "{{ .Values.astrago.monitor.repository }}"
     tag: "{{ .Values.astrago.monitor.imageTag }}" 
   env:
-    env:
-      - name: SPRING_MVC_PATHMATCH_MATCHING-STRATEGY
-        value: ant_path_matcher
-      - name: PROMETHEUS_URL
-        value: dev-prometheus-kube-promet-prometheus.prometheus.svc.cluster.local
+    - name: SPRING_MVC_PATHMATCH_MATCHING-STRATEGY
+      value: ant_path_matcher
+    - name: PROMETHEUS_URL
+      value: dev-prometheus-kube-promet-prometheus.prometheus.svc.cluster.local
 
 frontend:
   image:

@@ -449,6 +449,16 @@ primary:
     ## @param primary.persistence.existingClaim Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas
     ## NOTE: When it's set the rest of persistence parameters are ignored
     ##
+    createClaim:
+      enabled: false
+      volumeName: "" 
+      volumeType: ""
+      volumeSize: ""
+      accessModes:
+      - ReadWriteOnce
+      nfs:
+        server: ""
+        path: ""
     existingClaim: ""
     ## @param primary.persistence.subPath Subdirectory of the volume to mount at
     ##
