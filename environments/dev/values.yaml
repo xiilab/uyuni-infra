@@ -4,7 +4,6 @@ astrago:
     realm: myrealm
     client: kubernetes-client
     clientSecret: 7bE2Oq2HyKrPsX49EXul0G48O4c4kkFv
-
   mariadb:
     rootPassword: root
     database: astrago
@@ -13,12 +12,10 @@ astrago:
     volume:
       volumeName: astra-mariadb-volume
       volumeSize: 8Gi
-      volumeType: nfs        
+      volumeType: nfs
       nfs:
         server: 10.61.3.2
         path: /kube_storage/astra-mariadb-volume
-
-
   core:
     repository: harbor.xiilab.com:32443/uyuni/server-core
     imageTag: "develop-82e64ba"
@@ -74,3 +71,13 @@ astrago:
         value: uuNj1L0Yg2xKcBPVp7yOVlm2nigL3hoHOzbwQXAwx1I=
       - name: NEXT_PUBLIC_API_URL
         value: http://localhost:4444/
+uyuni:
+  core:
+    repository: harbor.xiilab.com:32443/uyuni/server-core
+    imageTag: develop-35d92d7
+  batch:
+    repository: harbor.xiilab.com:32443/uyuni/server-batch
+    imageTag: develop-35d92d7
+  monitor:
+    repository: harbor.xiilab.com:32443/uyuni/server-monitor
+    imageTag: develop-35d92d7
