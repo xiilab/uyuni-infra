@@ -3,12 +3,12 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: mariadb
-  namespace: "uyuni"
+  name: astrago-mariadb
+  namespace: "astrago"
   labels:
     app.kubernetes.io/name: mariadb
     helm.sh/chart: mariadb-12.2.9
-    app.kubernetes.io/instance: uyuni
+    app.kubernetes.io/instance: astrago
     app.kubernetes.io/managed-by: Helm
   annotations:
 automountServiceAccountToken: false
@@ -24,12 +24,12 @@ metadata:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: mariadb
-  namespace: "uyuni"
+  name: astrago-mariadb
+  namespace: "astrago"
   labels:
     app.kubernetes.io/name: mariadb
     helm.sh/chart: mariadb-12.2.9
-    app.kubernetes.io/instance: uyuni
+    app.kubernetes.io/instance: astrago
     app.kubernetes.io/managed-by: Helm
 type: Opaque
 data:
@@ -40,12 +40,12 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: mariadb
-  namespace: "uyuni"
+  name: astrago-mariadb
+  namespace: "astrago"
   labels:
     app.kubernetes.io/name: mariadb
     helm.sh/chart: mariadb-12.2.9
-    app.kubernetes.io/instance: uyuni
+    app.kubernetes.io/instance: astrago
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: primary
 data:
@@ -54,6 +54,7 @@ data:
     skip-name-resolve
     explicit_defaults_for_timestamp
     basedir=/opt/bitnami/mariadb
+    datadir=/bitnami/mariadb/data
     plugin_dir=/opt/bitnami/mariadb/plugin
     port=3306
     socket=/opt/bitnami/mariadb/tmp/mysql.sock
@@ -65,10 +66,7 @@ data:
     character-set-server=UTF8
     collation-server=utf8_general_ci
     slow_query_log=0
-    slow_query_log_file=/opt/bitnami/mariadb/logs/mysqld.log
     long_query_time=10.0
-    interactive_timeout=1803
-    wait_timeout=1803
     
     [client]
     port=3306
@@ -108,23 +106,36 @@ data:
         name: NodeResourcesFit
       schedulerName: binpack-scheduler
 ---
-# Source: uyuni/templates/storage-class.yaml
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
+# Source: uyuni/charts/mariadb/templates/persistent-volume.yaml
+apiVersion: v1
+kind: PersistentVolume
 metadata:
-  name: nfs-csi
-  namespace: uyuni
-provisioner: nfs.csi.k8s.io
-parameters:
-  server: 10.61.3.2
-  share: /kube_storage
-  # csi.storage.k8s.io/provisioner-secret is only needed for providing mountOptions in DeleteVolume
-  # csi.storage.k8s.io/provisioner-secret-name: "mount-options"
-  # csi.storage.k8s.io/provisioner-secret-namespace: "default"
-reclaimPolicy: Delete
-volumeBindingMode: Immediate
-mountOptions:
-  - nfsvers=4.1
+  name: astra-mariadb-volume-pv
+  namespace: "astrago"    
+spec:
+  capacity:
+    storage: "8Gi"
+  persistentVolumeReclaimPolicy: Retain
+  accessModes:
+    - "ReadWriteOnce"
+  storageClassName: astra-mariadb
+  nfs:
+    server: 10.61.3.2
+    path: /kube_storage/astra-mariadb-volume
+---
+# Source: uyuni/charts/mariadb/templates/persistent-volume.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: astra-mariadb-volume
+  namespace: "astrago"    
+spec:
+  resources:
+    requests:
+      storage: "8Gi"
+  accessModes:
+    - "ReadWriteOnce"
+  storageClassName: astra-mariadb
 ---
 # Source: uyuni/templates/binpack-scheduler/rbac.yaml
 kind: ClusterRole
@@ -192,11 +203,11 @@ apiVersion: v1
 kind: Service
 metadata:
   name: uyuni-backend-batch
-  namespace: uyuni
+  namespace: astrago
   labels:
     helm.sh/chart: batch-0.1.1
     app.kubernetes.io/name: batch
-    app.kubernetes.io/instance: uyuni
+    app.kubernetes.io/instance: astrago
     app.kubernetes.io/version: "1.16.0"
     app.kubernetes.io/managed-by: Helm
 spec:
@@ -207,42 +218,42 @@ spec:
       name: http
   selector:
     app.kubernetes.io/name: batch
-    app.kubernetes.io/instance: uyuni
+    app.kubernetes.io/instance: astrago
 ---
 # Source: uyuni/charts/core/templates/service.yaml
 apiVersion: v1
 kind: Service
 metadata:
   name: uyuni-backend-core
-  namespace: uyuni
+  namespace: astrago
   labels:
     helm.sh/chart: core-0.1.1
     app.kubernetes.io/name: core
-    app.kubernetes.io/instance: uyuni
+    app.kubernetes.io/instance: astrago
     app.kubernetes.io/version: "1.16.0"
     app.kubernetes.io/managed-by: Helm
 spec:
-  type: NodePort
+  type: 
   ports:
     - port: 8080
       targetPort: 8080
-      nodePort: 30082
+      nodePort: 
       protocol: TCP
       name: http
   selector:
     app.kubernetes.io/name: core
-    app.kubernetes.io/instance: uyuni
+    app.kubernetes.io/instance: astrago
 ---
 # Source: uyuni/charts/frontend/templates/service.yaml
 apiVersion: v1
 kind: Service
 metadata:
   name: uyuni-frontend
-  namespace: uyuni
+  namespace: astrago
   labels:
     helm.sh/chart: frontend-0.1.0
     app.kubernetes.io/name: frontend
-    app.kubernetes.io/instance: uyuni
+    app.kubernetes.io/instance: astrago
     app.kubernetes.io/version: "1.16.0"
     app.kubernetes.io/managed-by: Helm
 spec:
@@ -255,34 +266,33 @@ spec:
       name: http
   selector:
     app.kubernetes.io/name: frontend
-    app.kubernetes.io/instance: uyuni
+    app.kubernetes.io/instance: astrago
 ---
 # Source: uyuni/charts/mariadb/templates/primary/svc.yaml
 apiVersion: v1
 kind: Service
 metadata:
-  name: mariadb
-  namespace: "uyuni"
+  name: astrago-mariadb
+  namespace: "astrago"
   labels:
     app.kubernetes.io/name: mariadb
     helm.sh/chart: mariadb-12.2.9
-    app.kubernetes.io/instance: uyuni
+    app.kubernetes.io/instance: astrago
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: primary
   annotations:
 spec:
-  type: NodePort
-  externalTrafficPolicy: "Cluster"
+  type: ClusterIP
   sessionAffinity: None
   ports:
     - name: mysql
       port: 3306
       protocol: TCP
       targetPort: mysql
-      nodePort: 32000
+      nodePort: null
   selector: 
     app.kubernetes.io/name: mariadb
-    app.kubernetes.io/instance: uyuni
+    app.kubernetes.io/instance: astrago
     app.kubernetes.io/component: primary
 ---
 # Source: uyuni/charts/monitor/templates/service.yaml
@@ -290,35 +300,35 @@ apiVersion: v1
 kind: Service
 metadata:
   name: uyuni-backend-monitor
-  namespace: uyuni
+  namespace: astrago
   labels:
     helm.sh/chart: monitor-0.1.1
     app.kubernetes.io/name: monitor
-    app.kubernetes.io/instance: uyuni
+    app.kubernetes.io/instance: astrago
     app.kubernetes.io/version: "1.16.0"
     app.kubernetes.io/managed-by: Helm
 spec:
-  type: NodePort
+  type: 
   ports:
     - port: 8080
       targetPort: 8080
-      nodePort: 30081
+      nodePort: 
       protocol: TCP
       name: http
   selector:
     app.kubernetes.io/name: monitor
-    app.kubernetes.io/instance: uyuni
+    app.kubernetes.io/instance: astrago
 ---
 # Source: uyuni/charts/batch/templates/deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: uyuni-backend-batch
-  namespace: uyuni
+  namespace: astrago
   labels:
     helm.sh/chart: batch-0.1.1
     app.kubernetes.io/name: batch
-    app.kubernetes.io/instance: uyuni
+    app.kubernetes.io/instance: astrago
     app.kubernetes.io/version: "1.16.0"
     app.kubernetes.io/managed-by: Helm
 spec:
@@ -326,12 +336,12 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: batch
-      app.kubernetes.io/instance: uyuni
+      app.kubernetes.io/instance: astrago
   template:
     metadata:
       labels:
         app.kubernetes.io/name: batch
-        app.kubernetes.io/instance: uyuni
+        app.kubernetes.io/instance: astrago
     spec:
       securityContext:
         {}
@@ -340,7 +350,7 @@ spec:
           securityContext:
             {}
           image: "harbor.xiilab.com:32443/uyuni/server-batch:develop-82e64ba"
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
 
           env:
           ports:
@@ -355,11 +365,11 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: uyuni-backend-core
-  namespace: uyuni
+  namespace: astrago
   labels:
     helm.sh/chart: core-0.1.1
     app.kubernetes.io/name: core
-    app.kubernetes.io/instance: uyuni
+    app.kubernetes.io/instance: astrago
     app.kubernetes.io/version: "1.16.0"
     app.kubernetes.io/managed-by: Helm
 spec:
@@ -367,12 +377,12 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: core
-      app.kubernetes.io/instance: uyuni
+      app.kubernetes.io/instance: astrago
   template:
     metadata:
       labels:
         app.kubernetes.io/name: core
-        app.kubernetes.io/instance: uyuni
+        app.kubernetes.io/instance: astrago
     spec:
       securityContext:
         {}
@@ -381,13 +391,13 @@ spec:
           securityContext:
             {}
           image: "harbor.xiilab.com:32443/uyuni/server-core:develop-82e64ba"
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           
           env:
           - name: SPRING_DATASOURCE_URL
-            value: "jdbc:mariadb://mariadb:3306/uyuni"
+            value: "jdbc:mariadb://mariadb:3306/astrago"
           - name: SPRING_DATASOURCE_USERNAME
-            value: "uyuni"
+            value: "astrago"
           - name: SPRING_DATASOURCE_PASSWORD
             value: "xiirocks"
           - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWT_ISSUER-URI
@@ -409,11 +419,11 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: uyuni-frontend
-  namespace: uyuni
+  namespace: astrago
   labels:
     helm.sh/chart: frontend-0.1.0
     app.kubernetes.io/name: frontend
-    app.kubernetes.io/instance: uyuni
+    app.kubernetes.io/instance: astrago
     app.kubernetes.io/version: "1.16.0"
     app.kubernetes.io/managed-by: Helm
 spec:
@@ -421,12 +431,12 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: frontend
-      app.kubernetes.io/instance: uyuni
+      app.kubernetes.io/instance: astrago
   template:
     metadata:
       labels:
         app.kubernetes.io/name: frontend
-        app.kubernetes.io/instance: uyuni
+        app.kubernetes.io/instance: astrago
     spec:
       securityContext:
         {}
@@ -473,11 +483,11 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: uyuni-backend-monitor
-  namespace: uyuni
+  namespace: astrago
   labels:
     helm.sh/chart: monitor-0.1.1
     app.kubernetes.io/name: monitor
-    app.kubernetes.io/instance: uyuni
+    app.kubernetes.io/instance: astrago
     app.kubernetes.io/version: "1.16.0"
     app.kubernetes.io/managed-by: Helm
 spec:
@@ -485,12 +495,12 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: monitor
-      app.kubernetes.io/instance: uyuni
+      app.kubernetes.io/instance: astrago
   template:
     metadata:
       labels:
         app.kubernetes.io/name: monitor
-        app.kubernetes.io/instance: uyuni
+        app.kubernetes.io/instance: astrago
     spec:
       securityContext:
         {}
@@ -499,7 +509,7 @@ spec:
           securityContext:
             {}
           image: "harbor.xiilab.com:32443/uyuni/server-monitor:develop-82e64ba"
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           env:
           ports:
             - name: http
@@ -582,12 +592,12 @@ spec:
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: mariadb
-  namespace: "uyuni"
+  name: astrago-mariadb
+  namespace: "astrago"
   labels:
     app.kubernetes.io/name: mariadb
     helm.sh/chart: mariadb-12.2.9
-    app.kubernetes.io/instance: uyuni
+    app.kubernetes.io/instance: astrago
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: primary
 spec:
@@ -596,24 +606,24 @@ spec:
   selector:
     matchLabels: 
       app.kubernetes.io/name: mariadb
-      app.kubernetes.io/instance: uyuni
+      app.kubernetes.io/instance: astrago
       app.kubernetes.io/component: primary
-  serviceName: mariadb
+  serviceName: astrago-mariadb
   updateStrategy:
     type: RollingUpdate
   template:
     metadata:
       annotations:
-        checksum/configuration: c4b338e2e83abbf552a0a633bc45a2f3ec80d7230ba0583e01198dfa4a40efb9
+        checksum/configuration: 0260afe3a5161c81802f7dc3a369dd4970d4a77a7c9e44c814e38d0c021591d2
       labels:
         app.kubernetes.io/name: mariadb
         helm.sh/chart: mariadb-12.2.9
-        app.kubernetes.io/instance: uyuni
+        app.kubernetes.io/instance: astrago
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/component: primary
     spec:
       
-      serviceAccountName: mariadb
+      serviceAccountName: astrago-mariadb
       affinity:
         podAffinity:
           
@@ -623,21 +633,12 @@ spec:
                 labelSelector:
                   matchLabels:
                     app.kubernetes.io/name: mariadb
-                    app.kubernetes.io/instance: uyuni
+                    app.kubernetes.io/instance: astrago
                     app.kubernetes.io/component: primary
                 topologyKey: kubernetes.io/hostname
               weight: 1
         nodeAffinity:
           
-      nodeSelector:
-        node-role.kubernetes.io/control-plane: ""
-      tolerations:
-        - effect: NoSchedule
-          key: node-role.kubernetes.io/control-plane
-          operator: Exists
-        - effect: NoSchedule
-          key: node-role.kubernetes.io/master
-          operator: Exists
       securityContext:
         fsGroup: 1001
       containers:
@@ -655,17 +656,17 @@ spec:
             - name: MARIADB_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: mariadb
+                  name: astrago-mariadb
                   key: mariadb-root-password
             - name: MARIADB_USER
-              value: "uyuni"
+              value: "astrago"
             - name: MARIADB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: mariadb
+                  name: astrago-mariadb
                   key: mariadb-password
             - name: MARIADB_DATABASE
-              value: "uyuni"
+              value: "astrago"
           ports:
             - name: mysql
               containerPort: 3306
@@ -713,19 +714,8 @@ spec:
       volumes:
         - name: config
           configMap:
-            name: mariadb
-  volumeClaimTemplates:
-    - metadata:
-        name: data
-        labels: 
-          app.kubernetes.io/name: mariadb
-          app.kubernetes.io/instance: uyuni
-          app.kubernetes.io/component: primary
-      spec:
-        accessModes:
-          - "ReadWriteOnce"
-        resources:
-          requests:
-            storage: "8Gi"
-        storageClassName: nfs-csi
+            name: astrago-mariadb
+        - name: data
+          persistentVolumeClaim:
+            claimName: astra-mariadb-volume
 
