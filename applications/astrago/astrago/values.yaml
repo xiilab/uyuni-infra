@@ -5,16 +5,22 @@ core:
   image:
     repository: xiilab/uyuni-backend-core
     tag: master
-
+  serviceAccount:
+    name: "astrago-sa"
+      
 batch:
   image:
     repository: xiilab/uyuni-backend-batch
     tag: master
+  serviceAccount:
+    name: "astrago-sa"      
 
 monitor:
   image:
     repository: xiilab/uyuni-backend-monitor
     tag: master
+  serviceAccount:
+    name: "astrago-sa"      
 
 frontend:
   image:
