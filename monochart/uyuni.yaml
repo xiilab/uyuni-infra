@@ -481,7 +481,7 @@ spec:
           - name: AUTH_CLIENT_SECRET
             value: "7bE2Oq2HyKrPsX49EXul0G48O4c4kkFv"
           - name: NEXTAUTH_URL
-            value: "http://uyuni-frontend:3000"
+            value: "http://10.61.3.12:30080"
           - name: NEXTAUTH_SECRET
             value: "uuNj1L0Yg2xKcBPVp7yOVlm2nigL3hoHOzbwQXAwx1I="
           
