@@ -364,6 +364,7 @@ spec:
         app.kubernetes.io/name: batch
         app.kubernetes.io/instance: astrago
     spec:
+      serviceAccountName: astrago-sa
       securityContext:
         {}
       containers:
@@ -405,6 +406,7 @@ spec:
         app.kubernetes.io/name: core
         app.kubernetes.io/instance: astrago
     spec:
+      serviceAccountName: astrago-sa      
       securityContext:
         {}
       containers:
@@ -459,6 +461,7 @@ spec:
         app.kubernetes.io/name: frontend
         app.kubernetes.io/instance: astrago
     spec:
+      serviceAccountName: astrago-frontend
       securityContext:
         {}
       containers:
@@ -523,6 +526,7 @@ spec:
         app.kubernetes.io/name: monitor
         app.kubernetes.io/instance: astrago
     spec:
+      serviceAccountName: astrago-sa      
       securityContext:
         {}
       containers:
