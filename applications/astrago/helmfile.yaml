@@ -3,12 +3,12 @@ repositories:
     url: https://charts.bitnami.com/bitnami
 
 releases:
-- name: uyuni
-  namespace: "{{ .Values.uyuni.namespace }}"
-  chart: uyuni
+- name: astrago
+  namespace: "astrago"
+  chart: astrago
   wait: true
   labels:
     type: app
-    app: uyuni
+    app: astrago
   values:
   - values.yaml.gotmpl

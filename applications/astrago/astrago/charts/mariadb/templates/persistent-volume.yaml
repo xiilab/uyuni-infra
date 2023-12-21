@@ -1,0 +1,38 @@
+{{- if and .Values.primary.persistence.enabled .Values.primary.persistence.createClaim.enabled }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .Values.primary.persistence.createClaim.volumeName }}-pv
+  namespace: {{ .Release.Namespace | quote }}    
+spec:
+  capacity:
+    storage: {{ .Values.primary.persistence.createClaim.volumeSize | quote }}
+  persistentVolumeReclaimPolicy: Retain
+  accessModes:
+    {{- range .Values.primary.persistence.createClaim.accessModes }}
+    - {{ . | quote }}
+    {{- end }}
+  storageClassName: astra-mariadb
+  {{- if eq .Values.primary.persistence.createClaim.volumeType "nfs" }}
+  nfs:
+    server: {{ .Values.primary.persistence.createClaim.nfs.server }}
+    path: {{ .Values.primary.persistence.createClaim.nfs.path }}
+  {{- end }}
+{{- end }}  
+---
+{{- if and .Values.primary.persistence.enabled .Values.primary.persistence.createClaim.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.primary.persistence.createClaim.volumeName }}
+  namespace: {{ .Release.Namespace | quote }}    
+spec:
+  resources:
+    requests:
+      storage: {{ .Values.primary.persistence.createClaim.volumeSize | quote }}
+  accessModes:
+    {{- range .Values.primary.persistence.createClaim.accessModes }}
+    - {{ . | quote }}
+    {{- end }}
+  storageClassName: astra-mariadb    
+{{- end }}

@@ -28,6 +28,6 @@ helmfiles:
   values:
   - {{ toYaml .Values | nindent 4 }}
 
-- path: applications/uyuni/helmfile.yaml
+- path: applications/astrago/helmfile.yaml
   values:
   - {{ toYaml .Values | nindent 4 }}

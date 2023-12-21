@@ -1,31 +1,22 @@
 # Default values for uyuni.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
-nfs:
-  server: 192.168.2.39
-  share: /kube_storage
-
-
 core:
-  namespace: uyuni
   image:
     repository: xiilab/uyuni-backend-core
     tag: master
 
 batch:
-  namespace: uyuni
   image:
     repository: xiilab/uyuni-backend-batch
     tag: master
 
 monitor:
-  namespace: uyuni
   image:
     repository: xiilab/uyuni-backend-monitor
     tag: master
 
 frontend:
-  namespace: uyuni
   image:
     repository: xiilab/uyuni-frontend
     tag: master
@@ -100,3 +91,4 @@ nodeSelector: { }
 tolerations: [ ]
 
 affinity: { }
+

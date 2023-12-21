@@ -1,0 +1,67 @@
+core:
+  image:
+    repository: "{{ .Values.astrago.core.repository }}"
+    tag: "{{ .Values.astrago.core.imageTag }}"
+  env:
+    - name: SPRING_DATASOURCE_URL
+      value: jdbc:mariadb://mariadb:3306/{{ .Values.astrago.mariadb.database }}
+    - name: SPRING_DATASOURCE_USERNAME
+      value: {{ .Values.astrago.mariadb.username }}
+    - name: SPRING_DATASOURCE_PASSWORD
+      value: {{ .Values.astrago.mariadb.password }}
+    - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWT_ISSUER-URI
+      value: {{ .Values.astrago.keycloak.host }}/realms/{{ .Values.astrago.keycloak.realm }}
+    - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWK-SET-URI
+      value: {{ .Values.astrago.keycloak.host }}/realms/{{ .Values.astrago.keycloak.realm }}/protocol/openid-connect/certs
+
+batch:
+  image:
+    repository: "{{ .Values.astrago.batch.repository }}"
+    tag: "{{ .Values.astrago.batch.imageTag }}"
+
+monitor:
+  image:
+    repository: "{{ .Values.astrago.monitor.repository }}"
+    tag: "{{ .Values.astrago.monitor.imageTag }}" 
+
+frontend:
+  image:
+    repository: "{{ .Values.astrago.frontend.repository }}"
+    pullPolicy: Always
+    tag: "{{ .Values.astrago.frontend.imageTag }}" 
+  env:
+    - name: KEYCLOAK_HOST
+      value: https://10.61.3.8:30002
+    - name: KEYCLOAK_REALME
+      value: myrealm
+    - name: KEYCLOAK_CLIENT_ID
+      value: kubernetes-client
+    - name: AUTH_CLIENT_SECRET
+      value: 7bE2Oq2HyKrPsX49EXul0G48O4c4kkFv
+    - name: NEXTAUTH_URL
+      value: http://localhost:3000
+    - name: NEXTAUTH_SECRET
+      value: uuNj1L0Yg2xKcBPVp7yOVlm2nigL3hoHOzbwQXAwx1I=
+    - name: NEXT_PUBLIC_API_URL
+      value: http://localhost:4444/
+
+mariadb:
+  auth:
+    rootPassword: {{ .Values.astrago.mariadb.rootPassword }}
+    database: {{ .Values.astrago.mariadb.database }}
+    username: {{ .Values.astrago.mariadb.username }}
+    password: {{ .Values.astrago.mariadb.password }}
+  primary:
+    persistence:
+      createClaim:
+        enabled: true
+        volumeName: {{ .Values.astrago.mariadb.volume.volumeName }}
+        volumeType: {{ .Values.astrago.mariadb.volume.volumeType }}
+        volumeSize: {{ .Values.astrago.mariadb.volume.volumeSize }}
+        accessModes:
+        - ReadWriteOnce
+        nfs:
+          server: {{ .Values.astrago.mariadb.volume.nfs.server }}
+          path: {{ .Values.astrago.mariadb.volume.nfs.path }}
+
+      existingClaim: {{ .Values.astrago.mariadb.volume.volumeName }} 

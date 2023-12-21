@@ -1,22 +1,24 @@
-nfs:
-  server: 10.61.3.2
-  share: /kube_storage
-keycloak:
-  repository: harbor.xiilab.com:32443/uyuni/server-core
-  imageTag: "develop-0ff3d31"
-uyuni:
-  nodePort: 30100
-  keycloakUrl: http://192.168.1.235:30051/auth
-  namespace: uyuni
-  storageClass: nfs-csi
+astrago:
+  keycloak:
+    host: http://10.61.3.8:30001
+    realm: myrealm
+    client: kubernetes-client
+    clientSecret: 7bE2Oq2HyKrPsX49EXul0G48O4c4kkFv
+
   mariadb:
-    auth:
-      rootPassword: root
-      database: uyuni
-      username: uyuni
-      password: xiirocks
-      replicationUser: replicator
-      replicationPassword: ''
+    rootPassword: root
+    database: astrago
+    username: astrago
+    password: xiirocks
+    volume:
+      volumeName: astra-mariadb-volume
+      volumeSize: 8Gi
+      volumeType: nfs        
+      nfs:
+        server: 10.61.3.2
+        path: /kube_storage/astra-mariadb-volume
+
+
   core:
     repository: harbor.xiilab.com:32443/uyuni/server-core
     imageTag: "develop-82e64ba"
