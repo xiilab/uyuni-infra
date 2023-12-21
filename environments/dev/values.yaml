@@ -1,4 +1,6 @@
 astrago:
+  prometheus:
+    host: http://10.61.3.12:30090
   keycloak:
     host: http://10.61.3.8:30001
     realm: myrealm
@@ -19,36 +21,12 @@ astrago:
   core:
     repository: harbor.xiilab.com:32443/uyuni/server-core
     imageTag: "develop-82e64ba"
-    service:
-      type: NodePort
-      port: 8080
-      nodePort: 30082
-    env:
-      - name: SPRING_DATASOURCE_URL
-        value: jdbc:mariadb://mariadb:3306/uyuni
-      - name: SPRING_DATASOURCE_USERNAME
-        value: uyuni
-      - name: SPRING_DATASOURCE_PASSWORD
-        value: xiirocks
-      - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWT_ISSUER-URI
-        value: http://10.61.3.8:30001/realms/myrealm
-      - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWK-SET-URI
-        value: http://10.61.3.8:30001/realms/myrealm/protocol/openid-connect/certs
   batch:
     repository: harbor.xiilab.com:32443/uyuni/server-batch
     imageTag: "develop-82e64ba"
   monitor:
     repository: harbor.xiilab.com:32443/uyuni/server-monitor
     imageTag: "develop-82e64ba"
-    service:
-      type: NodePort
-      port: 8080
-      nodePort: 30081
-    env:
-      - name: SPRING_MVC_PATHMATCH_MATCHING-STRATEGY
-        value: ant_path_matcher
-      - name: PROMETHEUS_URL
-        value: http://10.61.3.12:30090/
   frontend:
     repository: "harbor.xiilab.com:32443/uyuni/uyuni-frontend"
     imageTag: develop-df9b3ba
@@ -56,31 +34,3 @@ astrago:
       type: NodePort
       port: 3000
       nodePort: 30080
-    env:
-      - name: KEYCLOAK_HOST
-        value: http://10.61.3.8:30001
-      - name: KEYCLOAK_REALME
-        value: myrealm
-      - name: KEYCLOAK_CLIENT_ID
-        value: kubernetes-client
-      - name: AUTH_CLIENT_SECRET
-        value: 7bE2Oq2HyKrPsX49EXul0G48O4c4kkFv
-      - name: NEXTAUTH_URL
-        value: http://localhost:3000
-      - name: NEXTAUTH_SECRET
-        value: uuNj1L0Yg2xKcBPVp7yOVlm2nigL3hoHOzbwQXAwx1I=
-      - name: NEXT_PUBLIC_API_URL
-        value: http://localhost:4444/
-uyuni:
-  core:
-    repository: harbor.xiilab.com:32443/uyuni/server-core
-    imageTag: develop-35d92d7
-  batch:
-    repository: harbor.xiilab.com:32443/uyuni/server-batch
-    imageTag: develop-35d92d7
-  monitor:
-    repository: harbor.xiilab.com:32443/uyuni/server-monitor
-    imageTag: develop-35d92d7
-  frontend:
-    repository: harbor.xiilab.com:32443/uyuni/uyuni-frontend
-    imageTag: develop-a26198d

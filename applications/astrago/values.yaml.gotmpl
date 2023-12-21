@@ -23,6 +23,12 @@ monitor:
   image:
     repository: "{{ .Values.astrago.monitor.repository }}"
     tag: "{{ .Values.astrago.monitor.imageTag }}" 
+  env:
+    env:
+      - name: SPRING_MVC_PATHMATCH_MATCHING-STRATEGY
+        value: ant_path_matcher
+      - name: PROMETHEUS_URL
+        value: dev-prometheus-kube-promet-prometheus.prometheus.svc.cluster.local
 
 frontend:
   image:
@@ -31,19 +37,17 @@ frontend:
     tag: "{{ .Values.astrago.frontend.imageTag }}" 
   env:
     - name: KEYCLOAK_HOST
-      value: https://10.61.3.8:30002
+      value: {{ .Values.astrago.keycloak.host }}
     - name: KEYCLOAK_REALME
-      value: myrealm
+      value: {{ .Values.astrago.keycloak.realm }}
     - name: KEYCLOAK_CLIENT_ID
-      value: kubernetes-client
+      value: {{ .Values.astrago.keycloak.client }}
     - name: AUTH_CLIENT_SECRET
-      value: 7bE2Oq2HyKrPsX49EXul0G48O4c4kkFv
+      value: {{ .Values.astrago.keycloak.clientSecret }}
     - name: NEXTAUTH_URL
-      value: http://localhost:3000
+      value: http://uyuni-frontend:3000
     - name: NEXTAUTH_SECRET
       value: uuNj1L0Yg2xKcBPVp7yOVlm2nigL3hoHOzbwQXAwx1I=
-    - name: NEXT_PUBLIC_API_URL
-      value: http://localhost:4444/
 
 mariadb:
   auth:
