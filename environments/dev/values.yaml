@@ -58,7 +58,6 @@ astrago:
       nodePort: 30080
     env:
       - name: KEYCLOAK_HOST
-        # value: https://10.61.3.8:30002
         value: http://10.61.3.8:30001
       - name: KEYCLOAK_REALME
         value: myrealm
