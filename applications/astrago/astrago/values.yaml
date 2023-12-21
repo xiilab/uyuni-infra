@@ -7,6 +7,10 @@ core:
     tag: master
   serviceAccount:
     name: "astrago-sa"
+  service:
+    type: NodePort
+    port: 8080
+    nodePort: 30081
       
 batch:
   image:
@@ -14,6 +18,10 @@ batch:
     tag: master
   serviceAccount:
     name: "astrago-sa"      
+  service:
+    type: NodePort
+    port: 8080
+    nodePort: 30082
 
 monitor:
   image:
@@ -21,11 +29,19 @@ monitor:
     tag: master
   serviceAccount:
     name: "astrago-sa"      
+  service:
+    type: NodePort
+    port: 8080
+    nodePort: 30083
 
 frontend:
   image:
     repository: xiilab/uyuni-frontend
     tag: master
+  service:
+    type: NodePort
+    port: 3000
+    nodePort: 30080      
 
 imagePullSecrets: [ ]
 nameOverride: ""

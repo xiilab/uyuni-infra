@@ -33,9 +33,7 @@ podSecurityContext: {}
 
 
 service:
-  type: NodePort
-  port: 3000
-  nodePort: 30080
+  type: ClusterIP
   
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
