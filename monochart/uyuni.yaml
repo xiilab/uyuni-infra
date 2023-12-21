@@ -473,7 +473,7 @@ spec:
           
           env:
           - name: KEYCLOAK_HOST
-            value: "https://10.61.3.8:30002"
+            value: "http://10.61.3.8:30001"
           - name: KEYCLOAK_REALME
             value: "myrealm"
           - name: KEYCLOAK_CLIENT_ID
@@ -481,11 +481,9 @@ spec:
           - name: AUTH_CLIENT_SECRET
             value: "7bE2Oq2HyKrPsX49EXul0G48O4c4kkFv"
           - name: NEXTAUTH_URL
-            value: "http://localhost:3000"
+            value: "http://uyuni-frontend:3000"
           - name: NEXTAUTH_SECRET
             value: "uuNj1L0Yg2xKcBPVp7yOVlm2nigL3hoHOzbwQXAwx1I="
-          - name: NEXT_PUBLIC_API_URL
-            value: "http://localhost:4444/"
           
           ports:
             - name: http
@@ -536,6 +534,10 @@ spec:
           image: "harbor.xiilab.com:32443/uyuni/server-monitor:develop-82e64ba"
           imagePullPolicy: Always
           env:
+          - name: SPRING_MVC_PATHMATCH_MATCHING-STRATEGY
+            value: "ant_path_matcher"
+          - name: PROMETHEUS_URL
+            value: "dev-prometheus-kube-promet-prometheus.prometheus.svc.cluster.local"
           ports:
             - name: http
               containerPort: 8080
