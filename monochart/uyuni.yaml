@@ -461,7 +461,7 @@ spec:
         app.kubernetes.io/name: frontend
         app.kubernetes.io/instance: astrago
     spec:
-      serviceAccountName: astrago-frontend
+      serviceAccountName: default
       securityContext:
         {}
       containers:
