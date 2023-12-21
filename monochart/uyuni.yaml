@@ -473,7 +473,7 @@ spec:
           
           env:
           - name: KEYCLOAK_HOST
-            value: "http://10.61.3.8:30001"
+            value: "https://10.61.3.8:30002"
           - name: KEYCLOAK_REALME
             value: "myrealm"
           - name: KEYCLOAK_CLIENT_ID
