@@ -14,6 +14,7 @@ metadata:
 automountServiceAccountToken: false
 ---
 # Source: uyuni/templates/astra-serviceaccount.yaml
+apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: astrago-sa
