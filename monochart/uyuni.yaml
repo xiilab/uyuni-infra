@@ -171,7 +171,7 @@ subjects:
   namespace: astrago
 roleRef:
   kind: ClusterRole
-  name: admin
+  name: cluster-admin
   apiGroup: rbac.authorization.k8s.io
 ---
 # Source: uyuni/templates/binpack-scheduler/rbac.yaml
