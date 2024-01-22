@@ -113,37 +113,6 @@ data:
         name: NodeResourcesFit
       schedulerName: binpack-scheduler
 ---
-# Source: uyuni/charts/mariadb/templates/persistent-volume.yaml
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: astra-mariadb-volume-pv
-  namespace: "astrago"    
-spec:
-  capacity:
-    storage: "8Gi"
-  persistentVolumeReclaimPolicy: Retain
-  accessModes:
-    - "ReadWriteOnce"
-  storageClassName: astra-mariadb
-  nfs:
-    server: 10.61.3.2
-    path: /kube_storage/astra-mariadb-volume
----
-# Source: uyuni/charts/mariadb/templates/persistent-volume.yaml
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: astra-mariadb-volume
-  namespace: "astrago"    
-spec:
-  resources:
-    requests:
-      storage: "8Gi"
-  accessModes:
-    - "ReadWriteOnce"
-  storageClassName: astra-mariadb
----
 # Source: uyuni/templates/binpack-scheduler/rbac.yaml
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
@@ -742,7 +711,17 @@ spec:
         - name: config
           configMap:
             name: astrago-mariadb
-        - name: data
-          persistentVolumeClaim:
-            claimName: astra-mariadb-volume
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+        labels: 
+          app.kubernetes.io/name: mariadb
+          app.kubernetes.io/instance: astrago
+          app.kubernetes.io/component: primary
+      spec:
+        accessModes:
+          - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: "8Gi"
 
