@@ -55,6 +55,8 @@ mariadb:
     username: {{ .Values.astrago.mariadb.username }}
     password: {{ .Values.astrago.mariadb.password }}
   primary:
+  service:
+    type: NodePort
     persistence:
       createClaim:
         enabled: true
@@ -68,3 +70,6 @@ mariadb:
           path: {{ .Values.astrago.mariadb.volume.nfs.path }}
 
       existingClaim: {{ .Values.astrago.mariadb.volume.volumeName }} 
+
+Context: { }
+  # capa
