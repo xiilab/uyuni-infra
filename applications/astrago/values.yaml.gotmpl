@@ -55,8 +55,8 @@ mariadb:
     username: {{ .Values.astrago.mariadb.username }}
     password: {{ .Values.astrago.mariadb.password }}
   primary:
-  service:
-    type: NodePort
+    service:
+      type: NodePort
     persistence:
       createClaim:
         enabled: true
