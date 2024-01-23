@@ -4,7 +4,7 @@ core:
     tag: "{{ .Values.astrago.core.imageTag }}"
   env:
     - name: SPRING_DATASOURCE_URL
-      value: jdbc:mariadb://mariadb:3306/{{ .Values.astrago.mariadb.database }}
+      value: jdbc:mariadb://astrago-mariadb:3306/{{ .Values.astrago.mariadb.database }}
     - name: SPRING_DATASOURCE_USERNAME
       value: {{ .Values.astrago.mariadb.username }}
     - name: SPRING_DATASOURCE_PASSWORD
