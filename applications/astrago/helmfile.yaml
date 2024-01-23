@@ -3,7 +3,7 @@ repositories:
     url: https://charts.bitnami.com/bitnami
 
 releases:
-- name: astrago
+- name: astrago23
   namespace: "astrago"
   chart: astrago
   wait: true

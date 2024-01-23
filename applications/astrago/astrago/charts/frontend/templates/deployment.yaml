@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: uyuni-frontend
+  name: astrago-frontend
   namespace: {{ .Release.Namespace }}
   labels:
     {{- include "frontend.labels" . | nindent 4 }}

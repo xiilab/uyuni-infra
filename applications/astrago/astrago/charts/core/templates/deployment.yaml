@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: uyuni-backend-core
+  name: astrago-backend-core
   namespace: {{ .Release.Namespace }}
   labels:
     {{- include "backend.labels" . | nindent 4 }}
