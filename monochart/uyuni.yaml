@@ -3,12 +3,12 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: astrago-mariadb
+  name: astrago23-mariadb
   namespace: "astrago"
   labels:
     app.kubernetes.io/name: mariadb
     helm.sh/chart: mariadb-12.2.9
-    app.kubernetes.io/instance: astrago
+    app.kubernetes.io/instance: astrago23
     app.kubernetes.io/managed-by: Helm
   annotations:
 automountServiceAccountToken: false
@@ -31,12 +31,12 @@ metadata:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: astrago-mariadb
+  name: astrago23-mariadb
   namespace: "astrago"
   labels:
     app.kubernetes.io/name: mariadb
     helm.sh/chart: mariadb-12.2.9
-    app.kubernetes.io/instance: astrago
+    app.kubernetes.io/instance: astrago23
     app.kubernetes.io/managed-by: Helm
 type: Opaque
 data:
@@ -47,12 +47,12 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: astrago-mariadb
+  name: astrago23-mariadb
   namespace: "astrago"
   labels:
     app.kubernetes.io/name: mariadb
     helm.sh/chart: mariadb-12.2.9
-    app.kubernetes.io/instance: astrago
+    app.kubernetes.io/instance: astrago23
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: primary
 data:
@@ -228,7 +228,7 @@ metadata:
   labels:
     helm.sh/chart: batch-0.1.1
     app.kubernetes.io/name: batch
-    app.kubernetes.io/instance: astrago
+    app.kubernetes.io/instance: astrago23
     app.kubernetes.io/version: "1.16.0"
     app.kubernetes.io/managed-by: Helm
 spec:
@@ -239,7 +239,7 @@ spec:
       name: http
   selector:
     app.kubernetes.io/name: batch
-    app.kubernetes.io/instance: astrago
+    app.kubernetes.io/instance: astrago23
 ---
 # Source: uyuni/charts/core/templates/service.yaml
 apiVersion: v1
@@ -250,7 +250,7 @@ metadata:
   labels:
     helm.sh/chart: core-0.1.1
     app.kubernetes.io/name: core
-    app.kubernetes.io/instance: astrago
+    app.kubernetes.io/instance: astrago23
     app.kubernetes.io/version: "1.16.0"
     app.kubernetes.io/managed-by: Helm
 spec:
@@ -263,7 +263,7 @@ spec:
       name: http
   selector:
     app.kubernetes.io/name: core
-    app.kubernetes.io/instance: astrago
+    app.kubernetes.io/instance: astrago23
 ---
 # Source: uyuni/charts/frontend/templates/service.yaml
 apiVersion: v1
@@ -274,7 +274,7 @@ metadata:
   labels:
     helm.sh/chart: frontend-0.1.0
     app.kubernetes.io/name: frontend
-    app.kubernetes.io/instance: astrago
+    app.kubernetes.io/instance: astrago23
     app.kubernetes.io/version: "1.16.0"
     app.kubernetes.io/managed-by: Helm
 spec:
@@ -287,18 +287,18 @@ spec:
       name: http
   selector:
     app.kubernetes.io/name: frontend
-    app.kubernetes.io/instance: astrago
+    app.kubernetes.io/instance: astrago23
 ---
 # Source: uyuni/charts/mariadb/templates/primary/svc.yaml
 apiVersion: v1
 kind: Service
 metadata:
-  name: astrago-mariadb
+  name: astrago23-mariadb
   namespace: "astrago"
   labels:
     app.kubernetes.io/name: mariadb
     helm.sh/chart: mariadb-12.2.9
-    app.kubernetes.io/instance: astrago
+    app.kubernetes.io/instance: astrago23
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: primary
   annotations:
@@ -313,7 +313,7 @@ spec:
       targetPort: mysql
   selector: 
     app.kubernetes.io/name: mariadb
-    app.kubernetes.io/instance: astrago
+    app.kubernetes.io/instance: astrago23
     app.kubernetes.io/component: primary
 ---
 # Source: uyuni/charts/monitor/templates/service.yaml
@@ -325,7 +325,7 @@ metadata:
   labels:
     helm.sh/chart: monitor-0.1.1
     app.kubernetes.io/name: monitor
-    app.kubernetes.io/instance: astrago
+    app.kubernetes.io/instance: astrago23
     app.kubernetes.io/version: "1.16.0"
     app.kubernetes.io/managed-by: Helm
 spec:
@@ -338,18 +338,18 @@ spec:
       name: http
   selector:
     app.kubernetes.io/name: monitor
-    app.kubernetes.io/instance: astrago
+    app.kubernetes.io/instance: astrago23
 ---
 # Source: uyuni/charts/batch/templates/deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: uyuni-backend-batch
+  name: astrago-backend-batch
   namespace: astrago
   labels:
     helm.sh/chart: batch-0.1.1
     app.kubernetes.io/name: batch
-    app.kubernetes.io/instance: astrago
+    app.kubernetes.io/instance: astrago23
     app.kubernetes.io/version: "1.16.0"
     app.kubernetes.io/managed-by: Helm
 spec:
@@ -357,12 +357,12 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: batch
-      app.kubernetes.io/instance: astrago
+      app.kubernetes.io/instance: astrago23
   template:
     metadata:
       labels:
         app.kubernetes.io/name: batch
-        app.kubernetes.io/instance: astrago
+        app.kubernetes.io/instance: astrago23
     spec:
       serviceAccountName: astrago-sa
       securityContext:
@@ -386,12 +386,12 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: uyuni-backend-core
+  name: astrago-backend-core
   namespace: astrago
   labels:
     helm.sh/chart: core-0.1.1
     app.kubernetes.io/name: core
-    app.kubernetes.io/instance: astrago
+    app.kubernetes.io/instance: astrago23
     app.kubernetes.io/version: "1.16.0"
     app.kubernetes.io/managed-by: Helm
 spec:
@@ -399,12 +399,12 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: core
-      app.kubernetes.io/instance: astrago
+      app.kubernetes.io/instance: astrago23
   template:
     metadata:
       labels:
         app.kubernetes.io/name: core
-        app.kubernetes.io/instance: astrago
+        app.kubernetes.io/instance: astrago23
     spec:
       serviceAccountName: astrago-sa      
       securityContext:
@@ -441,12 +441,12 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: uyuni-frontend
+  name: astrago-frontend
   namespace: astrago
   labels:
     helm.sh/chart: frontend-0.1.0
     app.kubernetes.io/name: frontend
-    app.kubernetes.io/instance: astrago
+    app.kubernetes.io/instance: astrago23
     app.kubernetes.io/version: "1.16.0"
     app.kubernetes.io/managed-by: Helm
 spec:
@@ -454,12 +454,12 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: frontend
-      app.kubernetes.io/instance: astrago
+      app.kubernetes.io/instance: astrago23
   template:
     metadata:
       labels:
         app.kubernetes.io/name: frontend
-        app.kubernetes.io/instance: astrago
+        app.kubernetes.io/instance: astrago23
     spec:
       serviceAccountName: default
       securityContext:
@@ -504,12 +504,12 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: uyuni-backend-monitor
+  name: astrago-backend-monitor
   namespace: astrago
   labels:
     helm.sh/chart: monitor-0.1.1
     app.kubernetes.io/name: monitor
-    app.kubernetes.io/instance: astrago
+    app.kubernetes.io/instance: astrago23
     app.kubernetes.io/version: "1.16.0"
     app.kubernetes.io/managed-by: Helm
 spec:
@@ -517,12 +517,12 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: monitor
-      app.kubernetes.io/instance: astrago
+      app.kubernetes.io/instance: astrago23
   template:
     metadata:
       labels:
         app.kubernetes.io/name: monitor
-        app.kubernetes.io/instance: astrago
+        app.kubernetes.io/instance: astrago23
     spec:
       serviceAccountName: astrago-sa      
       securityContext:
@@ -619,12 +619,12 @@ spec:
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: astrago-mariadb
+  name: astrago23-mariadb
   namespace: "astrago"
   labels:
     app.kubernetes.io/name: mariadb
     helm.sh/chart: mariadb-12.2.9
-    app.kubernetes.io/instance: astrago
+    app.kubernetes.io/instance: astrago23
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: primary
 spec:
@@ -633,24 +633,24 @@ spec:
   selector:
     matchLabels: 
       app.kubernetes.io/name: mariadb
-      app.kubernetes.io/instance: astrago
+      app.kubernetes.io/instance: astrago23
       app.kubernetes.io/component: primary
-  serviceName: astrago-mariadb
+  serviceName: astrago23-mariadb
   updateStrategy:
     type: RollingUpdate
   template:
     metadata:
       annotations:
-        checksum/configuration: 0260afe3a5161c81802f7dc3a369dd4970d4a77a7c9e44c814e38d0c021591d2
+        checksum/configuration: 024589e284a699f61453f8d0b2419fde9005bd816c9f8d3febde702b1a1b2931
       labels:
         app.kubernetes.io/name: mariadb
         helm.sh/chart: mariadb-12.2.9
-        app.kubernetes.io/instance: astrago
+        app.kubernetes.io/instance: astrago23
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/component: primary
     spec:
       
-      serviceAccountName: astrago-mariadb
+      serviceAccountName: astrago23-mariadb
       affinity:
         podAffinity:
           
@@ -660,7 +660,7 @@ spec:
                 labelSelector:
                   matchLabels:
                     app.kubernetes.io/name: mariadb
-                    app.kubernetes.io/instance: astrago
+                    app.kubernetes.io/instance: astrago23
                     app.kubernetes.io/component: primary
                 topologyKey: kubernetes.io/hostname
               weight: 1
@@ -683,14 +683,14 @@ spec:
             - name: MARIADB_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: astrago-mariadb
+                  name: astrago23-mariadb
                   key: mariadb-root-password
             - name: MARIADB_USER
               value: "astrago"
             - name: MARIADB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: astrago-mariadb
+                  name: astrago23-mariadb
                   key: mariadb-password
             - name: MARIADB_DATABASE
               value: "astrago"
@@ -741,7 +741,7 @@ spec:
       volumes:
         - name: config
           configMap:
-            name: astrago-mariadb
+            name: astrago23-mariadb
         - name: data
           persistentVolumeClaim:
             claimName: astra-mariadb-volume
