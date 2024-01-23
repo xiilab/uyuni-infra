@@ -418,7 +418,7 @@ spec:
           
           env:
           - name: SPRING_DATASOURCE_URL
-            value: "jdbc:mariadb://mariadb:3306/astrago"
+            value: "jdbc:mariadb://astrago-mariadb:3306/astrago"
           - name: SPRING_DATASOURCE_USERNAME
             value: "astrago"
           - name: SPRING_DATASOURCE_PASSWORD
