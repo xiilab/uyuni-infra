@@ -43,6 +43,8 @@ frontend:
       value: {{ .Values.astrago.keycloak.client }}
     - name: AUTH_CLIENT_SECRET
       value: {{ .Values.astrago.keycloak.clientSecret }}
+    - name: NODE_OPTIONS
+      value: "--max-http-header-size=41960"
     - name: NEXTAUTH_URL
       value: http://10.61.3.12:30080
     - name: NEXTAUTH_SECRET
