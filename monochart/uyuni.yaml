@@ -480,6 +480,8 @@ spec:
             value: "kubernetes-client"
           - name: AUTH_CLIENT_SECRET
             value: "7bE2Oq2HyKrPsX49EXul0G48O4c4kkFv"
+          - name: NODE_OPTIONS
+            value: "--max-http-header-size=41960"
           - name: NEXTAUTH_URL
             value: "http://10.61.3.12:30080"
           - name: NEXTAUTH_SECRET
