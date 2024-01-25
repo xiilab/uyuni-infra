@@ -395,7 +395,7 @@ metadata:
     app.kubernetes.io/version: "1.16.0"
     app.kubernetes.io/managed-by: Helm
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app.kubernetes.io/name: core
@@ -436,6 +436,7 @@ spec:
 
           resources:
             {}
+      terminationGracePeriodSeconds: 10
 ---
 # Source: uyuni/charts/frontend/templates/deployment.yaml
 apiVersion: apps/v1
