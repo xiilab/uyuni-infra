@@ -469,7 +469,7 @@ spec:
         - name: frontend
           securityContext:
             {}
-          image: "harbor.xiilab.com:32443/uyuni/uyuni-frontend:develop-805ddc3"
+          image: "harbor.xiilab.com:32443/uyuni/uyuni-frontend:develop-77b5f20"
           imagePullPolicy: Always
           
           env:
