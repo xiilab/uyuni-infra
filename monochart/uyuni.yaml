@@ -375,16 +375,6 @@ spec:
           imagePullPolicy: Always
 
           env:
-          - name: SPRING_DATASOURCE_URL
-            value: "jdbc:mariadb://astrago-mariadb:3306/astrago"
-          - name: SPRING_DATASOURCE_USERNAME
-            value: "astrago"
-          - name: SPRING_DATASOURCE_PASSWORD
-            value: "xiirocks"
-          - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWT_ISSUER-URI
-            value: "http://10.61.3.8:30001/realms/myrealm"
-          - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWK-SET-URI
-            value: "http://10.61.3.8:30001/realms/myrealm/protocol/openid-connect/certs"
           ports:
             - name: http
               containerPort: 8080
