@@ -18,6 +18,17 @@ batch:
   image:
     repository: "{{ .Values.astrago.batch.repository }}"
     tag: "{{ .Values.astrago.batch.imageTag }}"
+  env:
+    - name: SPRING_DATASOURCE_URL
+      value: jdbc:mariadb://astrago-mariadb:3306/{{ .Values.astrago.mariadb.database }}
+    - name: SPRING_DATASOURCE_USERNAME
+      value: {{ .Values.astrago.mariadb.username }}
+    - name: SPRING_DATASOURCE_PASSWORD
+      value: {{ .Values.astrago.mariadb.password }}
+    - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWT_ISSUER-URI
+      value: {{ .Values.astrago.keycloak.host }}/realms/{{ .Values.astrago.keycloak.realm }}
+    - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWK-SET-URI
+      value: {{ .Values.astrago.keycloak.host }}/realms/{{ .Values.astrago.keycloak.realm }}/protocol/openid-connect/certs
 
 monitor:
   image:
