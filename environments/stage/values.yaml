@@ -1,0 +1,48 @@
+keycloak:
+  adminUser: admin
+  adminPassword: xiirocks
+  createVolume:
+    enabled: true
+    name: keycloak-volume
+    size: 8Gi
+    volumeType: nfs
+    nfs:
+      server: 10.61.3.2
+      path: /kube_storage/staging-astrago-keycloak-volume
+
+astrago:
+  prometheus:
+    host: http://10.61.3.12:30090
+  keycloak:
+    host: http://10.61.3.8:30001
+    realm: myrealm
+    client: kubernetes-client
+    clientSecret: 7bE2Oq2HyKrPsX49EXul0G48O4c4kkFv
+  mariadb:
+    rootPassword: root
+    database: astrago
+    username: astrago
+    password: xiirocks
+    volume:
+      volumeName: astra-mariadb-volume
+      volumeSize: 8Gi
+      volumeType: nfs
+      nfs:
+        server: 10.61.3.2
+        path: /kube_storage/astra-mariadb-volume
+  core:
+    repository: harbor.xiilab.com:32443/uyuni/server-core
+    imageTag: "develop-7bc739e"
+  batch:
+    repository: harbor.xiilab.com:32443/uyuni/server-batch
+    imageTag: "develop-7bc739e"
+  monitor:
+    repository: harbor.xiilab.com:32443/uyuni/server-monitor
+    imageTag: "develop-7bc739e"
+  frontend:
+    repository: "harbor.xiilab.com:32443/uyuni/uyuni-frontend"
+    imageTag: develop-eb4d38f
+    service:
+      type: NodePort
+      port: 3000
+      nodePort: 30080

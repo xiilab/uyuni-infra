@@ -1,6 +1,6 @@
 auth:
-  adminUser: admin
-  adminPassword: "xiirocks"
+  adminUser: "{{ .Values.keycloak.adminUser }}"
+  adminPassword: "{{ .Values.keycloak.adminPassword }}"
 service:
   type: NodePort
   nodePorts:
@@ -45,16 +45,16 @@ postgresql:
   primary:
     persistence:
       enabled: true
-      existingClaim: "keycloak-volume"
+      existingClaim: "{{ .Values.keycloak.createVolume.name }}"
 
 createVolume:
-  enabled: true
-  name: keycloak-volume
-  size: 8Gi
+  enabled: "{{ .Values.keycloak.createVolume.enabled }}"
+  name: "{{ .Values.keycloak.createVolume.name }}"
+  size: "{{ .Values.keycloak.createVolume.size }}"
   accessModes:
     - ReadWriteOnce     
-  volumeType: nfs
+  volumeType: "{{ .Values.keycloak.createVolume.volumeType }}"
   nfs:
-    server: 10.61.3.2
-    path: /kube_storage/staging-astrago-keycloak-volume
+    server: "{{ .Values.keycloak.createVolume.nfs.server }}"
+    path: "{{ .Values.keycloak.createVolume.nfs.path }}"
 
