@@ -1,0 +1,10 @@
+releases:
+  - name: keycloak
+    namespace: keycloak
+    # chart: oci://registry-1.docker.io/bitnamicharts/keycloak
+    chart: keycloak
+    wait: true
+    labels:
+      app: keycloak
+    values:
+    - keycloak/custom_values.yaml

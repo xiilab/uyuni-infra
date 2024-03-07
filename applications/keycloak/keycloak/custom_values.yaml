@@ -1,0 +1,42 @@
+auth:
+  adminUser: admin
+  adminPassword: "xiirocks"
+service:
+  type: NodePort
+  nodePorts:
+    http: "30001"
+    https: "30002"
+
+extraVolumes:
+  - name: theme
+    emptyDir: {}
+## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for Keycloak container(s)
+##
+extraVolumeMounts:
+  - name: theme
+    mountPath: /opt/bitnami/keycloak/providers/keycloak-theme.jar
+    subPath: keycloak-theme.jar
+
+## @param initContainers Add additional init containers to the Keycloak pods
+## Example:
+## initContainers:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+initContainers:
+  - name: download-astra-logintheme
+    image: jacobcarlborg/docker-alpine-wget
+    command:
+      - sh
+    args:
+      - -c
+      - |
+       echo "check_certificate = off" >> ~/.wgetrc && wget https://github.com/xiilab/uyuni-login-theme/releases/download/v1.0.13/keycloak-theme.jar -P /theme
+
+    volumeMounts:
+      - name: theme
+        mountPath: /theme
