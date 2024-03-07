@@ -42,6 +42,11 @@ initContainers:
         mountPath: /theme
 
 postgresql:
+  auth:
+    postgresPassword: "keycloak"
+    username: bn_keycloak
+    password: "keycloak"
+    database: bitnami_keycloak
   primary:
     persistence:
       enabled: true
