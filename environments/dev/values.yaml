@@ -6,6 +6,7 @@ astrago:
     realm: myrealm
     client: kubernetes-client
     clientSecret: 7bE2Oq2HyKrPsX49EXul0G48O4c4kkFv
+    nextauthUrl: http://10.61.3.12:30080
   mariadb:
     rootPassword: root
     database: astrago
