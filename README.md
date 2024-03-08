@@ -71,7 +71,13 @@ astrago:
 ```
 
 ## 3. 명령어
-### 3.1 인프라 설치(맨 상단의 위치에서(helmfile.yaml이 있는 곳에서) 실행)
+### 3.1 인프라 설치 및 제거(맨 상단의 위치에서(helmfile.yaml이 있는 곳에서) 실행)
+#### helm & helmfile 설치
+```sh
+cd tools
+./install_helmfile.sh
+```
+
 #### helmfile을 이용하여 전체 인프라 설치 
 ```sh
 helmfile --environment <env name> sync
