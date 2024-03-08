@@ -1,0 +1,59 @@
+all:
+  hosts:
+    master-1:
+      ansible_host: 10.61.3.161
+      ip: 10.61.3.161
+      access_ip: 10.61.3.161
+    master-2:
+      ansible_host: 10.61.3.162
+      ip: 10.61.3.162
+      access_ip: 10.61.3.162
+    worker-1:
+      ansible_host: 10.61.3.22
+      ip: 10.61.3.22
+      access_ip: 10.61.3.22
+    worker-2:
+      ansible_host: 10.61.3.23
+      ip: 10.61.3.23
+      access_ip: 10.61.3.23
+    worker-3:
+      ansible_host: 10.61.3.24
+      ip: 10.61.3.24
+      access_ip: 10.61.3.24
+    worker-4:
+      ansible_host: 10.61.3.25
+      ip: 10.61.3.25
+      access_ip: 10.61.3.25
+    worker-5:
+      ansible_host: 10.61.3.26
+      ip: 10.61.3.26
+      access_ip: 10.61.3.26
+    worker-6:
+      ansible_host: 10.61.3.27
+      ip: 10.61.3.27
+      access_ip: 10.61.3.27
+  children:
+    kube-master:
+      hosts:
+        master-1:
+        master-2:
+        worker-1:
+    kube-node:
+      hosts:
+        worker-1:
+        worker-2:
+        worker-3:
+        worker-4:
+        worker-5:
+        worker-6:
+    etcd:
+      hosts:
+        master-1:
+        master-2:
+        worker-1:
+    k8s-cluster:
+      children:
+        kube-master:
+        kube-node:
+    calico-rr:
+      hosts: {}

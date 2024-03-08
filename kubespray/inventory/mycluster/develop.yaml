@@ -1,0 +1,43 @@
+all:
+  hosts:
+    master-x3250m5-1:
+      ansible_host: 10.61.3.12
+      ip: 10.61.3.12
+      access_ip: 10.61.3.12
+    master-x3250m5-2:
+      ansible_host: 10.61.3.13
+      ip: 10.61.3.13
+      access_ip: 10.61.3.13
+    master-x3250m5-3:
+      ansible_host: 10.61.3.14
+      ip: 10.61.3.14
+      access_ip: 10.61.3.14
+    gpu-titan-2:
+      ansible_host: 10.61.3.138
+      ip: 10.61.3.138
+      access_ip: 10.61.3.138
+    dgxh100:
+      ansible_host: 10.61.3.30
+      ip: 10.61.3.30
+      access_ip: 10.61.3.30
+  children:
+    kube-master:
+      hosts:
+        master-x3250m5-1:
+        master-x3250m5-2:
+        master-x3250m5-3:
+    kube-node:
+      hosts:
+        gpu-titan-2:
+        dgxh100:
+    etcd:
+      hosts:
+        master-x3250m5-1:
+        master-x3250m5-2:
+        master-x3250m5-3:
+    k8s-cluster:
+      children:
+        kube-master:
+        kube-node:
+    calico-rr:
+      hosts: {}
