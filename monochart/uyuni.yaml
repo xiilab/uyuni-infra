@@ -326,7 +326,7 @@ subjects:
 apiVersion: v1
 kind: Service
 metadata:
-  name: uyuni-backend-batch
+  name: astrago-backend-batch
   namespace: astrago
   labels:
     helm.sh/chart: batch-0.1.1
@@ -350,7 +350,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: uyuni-backend-core
+  name: astrago-backend-core
   namespace: astrago
   labels:
     helm.sh/chart: core-0.1.1
@@ -374,7 +374,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: uyuni-frontend
+  name: astrago-frontend
   namespace: astrago
   labels:
     helm.sh/chart: frontend-0.1.0
@@ -425,7 +425,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: uyuni-backend-monitor
+  name: astrago-backend-monitor
   namespace: astrago
   labels:
     helm.sh/chart: monitor-0.1.1
