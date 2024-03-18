@@ -1,4 +1,24 @@
 alertmanager:
+  config:
+    global:
+      resolve_timeout: 5m
+    route:
+      group_by: ['nodeName', 'ruleName']
+      group_wait: 30s
+      group_interval: 5m
+      repeat_interval: 12h
+      receiver: 'null'
+      routes:
+      - receiver: 'webhook'
+        matchers:
+          - app = "uyuni-suite"
+    receivers:
+    - name: 'null'
+    - name: 'webhook'
+      webhook_configs:
+      - url: 'http://astrago-backend-core.astrago.svc:8080/api/v1/core/alertManager/receive'
+    templates:
+    - '/etc/alertmanager/config/*.tmpl'  
   service:
     type: NodePort    
       
