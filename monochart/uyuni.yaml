@@ -462,6 +462,21 @@ spec:
   selector:
     k8s-app: metrics-server
 ---
+# Source: uyuni/templates/time-prediction.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: astrago-time-prediction
+  namespace: astrago
+spec:
+  selector:
+    app: astrago-time-prediction
+  ports:
+  - protocol: TCP
+    port: 8000
+    targetPort: 8000
+  type: NodePort
+---
 # Source: uyuni/charts/batch/templates/deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
@@ -825,6 +840,28 @@ spec:
       volumes:
       - emptyDir: {}
         name: tmp-dir
+---
+# Source: uyuni/templates/time-prediction.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: astrago-time-prediction
+  namespace: astrago
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: astrago-time-prediction
+  template:
+    metadata:
+      labels:
+        app: astrago-time-prediction
+    spec:
+      containers:
+      - name: astrago-time-prediction
+        image: xiilab/astrago:time-prediction  # 이미지 이름 수정
+        ports:
+        - containerPort: 8000
 ---
 # Source: uyuni/charts/mariadb/templates/primary/statefulset.yaml
 apiVersion: apps/v1
