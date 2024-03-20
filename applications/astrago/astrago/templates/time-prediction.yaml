@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: astrago-time-prediction
-        image: xiilab/astrago:time-prediction  # 이미지 이름 수정
+        image: xiilab/astrago:time-prediction-v0.1  # 이미지 이름 수정
         ports:
         - containerPort: 8000
 
