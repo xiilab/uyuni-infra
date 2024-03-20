@@ -508,7 +508,7 @@ spec:
         - name: batch
           securityContext:
             {}
-          image: "harbor.xiilab.com:32443/uyuni/server-batch:develop-7f3ca2e"
+          image: "harbor.xiilab.com:32443/uyuni/server-batch:develop-6e20016"
           imagePullPolicy: Always
 
           env:
@@ -560,7 +560,7 @@ spec:
         - name: core
           securityContext:
             {}
-          image: "harbor.xiilab.com:32443/uyuni/server-core:develop-7f3ca2e"
+          image: "harbor.xiilab.com:32443/uyuni/server-core:develop-6e20016"
           imagePullPolicy: Always
           
           env:
@@ -681,7 +681,7 @@ spec:
         - name: monitor
           securityContext:
             {}
-          image: "harbor.xiilab.com:32443/uyuni/server-monitor:develop-7f3ca2e"
+          image: "harbor.xiilab.com:32443/uyuni/server-monitor:develop-6e20016"
           imagePullPolicy: Always
           env:
           - name: SPRING_MVC_PATHMATCH_MATCHING-STRATEGY
