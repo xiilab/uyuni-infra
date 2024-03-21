@@ -35,6 +35,12 @@ monitor:
     repository: "{{ .Values.astrago.monitor.repository }}"
     tag: "{{ .Values.astrago.monitor.imageTag }}" 
   env:
+    - name: SPRING_DATASOURCE_URL
+      value: jdbc:mariadb://astrago-mariadb:3306/{{ .Values.astrago.mariadb.database }}
+    - name: SPRING_DATASOURCE_USERNAME
+      value: {{ .Values.astrago.mariadb.username }}
+    - name: SPRING_DATASOURCE_PASSWORD
+      value: {{ .Values.astrago.mariadb.password }}
     - name: SPRING_MVC_PATHMATCH_MATCHING-STRATEGY
       value: ant_path_matcher
     - name: PROMETHEUS_URL
