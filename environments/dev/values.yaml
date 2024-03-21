@@ -21,13 +21,13 @@ astrago:
         path: /kube_storage/astra-mariadb-volume
   core:
     repository: "harbor.xiilab.com:32443/uyuni/server-core"
-    imageTag: "develop-c56d115"
+    imageTag: "develop-4bfff53"
   batch:
     repository: "harbor.xiilab.com:32443/uyuni/server-batch"
-    imageTag: "develop-c56d115"
+    imageTag: "develop-4bfff53"
   monitor:
     repository: "harbor.xiilab.com:32443/uyuni/server-monitor"
-    imageTag: "develop-c56d115"
+    imageTag: "develop-4bfff53"
   frontend:
     repository: "harbor.xiilab.com:32443/uyuni/uyuni-frontend"
     imageTag: develop-c3ba0c9
