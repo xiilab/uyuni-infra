@@ -41,7 +41,7 @@ astrago:
     imageTag: "develop-7bc739e"
   frontend:
     repository: "$DOCKER_REPOSITORY"
-    imageTag: 0.9-4e67-rc
+    imageTag: 0.9-892f-rc
     service:
       type: NodePort
       port: 3000
