@@ -41,7 +41,7 @@ astrago:
     imageTag: "develop-7bc739e"
   frontend:
     repository: "xiilab/astrago-frontend"
-    imageTag: 0.1-4d80-rc
+    imageTag: 0.1-d476-rc
     service:
       type: NodePort
       port: 3000
