@@ -40,8 +40,8 @@ astrago:
     repository: harbor.xiilab.com:32443/uyuni/server-monitor
     imageTag: "develop-7bc739e"
   frontend:
-    repository: "$DOCKER_REPOSITORY"
-    imageTag: 0.9-892f-rc
+    repository: "xiilab/astrago-frontend"
+    imageTag: 0.9-17a1-rc
     service:
       type: NodePort
       port: 3000
