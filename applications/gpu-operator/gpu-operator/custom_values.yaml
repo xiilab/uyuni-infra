@@ -19,3 +19,9 @@ driver:
 
 toolkit:
   enabled: true 
+
+migManager:
+  enabled: true
+  config:
+    name: "custom-mig-parted-config"
+    default: "all-disabled"
