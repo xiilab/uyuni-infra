@@ -509,7 +509,7 @@ spec:
         - name: batch
           securityContext:
             {}
-          image: "xiilab/astrago-backend:batch-develop-6beffdb"
+          image: "xiilab/astrago-backend:batch-develop-ced2a72"
           imagePullPolicy: Always
 
           env:
@@ -561,7 +561,7 @@ spec:
         - name: core
           securityContext:
             {}
-          image: "xiilab/astrago-backend:core-develop-6beffdb"
+          image: "xiilab/astrago-backend:core-develop-ced2a72"
           imagePullPolicy: Always
           
           env:
@@ -682,7 +682,7 @@ spec:
         - name: monitor
           securityContext:
             {}
-          image: "xiilab/astrago-backend:monitor-develop-6beffdb"
+          image: "xiilab/astrago-backend:monitor-develop-ced2a72"
           imagePullPolicy: Always
           env:
           - name: SPRING_DATASOURCE_URL
