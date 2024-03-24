@@ -22,15 +22,15 @@ astrago:
   core:
     #    repository: "harbor.xiilab.com:32443/uyuni/server-core"
     repository: xiilab/astrago-backend
-    imageTag: "develop-670ba38"
+    imageTag: "develop-0470e91"
   batch:
     #    repository: "harbor.xiilab.com:32443/uyuni/server-batch"
     repository: xiilab/astrago-backend
-    imageTag: "develop-670ba38"
+    imageTag: "develop-0470e91"
   monitor:
     #    repository: "harbor.xiilab.com:32443/uyuni/server-monitor"
     repository: xiilab/astrago-backend
-    imageTag: "develop-670ba38"
+    imageTag: "develop-0470e91"
   frontend:
     repository: "docker.io/xiilab/astrago-frontend"
     imageTag: develop-b98b5b8
