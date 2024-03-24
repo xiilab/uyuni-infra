@@ -33,7 +33,7 @@ astrago:
     imageTag: "monitor-develop-f84df7f"
   frontend:
     repository: "docker.io/xiilab/astrago-frontend"
-    imageTag: develop-75babbd
+    imageTag: develop-6fb1643
     service:
       type: NodePort
       port: 3000
