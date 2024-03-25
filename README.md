@@ -75,7 +75,7 @@ astrago:
 #### helm & helmfile 설치
 ```sh
 cd tools
-./install_helmfile.sh
+sudo ./install_helmfile.sh
 ```
 
 #### helmfile을 이용하여 전체 인프라 설치 
