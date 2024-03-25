@@ -122,6 +122,23 @@ data:
         name: NodeResourcesFit
       schedulerName: binpack-scheduler
 ---
+# Source: uyuni/charts/core/templates/log-volume.yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: astrago-workload-log
+  namespace: "astrago"
+spec:
+  capacity:
+    storage: "8Gi"
+  persistentVolumeReclaimPolicy: Retain
+  accessModes:
+    - "ReadWriteOnce"
+  storageClassName: workload-log-volume
+  nfs:
+    server: 10.61.3.2
+    path: /kube_storage/astrago-log-volume
+---
 # Source: uyuni/charts/mariadb/templates/persistent-volume.yaml
 apiVersion: v1
 kind: PersistentVolume
@@ -138,6 +155,20 @@ spec:
   nfs:
     server: 10.61.3.2
     path: /kube_storage/astra-mariadb-volume
+---
+# Source: uyuni/charts/core/templates/log-volume.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: astrago-workload-log
+  namespace: "astrago"
+spec:
+  resources:
+    requests:
+      storage: "8Gi"
+  accessModes:
+    - "ReadWriteOnce"
+  storageClassName: workload-log-volume
 ---
 # Source: uyuni/charts/mariadb/templates/persistent-volume.yaml
 apiVersion: v1
@@ -575,7 +606,9 @@ spec:
             value: "http://10.61.3.8:30001/realms/myrealm"
           - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWK-SET-URI
             value: "http://10.61.3.8:30001/realms/myrealm/protocol/openid-connect/certs"
-
+          volumeMounts:
+            - name: astrago-workload-log
+              mountPath: /root/astrago
           
           ports:
             - name: http
@@ -584,6 +617,10 @@ spec:
 
           resources:
             {}
+      volumes:
+        - name: astrago-workload-log
+          persistentVolumeClaim:
+            claimName: astrago-workload-log
       terminationGracePeriodSeconds: 10
 ---
 # Source: uyuni/charts/frontend/templates/deployment.yaml
