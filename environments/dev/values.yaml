@@ -7,6 +7,15 @@ astrago:
     client: kubernetes-client
     clientSecret: 7bE2Oq2HyKrPsX49EXul0G48O4c4kkFv
     nextauthUrl: http://10.61.3.12:30080
+  log:
+    createVolume:
+      enabled: true
+      name: astrago-workload-log
+      size: 8Gi
+      volumeType: nfs
+      nfs:
+        server: 10.61.3.2
+        path: /kube_storage/astrago-log-volume
   mariadb:
     rootPassword: root
     database: astrago

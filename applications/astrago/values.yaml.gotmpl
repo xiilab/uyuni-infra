@@ -13,6 +13,18 @@ core:
       value: {{ .Values.astrago.keycloak.host }}/realms/{{ .Values.astrago.keycloak.realm }}
     - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWK-SET-URI
       value: {{ .Values.astrago.keycloak.host }}/realms/{{ .Values.astrago.keycloak.realm }}/protocol/openid-connect/certs
+  createVolume:
+    enabled: "{{ .Values.astrago.log.createVolume.enabled }}"
+    name: "{{ .Values.astrago.log.createVolume.name }}"
+    size: "{{ .Values.astrago.log.createVolume.size }}"
+    accessModes:
+      - ReadWriteOnce
+    volumeType: "{{ .Values.astrago.log.createVolume.volumeType }}"
+    nfs:
+      server: "{{ .Values.astrago.log.createVolume.nfs.server }}"
+      path: "{{ .Values.astrago.log.createVolume.nfs.path }}"    
+    
+ 
 
 batch:
   image:
