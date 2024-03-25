@@ -554,12 +554,20 @@ spec:
               value: "http://10.61.3.8:30001/realms/myrealm"
             - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWK-SET-URI
               value: "http://10.61.3.8:30001/realms/myrealm/protocol/openid-connect/certs"
+          volumeMounts:
+            - name: astrago-workload-log
+              mountPath: /root/astrago
+
           ports:
             - name: http
               containerPort: 8080
               protocol: TCP
           resources:
             {}
+      volumes:
+        - name: astrago-workload-log
+          persistentVolumeClaim:
+            claimName: astrago-workload-log
 ---
 # Source: uyuni/charts/core/templates/deployment.yaml
 apiVersion: apps/v1
