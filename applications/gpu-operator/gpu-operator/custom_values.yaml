@@ -25,3 +25,6 @@ migManager:
   config:
     name: "custom-mig-parted-config"
     default: "all-disabled"
+
+mig:
+  strategy: mixed
