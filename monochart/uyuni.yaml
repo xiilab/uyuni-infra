@@ -617,7 +617,7 @@ spec:
         - name: frontend
           securityContext:
             {}
-          image: "docker.io/xiilab/astrago-frontend:develop-9264b06"
+          image: "harbor.xiilab.com:32443/uyuni/uyuni-frontend:develop-88df5e9"
           imagePullPolicy: Always
           
           env:
