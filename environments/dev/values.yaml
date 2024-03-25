@@ -32,8 +32,8 @@ astrago:
     repository: xiilab/astrago-backend
     imageTag: "develop-ccfa648"
   frontend:
-    repository: "docker.io/xiilab/astrago-frontend"
-    imageTag: develop-9264b06
+    repository: "harbor.xiilab.com:32443/uyuni/uyuni-frontend"
+    imageTag: develop-88df5e9
     service:
       type: NodePort
       port: 3000
