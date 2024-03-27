@@ -81,11 +81,11 @@ data:
     log-error=/opt/bitnami/mariadb/logs/mysqld.log
     character-set-server=UTF8
     collation-server=utf8_general_ci
-    slow_query_log=0
     long_query_time=10.0
     interactive_timeout = 3600
     wait_timeout = 3600
     max_connections = 500
+    slow_query_log = 1
     
     [client]
     port=3306
@@ -946,7 +946,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/configuration: 3ab62f387dd3bc904dccefbfc10d30ac61b2682a14a0328b968cd2c5cf90d463
+        checksum/configuration: cc86e83c1be5a9e330b51aa6929c9c0bdf61cd421b4baee85fbf3461d040034a
       labels:
         app.kubernetes.io/name: mariadb
         helm.sh/chart: mariadb-12.2.9
