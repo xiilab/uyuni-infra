@@ -11,7 +11,7 @@ core:
     - name: SPRING_DATASOURCE_PASSWORD
       value: {{ .Values.astrago.mariadb.password }}
     - name: SPRING_DATASOURCE_HIKARI_MAX-LIFETIME
-      value: {{ .Values.astrago.mariadb.maxLifetime | replace ":" ""}}
+      value: {{ int .Values.astrago.mariadb.maxLifetime}}
     - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWT_ISSUER-URI
       value: {{ .Values.astrago.keycloak.host }}/realms/{{ .Values.astrago.keycloak.realm }}
     - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWK-SET-URI
