@@ -83,6 +83,9 @@ data:
     collation-server=utf8_general_ci
     slow_query_log=0
     long_query_time=10.0
+    interactive_timeout = 3600
+    wait_timeout = 3600
+    max_connections = 500
     
     [client]
     port=3306
@@ -610,6 +613,8 @@ spec:
             value: "astrago"
           - name: SPRING_DATASOURCE_PASSWORD
             value: "xiirocks"
+          - name: SPRING_DATASOURCE_HIKARI_MAX-LIFETIME
+            value: "3.57e+06"
           - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWT_ISSUER-URI
             value: "http://10.61.3.8:30001/realms/myrealm"
           - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWK-SET-URI
@@ -941,7 +946,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/configuration: 0260afe3a5161c81802f7dc3a369dd4970d4a77a7c9e44c814e38d0c021591d2
+        checksum/configuration: 3ab62f387dd3bc904dccefbfc10d30ac61b2682a14a0328b968cd2c5cf90d463
       labels:
         app.kubernetes.io/name: mariadb
         helm.sh/chart: mariadb-12.2.9
