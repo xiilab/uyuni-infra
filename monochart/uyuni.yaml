@@ -614,7 +614,7 @@ spec:
           - name: SPRING_DATASOURCE_PASSWORD
             value: "xiirocks"
           - name: SPRING_DATASOURCE_HIKARI_MAX-LIFETIME
-            value: "3.595e+06"
+            value: "0"
           - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWT_ISSUER-URI
             value: "http://10.61.3.8:30001/realms/myrealm"
           - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWK-SET-URI
