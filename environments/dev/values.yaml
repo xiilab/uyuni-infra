@@ -21,7 +21,7 @@ astrago:
     database: astrago
     username: astrago
     password: xiirocks
-    maxLifetime: 3595000
+    maxLifetime: "3595000"
     volume:
       volumeName: astra-mariadb-volume
       volumeSize: 8Gi
