@@ -40,6 +40,8 @@ batch:
       value: {{ .Values.astrago.mariadb.username }}
     - name: SPRING_DATASOURCE_PASSWORD
       value: {{ .Values.astrago.mariadb.password }}
+    - name: SPRING_DATASOURCE_HIKARI_MAX-LIFETIME
+      value: {{ int .Values.astrago.mariadb.maxLifetime}}
     - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWT_ISSUER-URI
       value: {{ .Values.astrago.keycloak.host }}/realms/{{ .Values.astrago.keycloak.realm }}
     - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWK-SET-URI
@@ -58,6 +60,8 @@ monitor:
       value: {{ .Values.astrago.mariadb.username }}
     - name: SPRING_DATASOURCE_PASSWORD
       value: {{ .Values.astrago.mariadb.password }}
+    - name: SPRING_DATASOURCE_HIKARI_MAX-LIFETIME
+      value: {{ int .Values.astrago.mariadb.maxLifetime}}
     - name: SPRING_MVC_PATHMATCH_MATCHING-STRATEGY
       value: ant_path_matcher
     - name: PROMETHEUS_URL
