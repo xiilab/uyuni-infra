@@ -40,7 +40,7 @@ astrago:
     imageTag: "develop-5afb502"
   frontend:
     repository: "harbor.xiilab.com:32443/uyuni/uyuni-frontend"
-    imageTag: develop-c407246
+    imageTag: develop-43ca305
     service:
       type: NodePort
       port: 3000
