@@ -556,9 +556,9 @@ spec:
             - name: SPRING_DATASOURCE_HIKARI_MAX-LIFETIME
               value: "0"
             - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWT_ISSUER-URI
-              value: "http://10.61.3.8:30001/realms/myrealm"
+              value: "http://10.61.3.12:30001/realms/astrago"
             - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWK-SET-URI
-              value: "http://10.61.3.8:30001/realms/myrealm/protocol/openid-connect/certs"
+              value: "http://10.61.3.12:30001/realms/astrago/protocol/openid-connect/certs"
           volumeMounts:
             - name: astrago-workload-log
               mountPath: /root/astrago
@@ -618,9 +618,9 @@ spec:
           - name: SPRING_DATASOURCE_HIKARI_MAX-LIFETIME
             value: "0"
           - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWT_ISSUER-URI
-            value: "http://10.61.3.8:30001/realms/myrealm"
+            value: "http://10.61.3.12:30001/realms/astrago"
           - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWK-SET-URI
-            value: "http://10.61.3.8:30001/realms/myrealm/protocol/openid-connect/certs"
+            value: "http://10.61.3.12:30001/realms/astrago/protocol/openid-connect/certs"
           volumeMounts:
             - name: astrago-workload-log
               mountPath: /root/astrago
@@ -674,13 +674,13 @@ spec:
           
           env:
           - name: KEYCLOAK_HOST
-            value: "http://10.61.3.8:30001"
+            value: "http://10.61.3.12:30001"
           - name: KEYCLOAK_REALME
-            value: "myrealm"
+            value: "astrago"
           - name: KEYCLOAK_CLIENT_ID
-            value: "kubernetes-client"
+            value: "astrago-client"
           - name: AUTH_CLIENT_SECRET
-            value: "7bE2Oq2HyKrPsX49EXul0G48O4c4kkFv"
+            value: "astragosecret"
           - name: NODE_OPTIONS
             value: "--max-http-header-size=41960"
           - name: NEXTAUTH_URL
