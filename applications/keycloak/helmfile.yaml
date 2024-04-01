@@ -1,10 +1,19 @@
 releases:
-  - name: keycloak
-    namespace: keycloak
-    # chart: oci://registry-1.docker.io/bitnamicharts/keycloak
-    chart: keycloak
-    wait: true
-    labels:
-      app: keycloak
-    values:
-    - values.yaml.gotmpl
+- name: keycloak-volume
+  namespace: keycloak
+  chart: keycloak-volume
+  wait: true
+  labels:
+    app: keycloak
+  values:
+  - values.yaml.gotmpl
+
+- name: keycloak
+  namespace: keycloak
+  # chart: oci://registry-1.docker.io/bitnamicharts/keycloak
+  chart: keycloak
+  wait: true
+  labels:
+    app: keycloak
+  values:
+  - values.yaml.gotmpl

@@ -7,15 +7,24 @@ service:
     http: "30001"
     https: "30002"
 
+extraEnvVars:
+  - name: KEYCLOAK_EXTRA_ARGS
+    value: "--import-realm"
+
 extraVolumes:
   - name: theme
     emptyDir: {}
+  - name: realm-config
+    configMap:
+      name: realm-config
 ## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for Keycloak container(s)
 ##
 extraVolumeMounts:
   - name: theme
     mountPath: /opt/bitnami/keycloak/providers/keycloak-theme.jar
     subPath: keycloak-theme.jar
+  - name: realm-config
+    mountPath: /opt/bitnami/keycloak/data/import
 
 ## @param initContainers Add additional init containers to the Keycloak pods
 ## Example:
@@ -35,7 +44,7 @@ initContainers:
     args:
       - -c
       - |
-       echo "check_certificate = off" >> ~/.wgetrc && wget https://github.com/xiilab/uyuni-login-theme/releases/download/v1.0.13/keycloak-theme.jar -P /theme
+       echo "check_certificate = off" >> ~/.wgetrc && wget https://github.com/xiilab/uyuni-login-theme/releases/download/{{ .Values.keycloak.themeVersion }}/keycloak-theme.jar -P /theme
 
     volumeMounts:
       - name: theme
@@ -43,14 +52,15 @@ initContainers:
 
 postgresql:
   auth:
-    postgresPassword: "keycloak"
-    username: bn_keycloak
-    password: "keycloak"
-    database: bitnami_keycloak
+    postgresPassword: postgres
+    username: keycloak
+    password: keycloak
+    database: keycloak
   primary:
     persistence:
       enabled: true
       existingClaim: "{{ .Values.keycloak.createVolume.name }}"
+
 
 createVolume:
   enabled: "{{ .Values.keycloak.createVolume.enabled }}"
@@ -62,4 +72,3 @@ createVolume:
   nfs:
     server: "{{ .Values.keycloak.createVolume.nfs.server }}"
     path: "{{ .Values.keycloak.createVolume.nfs.path }}"
-

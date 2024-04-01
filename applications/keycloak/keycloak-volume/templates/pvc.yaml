@@ -1,0 +1,16 @@
+{{- if .Values.createVolume.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.createVolume.name }}
+  namespace: {{ .Release.Namespace | quote }}
+spec:
+  resources:
+    requests:
+      storage: {{ .Values.createVolume.size | quote }}
+  accessModes:
+    {{- range .Values.createVolume.accessModes }}
+    - {{ . | quote }}
+    {{- end }}
+  storageClassName: keycloak-volume
+{{- end }}

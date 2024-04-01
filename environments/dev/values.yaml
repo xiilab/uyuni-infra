@@ -1,3 +1,15 @@
+keycloak:
+  themeVersion: v1.0.13
+  adminUser: admin
+  adminPassword: xiirocks
+  createVolume:
+    enabled: true
+    name: keycloak-volume
+    size: 8Gi
+    volumeType: nfs
+    nfs:
+      server: 10.61.3.2
+      path: /kube_storage/develop-astrago-keycloak-volume
 astrago:
   prometheus:
     host: http://10.61.3.12:30090
