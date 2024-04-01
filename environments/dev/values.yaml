@@ -11,13 +11,11 @@ keycloak:
       server: 10.61.3.2
       path: /kube_storage/develop-astrago-keycloak-volume
 astrago:
-  prometheus:
-    host: http://10.61.3.12:30090
   keycloak:
-    host: http://10.61.3.8:30001
-    realm: myrealm
-    client: kubernetes-client
-    clientSecret: 7bE2Oq2HyKrPsX49EXul0G48O4c4kkFv
+    host: http://10.61.3.12:30001
+    realm: astrago
+    client: astrago-client
+    clientSecret: astragosecret
     nextauthUrl: http://10.61.3.12:30080
   log:
     createVolume:
