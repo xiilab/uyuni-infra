@@ -570,7 +570,7 @@ spec:
             - name: ADMIN_PASSWORD
               value: "xiirocks"
             - name: ADMIN_INIT-PASSWORD
-              value: "xiirocks"
+              value: "astrago"
           volumeMounts:
             - name: astrago-workload-log
               mountPath: /root/astrago
@@ -644,7 +644,7 @@ spec:
           - name: ADMIN_PASSWORD
             value: "xiirocks"
           - name: ADMIN_INIT-PASSWORD
-            value: "xiirocks"
+            value: "astrago"
           volumeMounts:
             - name: astrago-workload-log
               mountPath: /root/astrago
