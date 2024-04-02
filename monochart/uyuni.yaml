@@ -543,7 +543,7 @@ spec:
         - name: batch
           securityContext:
             {}
-          image: "harbor.xiilab.com:32443/uyuni/server-batch:develop-f52d230"
+          image: "harbor.xiilab.com:32443/uyuni/server-batch:develop-3f484d7"
           imagePullPolicy: Always
 
           env:
@@ -559,6 +559,18 @@ spec:
               value: "http://10.61.3.12:30001/realms/astrago"
             - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWK-SET-URI
               value: "http://10.61.3.12:30001/realms/astrago/protocol/openid-connect/certs"
+            - name: KEYCLOAK_REALM
+              value: "astrago"
+            - name: KEYCLOAK_AUTH-SERVER-URL
+              value: "http://10.61.3.12:30001"
+            - name: KEYCLOAK_RESOURCE
+              value: "astrago-client"
+            - name: ADMIN_NAME
+              value: "admin"
+            - name: ADMIN_PASSWORD
+              value: "xiirocks"
+            - name: ADMIN_INIT-PASSWORD
+              value: "xiirocks"
           volumeMounts:
             - name: astrago-workload-log
               mountPath: /root/astrago
@@ -605,7 +617,7 @@ spec:
         - name: core
           securityContext:
             {}
-          image: "harbor.xiilab.com:32443/uyuni/server-core:develop-f52d230"
+          image: "harbor.xiilab.com:32443/uyuni/server-core:develop-3f484d7"
           imagePullPolicy: Always
           
           env:
@@ -621,6 +633,18 @@ spec:
             value: "http://10.61.3.12:30001/realms/astrago"
           - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWK-SET-URI
             value: "http://10.61.3.12:30001/realms/astrago/protocol/openid-connect/certs"
+          - name: KEYCLOAK_REALM
+            value: "astrago"
+          - name: KEYCLOAK_AUTH-SERVER-URL
+            value: "http://10.61.3.12:30001"
+          - name: KEYCLOAK_RESOURCE
+            value: "astrago-client"
+          - name: ADMIN_NAME
+            value: "admin"
+          - name: ADMIN_PASSWORD
+            value: "xiirocks"
+          - name: ADMIN_INIT-PASSWORD
+            value: "xiirocks"
           volumeMounts:
             - name: astrago-workload-log
               mountPath: /root/astrago
@@ -734,7 +758,7 @@ spec:
         - name: monitor
           securityContext:
             {}
-          image: "harbor.xiilab.com:32443/uyuni/server-monitor:develop-f52d230"
+          image: "harbor.xiilab.com:32443/uyuni/server-monitor:develop-3f484d7"
           imagePullPolicy: Always
           env:
           - name: SPRING_DATASOURCE_URL
