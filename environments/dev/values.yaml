@@ -12,7 +12,7 @@ keycloak:
       path: /kube_storage/develop-astrago-keycloak-volume
 astrago:
   keycloak:
-    host: http://10.61.3.12:30001
+    host: http://10.61.3.12:30080/auth/
     realm: astrago
     client: astrago-client
     clientSecret: astragosecret
