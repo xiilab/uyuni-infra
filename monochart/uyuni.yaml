@@ -711,6 +711,18 @@ spec:
             value: "http://10.61.3.12:30080"
           - name: NEXTAUTH_SECRET
             value: "uuNj1L0Yg2xKcBPVp7yOVlm2nigL3hoHOzbwQXAwx1I="
+          - name: NEXT_PUBLIC_API_URL
+            value: "http://astrago-backend-core:8080"
+          - name: NEXT_PUBLIC_MONITOR_API_URL
+            value: "http://astrago-backend-monitor:8080"
+          - name: NEXT_PUBLIC_PREDICTION_API_URL
+            value: "http://astrago-time-prediction:8000"
+          - name: NEXT_PUBLIC_BATCH_API_URL
+            value: "http://astrago-backend-batch:8080"
+          - name: NEXT_PUBLIC_API_MOCKING
+            value: "disabled"
+          - name: NEXT_PUBLIC_WEBSOCKET_HOST
+            value: "http://astrago-backend-core:8080/"
           
           ports:
             - name: http
