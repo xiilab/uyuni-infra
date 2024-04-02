@@ -17,7 +17,7 @@ astrago:
     client: astrago-client
     clientSecret: astragosecret
     nextauthUrl: http://10.61.3.12:30080
-    userInitPassword: xiirocks
+    userInitPassword: astrago
   log:
     createVolume:
       enabled: true
