@@ -631,7 +631,7 @@ spec:
             value: "0"
           - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWT_ISSUER-URI
             value: "http://10.61.3.12:30001/realms/astrago"
-          - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWK-SET-URI
+          - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWT_JWK-SET-URI
             value: "http://10.61.3.12:30001/realms/astrago/protocol/openid-connect/certs"
           - name: KEYCLOAK_REALM
             value: "astrago"
