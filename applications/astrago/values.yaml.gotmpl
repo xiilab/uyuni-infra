@@ -112,17 +112,17 @@ frontend:
     - name: NEXTAUTH_SECRET
       value: uuNj1L0Yg2xKcBPVp7yOVlm2nigL3hoHOzbwQXAwx1I=
     - name: NEXT_PUBLIC_API_URL
-      value: {{ .Values.astrago.frontend.nextPublicApiUrl }}
+      value: http://astrago-backend-core:8080
     - name: NEXT_PUBLIC_MONITOR_API_URL
-      value: {{ .Values.astrago.frontend.nextPublicMonitorApiUrl }}
+      value: http://astrago-backend-monitor:8080
     - name: NEXT_PUBLIC_PREDICTION_API_URL
-      value: {{ .Values.astrago.frontend.nextPublicPredictionApiUrl }}
+      value: http://astrago-time-prediction:8000
     - name: NEXT_PUBLIC_BATCH_API_URL
-      value: {{ .Values.astrago.frontend.nextPublicBatchApiUrl }}
+      value: http://astrago-backend-batch:8080
     - name: NEXT_PUBLIC_API_MOCKING
-      value: {{ .Values.astrago.frontend.nextPublicApiMocking }}
+      value: disabled
     - name: NEXT_PUBLIC_WEBSOCKET_HOST
-      value: {{ .Values.astrago.frontend.nextPublicWebsocketHost }}
+      value: http://astrago-backend-core:8080
 
 mariadb:
   auth:

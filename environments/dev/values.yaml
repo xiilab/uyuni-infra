@@ -56,9 +56,3 @@ astrago:
       type: NodePort
       port: 3000
       nodePort: 30080
-    nextPublicApiUrl: "http://astrago-backend-core:8080"
-    nextPublicMonitorApiUrl: "http://astrago-backend-monitor:8080"
-    nextPublicPredictionApiUrl: "http://astrago-time-prediction:8000"
-    nextPublicBatchApiUrl: "http://astrago-backend-batch:8080"
-    nextPublicApiMocking: disabled
-    nextPublicWebsocketHost: "http://astrago-backend-core:8080/"
