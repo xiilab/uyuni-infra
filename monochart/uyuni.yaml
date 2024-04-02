@@ -566,13 +566,13 @@ spec:
             - name: SPRING_DATASOURCE_HIKARI_MAX-LIFETIME
               value: "0"
             - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWT_ISSUER-URI
-              value: "http://10.61.3.12:30080/auth//realms/astrago"
+              value: "http://10.61.3.12:30001/realms/astrago"
             - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWT_JWK-SET-URI
-              value: "http://10.61.3.12:30080/auth//realms/astrago/protocol/openid-connect/certs"
+              value: "http://10.61.3.12:30001/realms/astrago/protocol/openid-connect/certs"
             - name: KEYCLOAK_REALM
               value: "astrago"
             - name: KEYCLOAK_AUTH-SERVER-URL
-              value: "http://10.61.3.12:30080/auth/"
+              value: "http://10.61.3.12:30001"
             - name: KEYCLOAK_RESOURCE
               value: "astrago-client"
             - name: ADMIN_NAME
@@ -640,13 +640,13 @@ spec:
           - name: SPRING_DATASOURCE_HIKARI_MAX-LIFETIME
             value: "0"
           - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWT_ISSUER-URI
-            value: "http://10.61.3.12:30080/auth//realms/astrago"
+            value: "http://10.61.3.12:30001/realms/astrago"
           - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWT_JWK-SET-URI
-            value: "http://10.61.3.12:30080/auth//realms/astrago/protocol/openid-connect/certs"
+            value: "http://10.61.3.12:30001/realms/astrago/protocol/openid-connect/certs"
           - name: KEYCLOAK_REALM
             value: "astrago"
           - name: KEYCLOAK_AUTH-SERVER-URL
-            value: "http://10.61.3.12:30080/auth/"
+            value: "http://10.61.3.12:30001"
           - name: KEYCLOAK_RESOURCE
             value: "astrago-client"
           - name: ADMIN_NAME
@@ -708,7 +708,7 @@ spec:
           
           env:
           - name: KEYCLOAK_HOST
-            value: "http://10.61.3.12:30080/auth/"
+            value: "http://10.61.3.12:30001"
           - name: KEYCLOAK_REALME
             value: "astrago"
           - name: KEYCLOAK_CLIENT_ID
