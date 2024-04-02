@@ -16,6 +16,18 @@ core:
       value: {{ .Values.astrago.keycloak.host }}/realms/{{ .Values.astrago.keycloak.realm }}
     - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWK-SET-URI
       value: {{ .Values.astrago.keycloak.host }}/realms/{{ .Values.astrago.keycloak.realm }}/protocol/openid-connect/certs
+    - name: KEYCLOAK_REALM
+      value: {{ .Values.astrago.keycloak.realm }} 
+    - name: KEYCLOAK_AUTH-SERVER-URL
+      value: {{ .Values.astrago.keycloak.host }}
+    - name: KEYCLOAK_RESOURCE
+      value: {{ .Values.astrago.keycloak.client }}
+    - name: ADMIN_NAME
+      value: {{ .Values.keycloak.adminUser }}
+    - name: ADMIN_PASSWORD
+      value: {{ .Values.keycloak.adminPassword }}
+    - name: ADMIN_INIT-PASSWORD
+      value: {{ .Values.astrago.keycloak.userInitPassword }}
   createVolume:
     enabled: "{{ .Values.astrago.log.createVolume.enabled }}"
     name: "{{ .Values.astrago.log.createVolume.name }}"
@@ -46,6 +58,18 @@ batch:
       value: {{ .Values.astrago.keycloak.host }}/realms/{{ .Values.astrago.keycloak.realm }}
     - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWK-SET-URI
       value: {{ .Values.astrago.keycloak.host }}/realms/{{ .Values.astrago.keycloak.realm }}/protocol/openid-connect/certs
+    - name: KEYCLOAK_REALM
+      value: {{ .Values.astrago.keycloak.realm }}
+    - name: KEYCLOAK_AUTH-SERVER-URL
+      value: {{ .Values.astrago.keycloak.host }}
+    - name: KEYCLOAK_RESOURCE
+      value: {{ .Values.astrago.keycloak.client }}
+    - name: ADMIN_NAME
+      value: {{ .Values.keycloak.adminUser }}
+    - name: ADMIN_PASSWORD
+      value: {{ .Values.keycloak.adminPassword }}
+    - name: ADMIN_INIT-PASSWORD
+      value: {{ .Values.astrago.keycloak.userInitPassword }}
   createVolume:
     name: "{{ .Values.astrago.log.createVolume.name }}"
 
