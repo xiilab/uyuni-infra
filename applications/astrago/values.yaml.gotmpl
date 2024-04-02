@@ -111,6 +111,18 @@ frontend:
       value: {{ .Values.astrago.keycloak.nextauthUrl }}
     - name: NEXTAUTH_SECRET
       value: uuNj1L0Yg2xKcBPVp7yOVlm2nigL3hoHOzbwQXAwx1I=
+    - name: NEXT_PUBLIC_API_URL
+      value: {{ .Values.astrago.frontend.nextPublicApiUrl }}
+    - name: NEXT_PUBLIC_MONITOR_API_URL
+      value: {{ .Values.astrago.frontend.nextPublicMonitorApiUrl }}
+    - name: NEXT_PUBLIC_PREDICTION_API_URL
+      value: {{ .Values.astrago.frontend.nextPublicPredictionApiUrl }}
+    - name: NEXT_PUBLIC_BATCH_API_URL
+      value: {{ .Values.astrago.frontend.nextPublicBatchApiUrl }}
+    - name: NEXT_PUBLIC_API_MOCKING
+      value: {{ .Values.astrago.frontend.nextPublicApiMocking }}
+    - name: NEXT_PUBLIC_WEBSOCKET_HOST
+      value: {{ .Values.astrago.frontend.nextPublicWebsocketHost }}
 
 mariadb:
   auth:
