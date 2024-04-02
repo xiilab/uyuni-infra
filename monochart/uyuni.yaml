@@ -479,6 +479,16 @@ spec:
     app.kubernetes.io/name: monitor
     app.kubernetes.io/instance: astrago
 ---
+# Source: uyuni/templates/keycloak-external-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: keycloak-service
+  namespace: astrago
+spec:
+  type: ExternalName
+  externalName: keycloak.keycloak.svc.cluster.local
+---
 # Source: uyuni/templates/metric-server.yaml
 apiVersion: v1
 kind: Service
