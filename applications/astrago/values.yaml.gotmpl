@@ -14,7 +14,7 @@ core:
       value: {{ int .Values.astrago.mariadb.maxLifetime}}
     - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWT_ISSUER-URI
       value: {{ .Values.astrago.keycloak.host }}/realms/{{ .Values.astrago.keycloak.realm }}
-    - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWK-SET-URI
+    - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWT_JWK-SET-URI
       value: {{ .Values.astrago.keycloak.host }}/realms/{{ .Values.astrago.keycloak.realm }}/protocol/openid-connect/certs
     - name: KEYCLOAK_REALM
       value: {{ .Values.astrago.keycloak.realm }} 
