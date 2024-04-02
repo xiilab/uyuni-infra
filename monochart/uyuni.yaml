@@ -707,8 +707,6 @@ spec:
             value: "astragosecret"
           - name: NODE_OPTIONS
             value: "--max-http-header-size=41960"
-          - name: NEXTAUTH_URL
-            value: "http://10.61.3.12:30080"
           - name: NEXTAUTH_SECRET
             value: "uuNj1L0Yg2xKcBPVp7yOVlm2nigL3hoHOzbwQXAwx1I="
           - name: NEXT_PUBLIC_API_URL
