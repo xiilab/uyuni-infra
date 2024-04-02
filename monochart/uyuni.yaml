@@ -543,7 +543,7 @@ spec:
         - name: batch
           securityContext:
             {}
-          image: "harbor.xiilab.com:32443/uyuni/server-batch:develop-cafd5cc"
+          image: "harbor.xiilab.com:32443/uyuni/server-batch:develop-6aeaee0"
           imagePullPolicy: Always
 
           env:
@@ -617,7 +617,7 @@ spec:
         - name: core
           securityContext:
             {}
-          image: "harbor.xiilab.com:32443/uyuni/server-core:develop-cafd5cc"
+          image: "harbor.xiilab.com:32443/uyuni/server-core:develop-6aeaee0"
           imagePullPolicy: Always
           
           env:
@@ -770,7 +770,7 @@ spec:
         - name: monitor
           securityContext:
             {}
-          image: "harbor.xiilab.com:32443/uyuni/server-monitor:develop-cafd5cc"
+          image: "harbor.xiilab.com:32443/uyuni/server-monitor:develop-6aeaee0"
           imagePullPolicy: Always
           env:
           - name: SPRING_DATASOURCE_URL
