@@ -51,10 +51,21 @@ prometheus:
           accessModes: ["ReadWriteOnce"]
           resources:
             requests:
-              storage: 50Gi
+              storage: {{ .Values.prometheus.createVolume.size }}
         selector: {}
 
 grafana:          
   service:
     enabled: true
     type: NodePort
+
+createVolume:
+  enabled: "{{ .Values.prometheus.createVolume.enabled }}"
+  name: "{{ .Values.prometheus.createVolume.name }}"
+  size: "{{ .Values.prometheus.createVolume.size }}"
+  accessModes:
+    - ReadWriteOnce
+  volumeType: "{{ .Values.prometheus.createVolume.volumeType }}"
+  nfs:
+    server: "{{ .Values.prometheus.createVolume.nfs.server }}"
+    path: "{{ .Values.prometheus.createVolume.nfs.path }}"

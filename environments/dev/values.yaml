@@ -13,6 +13,15 @@ keycloak:
     nfs:
       server: 10.61.3.2
       path: /kube_storage/develop-astrago-keycloak-volume
+prometheus:
+  createVolume: 
+    enabled: true
+    name: prometheus-volume
+    size: 50Gi
+    volumeType: nfs
+    nfs:
+      server: 10.61.3.2
+      path: /kube_storage/develop-prometheus-volume
 astrago:
   servicePort: 30080
   userInitPassword: astrago
