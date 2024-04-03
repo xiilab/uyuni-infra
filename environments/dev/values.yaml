@@ -21,8 +21,21 @@ astrago:
     client: astrago-client
     clientSecret: astragosecret
     userInitPassword: astrago
-  log:
-    createVolume:
+  mariadb:
+    rootPassword: root
+    username: astrago
+    password: xiirocks
+    maxLifetime: :3595000
+  createVolume:
+    mariadb:
+      enabled: true
+      name: astra-mariadb-volume
+      size: 8Gi
+      volumeType: nfs
+      nfs:
+        server: 10.61.3.2
+        path: /kube_storage/astra-mariadb-volume
+    workloadLog:
       enabled: true
       name: astrago-workload-log
       size: 8Gi
@@ -30,6 +43,7 @@ astrago:
       nfs:
         server: 10.61.3.2
         path: /kube_storage/astrago-log-volume
+   
   mariadb:
     rootPassword: root
     username: astrago

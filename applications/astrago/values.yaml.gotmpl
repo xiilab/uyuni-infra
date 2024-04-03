@@ -28,18 +28,7 @@ core:
       value: {{ .Values.keycloak.adminPassword }}
     - name: ADMIN_INIT-PASSWORD
       value: {{ .Values.astrago.userInitPassword }}
-  createVolume:
-    enabled: "{{ .Values.astrago.log.createVolume.enabled }}"
-    name: "{{ .Values.astrago.log.createVolume.name }}"
-    size: "{{ .Values.astrago.log.createVolume.size }}"
-    accessModes:
-      - ReadWriteOnce
-    volumeType: "{{ .Values.astrago.log.createVolume.volumeType }}"
-    nfs:
-      server: "{{ .Values.astrago.log.createVolume.nfs.server }}"
-      path: "{{ .Values.astrago.log.createVolume.nfs.path }}"    
-    
- 
+  existingClaim: "{{ .Values.astrago.createVolume.workloadLog.name }}"
 
 batch:
   image:
@@ -70,8 +59,7 @@ batch:
       value: {{ .Values.keycloak.adminPassword }}
     - name: ADMIN_INIT-PASSWORD
       value: {{ .Values.astrago.userInitPassword }}
-  createVolume:
-    name: "{{ .Values.astrago.log.createVolume.name }}"
+  existingClaim: "{{ .Values.astrago.createVolume.workloadLog.name }}"
 
 monitor:
   image:
@@ -137,18 +125,27 @@ mariadb:
     service:
       type: NodePort
     persistence:
-      createClaim:
-        enabled: true
-        volumeName: {{ .Values.astrago.mariadb.volume.volumeName }}
-        volumeType: {{ .Values.astrago.mariadb.volume.volumeType }}
-        volumeSize: {{ .Values.astrago.mariadb.volume.volumeSize }}
-        accessModes:
-        - ReadWriteOnce
-        nfs:
-          server: {{ .Values.astrago.mariadb.volume.nfs.server }}
-          path: {{ .Values.astrago.mariadb.volume.nfs.path }}
+      existingClaim: {{ .Values.astrago.createVolume.mariadb.name }} 
 
-      existingClaim: {{ .Values.astrago.mariadb.volume.volumeName }} 
+createVolume:
+  mariadb:
+    enabled: "{{ .Values.astrago.createVolume.mariadb.enabled }}"
+    name: "{{ .Values.astrago.createVolume.mariadb.name }}"
+    size: "{{ .Values.astrago.createVolume.mariadb.size }}"
+    accessModes:
+    - ReadWriteOnce
+    volumeType: "{{ .Values.astrago.createVolume.mariadb.volumeType }}"
+    nfs:
+      server: "{{ .Values.astrago.createVolume.mariadb.nfs.server }}"
+      path: "{{ .Values.astrago.createVolume.mariadb.nfs.path }}"
 
-Context: { }
-  # capa
+  workloadLog:
+    enabled: "{{ .Values.astrago.createVolume.workloadLog.enabled }}"
+    name: "{{ .Values.astrago.createVolume.workloadLog.name }}"
+    size: "{{ .Values.astrago.createVolume.workloadLog.size }}"
+    accessModes:
+    - ReadWriteOnce
+    volumeType: "{{ .Values.astrago.createVolume.workloadLog.volumeType }}"
+    nfs:
+      server: "{{ .Values.astrago.createVolume.workloadLog.nfs.server }}"
+      path: "{{ .Values.astrago.createVolume.workloadLog.nfs.path }}"

@@ -1,0 +1,21 @@
+{{- if .Values.createVolume.mariadb.enabled }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .Values.createVolume.mariadb.name }}-pv
+  namespace: {{ .Release.Namespace | quote }}
+spec:
+  capacity:
+    storage: {{ .Values.createVolume.mariadb.size | quote }}
+  persistentVolumeReclaimPolicy: Retain
+  accessModes:
+    {{- range .Values.createVolume.mariadb.accessModes }}
+    - {{ . | quote }}
+    {{- end }}
+  storageClassName: astrago-mariadb
+  {{- if eq .Values.createVolume.mariadb.volumeType "nfs" }}
+  nfs:
+    server: {{ .Values.createVolume.mariadb.nfs.server }}
+    path: {{ .Values.createVolume.mariadb.nfs.path }}
+  {{- end }}
+{{- end }}
