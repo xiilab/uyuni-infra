@@ -2291,7 +2291,6 @@ spec:
   scrapeConfigNamespaceSelector: {}
   storage:
     volumeClaimTemplate:
-      selector: {}
       spec:
         accessModes:
         - ReadWriteOnce
