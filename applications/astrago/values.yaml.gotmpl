@@ -5,7 +5,7 @@ core:
     tag: "{{ .Values.astrago.core.imageTag }}"
   env:
     - name: SPRING_DATASOURCE_URL
-      value: jdbc:mariadb://astrago-mariadb:3306/{{ .Values.astrago.mariadb.database }}
+      value: jdbc:mariadb://astrago-mariadb:3306/astrago
     - name: SPRING_DATASOURCE_USERNAME
       value: {{ .Values.astrago.mariadb.username }}
     - name: SPRING_DATASOURCE_PASSWORD
@@ -13,13 +13,13 @@ core:
     - name: SPRING_DATASOURCE_HIKARI_MAX-LIFETIME
       value: {{ int .Values.astrago.mariadb.maxLifetime}}
     - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWT_ISSUER-URI
-      value: {{ .Values.astrago.keycloak.host }}/realms/{{ .Values.astrago.keycloak.realm }}
+      value: http://{{ .Values.common.externalIP }}:{{ .Values.keycloak.servicePort }}/realms/{{ .Values.astrago.keycloak.realm }}
     - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWT_JWK-SET-URI
-      value: {{ .Values.astrago.keycloak.host }}/realms/{{ .Values.astrago.keycloak.realm }}/protocol/openid-connect/certs
+      value: http://{{ .Values.common.externalIP }}:{{ .Values.keycloak.servicePort }}/realms/{{ .Values.astrago.keycloak.realm }}/protocol/openid-connect/certs
     - name: KEYCLOAK_REALM
       value: {{ .Values.astrago.keycloak.realm }}
     - name: KEYCLOAK_AUTH-SERVER-URL
-      value: {{ .Values.astrago.keycloak.host }}
+      value: http://{{ .Values.common.externalIP }}:{{ .Values.keycloak.servicePort }}
     - name: KEYCLOAK_RESOURCE
       value: {{ .Values.astrago.keycloak.client }}
     - name: ADMIN_NAME
@@ -27,7 +27,7 @@ core:
     - name: ADMIN_PASSWORD
       value: {{ .Values.keycloak.adminPassword }}
     - name: ADMIN_INIT-PASSWORD
-      value: {{ .Values.astrago.keycloak.userInitPassword }}
+      value: {{ .Values.astrago.userInitPassword }}
   createVolume:
     enabled: "{{ .Values.astrago.log.createVolume.enabled }}"
     name: "{{ .Values.astrago.log.createVolume.name }}"
@@ -47,7 +47,7 @@ batch:
     tag: "{{ .Values.astrago.batch.imageTag }}"
   env:
     - name: SPRING_DATASOURCE_URL
-      value: jdbc:mariadb://astrago-mariadb:3306/{{ .Values.astrago.mariadb.database }}
+      value: jdbc:mariadb://astrago-mariadb:3306/astrago
     - name: SPRING_DATASOURCE_USERNAME
       value: {{ .Values.astrago.mariadb.username }}
     - name: SPRING_DATASOURCE_PASSWORD
@@ -55,13 +55,13 @@ batch:
     - name: SPRING_DATASOURCE_HIKARI_MAX-LIFETIME
       value: {{ int .Values.astrago.mariadb.maxLifetime}}
     - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWT_ISSUER-URI
-      value: {{ .Values.astrago.keycloak.host }}/realms/{{ .Values.astrago.keycloak.realm }}
+      value: http://{{ .Values.common.externalIP }}:{{ .Values.keycloak.servicePort }}/realms/{{ .Values.astrago.keycloak.realm }}
     - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWT_JWK-SET-URI
-      value: {{ .Values.astrago.keycloak.host }}/realms/{{ .Values.astrago.keycloak.realm }}/protocol/openid-connect/certs
+      value: http://{{ .Values.common.externalIP }}:{{ .Values.keycloak.servicePort }}/realms/{{ .Values.astrago.keycloak.realm }}/protocol/openid-connect/certs
     - name: KEYCLOAK_REALM
       value: {{ .Values.astrago.keycloak.realm }}
     - name: KEYCLOAK_AUTH-SERVER-URL
-      value: {{ .Values.astrago.keycloak.host }}
+      value: http://{{ .Values.common.externalIP }}:{{ .Values.keycloak.servicePort }}
     - name: KEYCLOAK_RESOURCE
       value: {{ .Values.astrago.keycloak.client }}
     - name: ADMIN_NAME
@@ -69,7 +69,7 @@ batch:
     - name: ADMIN_PASSWORD
       value: {{ .Values.keycloak.adminPassword }}
     - name: ADMIN_INIT-PASSWORD
-      value: {{ .Values.astrago.keycloak.userInitPassword }}
+      value: {{ .Values.astrago.userInitPassword }}
   createVolume:
     name: "{{ .Values.astrago.log.createVolume.name }}"
 
@@ -79,7 +79,7 @@ monitor:
     tag: "{{ .Values.astrago.monitor.imageTag }}" 
   env:
     - name: SPRING_DATASOURCE_URL
-      value: jdbc:mariadb://astrago-mariadb:3306/{{ .Values.astrago.mariadb.database }}
+      value: jdbc:mariadb://astrago-mariadb:3306/astrago
     - name: SPRING_DATASOURCE_USERNAME
       value: {{ .Values.astrago.mariadb.username }}
     - name: SPRING_DATASOURCE_PASSWORD
@@ -98,7 +98,7 @@ frontend:
     tag: "{{ .Values.astrago.frontend.imageTag }}" 
   env:
     - name: KEYCLOAK_HOST
-      value: {{ .Values.astrago.keycloak.host }}
+      value: http://{{ .Values.common.externalIP }}:{{ .Values.keycloak.servicePort }}
     - name: KEYCLOAK_REALME
       value: {{ .Values.astrago.keycloak.realm }}
     - name: KEYCLOAK_CLIENT_ID
@@ -108,7 +108,7 @@ frontend:
     - name: NODE_OPTIONS
       value: "--max-http-header-size=41960"
     - name: NEXTAUTH_URL
-      value: {{ .Values.astrago.keycloak.nextauthUrl }}
+      value: http://{{ .Values.common.externalIP }}:{{ .Values.astrago.servicePort }}
     - name: NEXTAUTH_SECRET
       value: uuNj1L0Yg2xKcBPVp7yOVlm2nigL3hoHOzbwQXAwx1I=
     - name: NEXT_PUBLIC_API_URL
@@ -123,11 +123,14 @@ frontend:
       value: disabled
     - name: NEXT_PUBLIC_WEBSOCKET_HOST
       value: http://astrago-backend-core:8080
+  service:
+    type: NodePort
+    nodePort: {{ .Values.astrago.servicePort  }}
 
 mariadb:
   auth:
     rootPassword: {{ .Values.astrago.mariadb.rootPassword }}
-    database: {{ .Values.astrago.mariadb.database }}
+    database: astrago
     username: {{ .Values.astrago.mariadb.username }}
     password: {{ .Values.astrago.mariadb.password }}
   primary:

@@ -4,7 +4,7 @@ auth:
 service:
   type: NodePort
   nodePorts:
-    http: "30001"
+    http: "{{ .Values.keycloak.servicePort }}"
     https: "30002"
 
 extraEnvVars:
@@ -17,8 +17,7 @@ extraVolumes:
   - name: realm-config
     configMap:
       name: realm-config
-## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for Keycloak container(s)
-##
+
 extraVolumeMounts:
   - name: theme
     mountPath: /opt/bitnami/keycloak/providers/keycloak-theme.jar
@@ -26,16 +25,6 @@ extraVolumeMounts:
   - name: realm-config
     mountPath: /opt/bitnami/keycloak/data/import
 
-## @param initContainers Add additional init containers to the Keycloak pods
-## Example:
-## initContainers:
-##   - name: your-image-name
-##     image: your-image
-##     imagePullPolicy: Always
-##     ports:
-##       - name: portname
-##         containerPort: 1234
-##
 initContainers:
   - name: download-astra-logintheme
     image: jacobcarlborg/docker-alpine-wget

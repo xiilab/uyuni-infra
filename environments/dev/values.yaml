@@ -1,7 +1,10 @@
+common:
+  externalIP: 10.61.3.12
 keycloak:
   themeVersion: v1.0.13
   adminUser: admin
   adminPassword: xiirocks
+  servicePort: 30001
   createVolume:
     enabled: true
     name: keycloak-volume
@@ -11,12 +14,12 @@ keycloak:
       server: 10.61.3.2
       path: /kube_storage/develop-astrago-keycloak-volume
 astrago:
+  servicePort: 30080
+  userInitPassword: astrago
   keycloak:
-    host: http://10.61.3.12:30001
     realm: astrago
     client: astrago-client
     clientSecret: astragosecret
-    nextauthUrl: http://10.61.3.12:30080
     userInitPassword: astrago
   log:
     createVolume:
@@ -29,7 +32,6 @@ astrago:
         path: /kube_storage/astrago-log-volume
   mariadb:
     rootPassword: root
-    database: astrago
     username: astrago
     password: xiirocks
     maxLifetime: :3595000
@@ -52,7 +54,3 @@ astrago:
   frontend:
     repository: "harbor.xiilab.com:32443/uyuni/uyuni-frontend"
     imageTag: develop-248c671
-    service:
-      type: NodePort
-      port: 3000
-      nodePort: 30080
