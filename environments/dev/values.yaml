@@ -25,7 +25,7 @@ astrago:
     rootPassword: root
     username: astrago
     password: xiirocks
-    maxLifetime: :3595000
+    maxLifetime: "3595000"
   createVolume:
     mariadb:
       enabled: true
