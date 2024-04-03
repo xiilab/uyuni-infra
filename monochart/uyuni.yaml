@@ -565,7 +565,7 @@ spec:
             - name: SPRING_DATASOURCE_PASSWORD
               value: "xiirocks"
             - name: SPRING_DATASOURCE_HIKARI_MAX-LIFETIME
-              value: "0"
+              value: "3595000"
             - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWT_ISSUER-URI
               value: "http://10.61.3.12:30001/realms/astrago"
             - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWT_JWK-SET-URI
@@ -639,7 +639,7 @@ spec:
           - name: SPRING_DATASOURCE_PASSWORD
             value: "xiirocks"
           - name: SPRING_DATASOURCE_HIKARI_MAX-LIFETIME
-            value: "0"
+            value: "3595000"
           - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWT_ISSUER-URI
             value: "http://10.61.3.12:30001/realms/astrago"
           - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWT_JWK-SET-URI
@@ -791,7 +791,7 @@ spec:
           - name: SPRING_DATASOURCE_PASSWORD
             value: "xiirocks"
           - name: SPRING_DATASOURCE_HIKARI_MAX-LIFETIME
-            value: "0"
+            value: "3595000"
           - name: SPRING_MVC_PATHMATCH_MATCHING-STRATEGY
             value: "ant_path_matcher"
           - name: PROMETHEUS_URL
