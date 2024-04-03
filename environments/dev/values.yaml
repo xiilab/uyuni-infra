@@ -43,19 +43,6 @@ astrago:
       nfs:
         server: 10.61.3.2
         path: /kube_storage/astrago-log-volume
-   
-  mariadb:
-    rootPassword: root
-    username: astrago
-    password: xiirocks
-    maxLifetime: :3595000
-    volume:
-      volumeName: astra-mariadb-volume
-      volumeSize: 8Gi
-      volumeType: nfs
-      nfs:
-        server: 10.61.3.2
-        path: /kube_storage/astra-mariadb-volume
   core:
     repository: "harbor.xiilab.com:32443/uyuni/server-core"
     imageTag: "develop-9e407a1"
