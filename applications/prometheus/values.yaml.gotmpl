@@ -52,7 +52,6 @@ prometheus:
           resources:
             requests:
               storage: {{ .Values.prometheus.createVolume.size }}
-        selector: {}
 
 grafana:          
   service:
