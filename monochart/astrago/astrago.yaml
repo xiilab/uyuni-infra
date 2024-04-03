@@ -1,0 +1,1121 @@
+---
+# Source: astrago-volume/templates/astrago-log-pv.yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: astrago-workload-log
+  namespace: "astrago"
+spec:
+  capacity:
+    storage: "8Gi"
+  persistentVolumeReclaimPolicy: Retain
+  accessModes:
+    - "ReadWriteOnce"
+  storageClassName: workload-log-volume
+  nfs:
+    server: 10.61.3.2
+    path: /kube_storage/astrago-log-volume
+---
+# Source: astrago-volume/templates/mariadb-pv.yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: astra-mariadb-volume-pv
+  namespace: "astrago"
+spec:
+  capacity:
+    storage: "8Gi"
+  persistentVolumeReclaimPolicy: Retain
+  accessModes:
+    - "ReadWriteOnce"
+  storageClassName: astrago-mariadb
+  nfs:
+    server: 10.61.3.2
+    path: /kube_storage/astra-mariadb-volume
+---
+# Source: astrago-volume/templates/astrago-log-pvc.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: astrago-workload-log
+  namespace: "astrago"
+spec:
+  resources:
+    requests:
+      storage: "8Gi"
+  accessModes:
+    - "ReadWriteOnce"
+  storageClassName: workload-log-volume
+---
+# Source: astrago-volume/templates/mariadb-pvc.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: astra-mariadb-volume
+  namespace: "astrago"
+spec:
+  resources:
+    requests:
+      storage: "8Gi"
+  accessModes:
+    - "ReadWriteOnce"
+  storageClassName: astrago-mariadb
+
+---
+# Source: uyuni/charts/mariadb/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: astrago-mariadb
+  namespace: "astrago"
+  labels:
+    app.kubernetes.io/name: mariadb
+    helm.sh/chart: mariadb-12.2.9
+    app.kubernetes.io/instance: astrago
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+automountServiceAccountToken: false
+---
+# Source: uyuni/templates/astra-serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: astrago-sa
+  namespace: astrago
+---
+# Source: uyuni/templates/binpack-scheduler/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: binpack-scheduler
+  namespace: kube-system
+---
+# Source: uyuni/templates/metric-server.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    k8s-app: metrics-server
+  name: metrics-server
+  namespace: kube-system
+---
+# Source: uyuni/charts/mariadb/templates/secrets.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: astrago-mariadb
+  namespace: "astrago"
+  labels:
+    app.kubernetes.io/name: mariadb
+    helm.sh/chart: mariadb-12.2.9
+    app.kubernetes.io/instance: astrago
+    app.kubernetes.io/managed-by: Helm
+type: Opaque
+data:
+  mariadb-root-password: "cm9vdA=="
+  mariadb-password: "eGlpcm9ja3M="
+---
+# Source: uyuni/charts/mariadb/templates/primary/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: astrago-mariadb
+  namespace: "astrago"
+  labels:
+    app.kubernetes.io/name: mariadb
+    helm.sh/chart: mariadb-12.2.9
+    app.kubernetes.io/instance: astrago
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: primary
+data:
+  my.cnf: |-
+    [mysqld]
+    skip-name-resolve
+    explicit_defaults_for_timestamp
+    basedir=/opt/bitnami/mariadb
+    datadir=/bitnami/mariadb/data
+    plugin_dir=/opt/bitnami/mariadb/plugin
+    port=3306
+    socket=/opt/bitnami/mariadb/tmp/mysql.sock
+    tmpdir=/opt/bitnami/mariadb/tmp
+    max_allowed_packet=16M
+    bind-address=*
+    pid-file=/opt/bitnami/mariadb/tmp/mysqld.pid
+    log-error=/opt/bitnami/mariadb/logs/mysqld.log
+    character-set-server=UTF8
+    collation-server=utf8_general_ci
+    long_query_time=10.0
+    interactive_timeout = 3600
+    wait_timeout = 3600
+    max_connections = 500
+    slow_query_log = 1
+    
+    [client]
+    port=3306
+    socket=/opt/bitnami/mariadb/tmp/mysql.sock
+    default-character-set=UTF8
+    plugin_dir=/opt/bitnami/mariadb/plugin
+    
+    [manager]
+    port=3306
+    socket=/opt/bitnami/mariadb/tmp/mysql.sock
+    pid-file=/opt/bitnami/mariadb/tmp/mysqld.pid
+---
+# Source: uyuni/templates/binpack-scheduler/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: binpack-scheduler-config
+  namespace: kube-system
+data:
+  gpu-binpack-scheduler-config.yaml: |
+    apiVersion: kubescheduler.config.k8s.io/v1
+    kind: KubeSchedulerConfiguration
+    leaderElection:
+      leaderElect: false
+    profiles:
+    - pluginConfig:
+      - args:
+          scoringStrategy:
+            resources:
+            - name: cpu
+              weight: 1
+            - name: memory
+              weight: 1
+            - name: nvidia.com/gpu
+              weight: 3
+            type: MostAllocated
+        name: NodeResourcesFit
+      schedulerName: binpack-scheduler
+---
+# Source: uyuni/templates/binpack-scheduler/rbac.yaml
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: binpack-scheduler
+  namespace: kube-system
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  verbs:
+  - get
+  - list
+  - watch
+---
+# Source: uyuni/templates/metric-server.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    k8s-app: metrics-server
+    rbac.authorization.k8s.io/aggregate-to-admin: "true"
+    rbac.authorization.k8s.io/aggregate-to-edit: "true"
+    rbac.authorization.k8s.io/aggregate-to-view: "true"
+  name: system:aggregated-metrics-reader
+rules:
+- apiGroups:
+  - metrics.k8s.io
+  resources:
+  - pods
+  - nodes
+  verbs:
+  - get
+  - list
+  - watch
+---
+# Source: uyuni/templates/metric-server.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    k8s-app: metrics-server
+  name: system:metrics-server
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - nodes/metrics
+  verbs:
+  - get
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  - nodes
+  verbs:
+  - get
+  - list
+  - watch
+---
+# Source: uyuni/templates/astra-clusterrlebinding.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: astrago
+subjects:
+- kind: ServiceAccount
+  name: astrago-sa
+  namespace: astrago
+roleRef:
+  kind: ClusterRole
+  name: cluster-admin
+  apiGroup: rbac.authorization.k8s.io
+---
+# Source: uyuni/templates/binpack-scheduler/rbac.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: binpack-scheduler
+  namespace: kube-system
+subjects:
+- kind: ServiceAccount
+  name: binpack-scheduler
+  namespace: kube-system
+roleRef:
+  kind: ClusterRole
+  name: binpack-scheduler
+  apiGroup: rbac.authorization.k8s.io
+---
+# Source: uyuni/templates/binpack-scheduler/rbac.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: binpack-scheduler-as-kube-scheduler
+  namespace: kube-system
+subjects:
+- kind: ServiceAccount
+  name: binpack-scheduler
+  namespace: kube-system
+roleRef:
+  kind: ClusterRole
+  name: system:kube-scheduler
+  apiGroup: rbac.authorization.k8s.io
+---
+# Source: uyuni/templates/binpack-scheduler/rbac.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: binpack-scheduler-as-volume-scheduler
+  namespace: kube-system
+subjects:
+- kind: ServiceAccount
+  name: binpack-scheduler
+  namespace: kube-system
+roleRef:
+  kind: ClusterRole
+  name: system:volume-scheduler
+  apiGroup: rbac.authorization.k8s.io
+---
+# Source: uyuni/templates/metric-server.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  labels:
+    k8s-app: metrics-server
+  name: metrics-server:system:auth-delegator
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: system:auth-delegator
+subjects:
+- kind: ServiceAccount
+  name: metrics-server
+  namespace: kube-system
+---
+# Source: uyuni/templates/metric-server.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  labels:
+    k8s-app: metrics-server
+  name: system:metrics-server
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: system:metrics-server
+subjects:
+- kind: ServiceAccount
+  name: metrics-server
+  namespace: kube-system
+---
+# Source: uyuni/templates/metric-server.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  labels:
+    k8s-app: metrics-server
+  name: metrics-server-auth-reader
+  namespace: kube-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: extension-apiserver-authentication-reader
+subjects:
+- kind: ServiceAccount
+  name: metrics-server
+  namespace: kube-system
+---
+# Source: uyuni/charts/batch/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: astrago-backend-batch
+  namespace: astrago
+  labels:
+    helm.sh/chart: batch-0.1.1
+    app.kubernetes.io/name: batch
+    app.kubernetes.io/instance: astrago
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: NodePort
+  ports:
+    - port: 8080
+      targetPort: 8080
+      nodePort: 30082
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: batch
+    app.kubernetes.io/instance: astrago
+---
+# Source: uyuni/charts/core/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: astrago-backend-core
+  namespace: astrago
+  labels:
+    helm.sh/chart: core-0.1.1
+    app.kubernetes.io/name: core
+    app.kubernetes.io/instance: astrago
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: NodePort
+  ports:
+    - port: 8080
+      targetPort: 8080
+      nodePort: 30081
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: core
+    app.kubernetes.io/instance: astrago
+---
+# Source: uyuni/charts/frontend/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: astrago-frontend
+  namespace: astrago
+  labels:
+    helm.sh/chart: frontend-0.1.0
+    app.kubernetes.io/name: frontend
+    app.kubernetes.io/instance: astrago
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: NodePort
+  ports:
+    - port: 3000
+      targetPort: 3000
+      nodePort: 30080
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: frontend
+    app.kubernetes.io/instance: astrago
+---
+# Source: uyuni/charts/mariadb/templates/primary/svc.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: astrago-mariadb
+  namespace: "astrago"
+  labels:
+    app.kubernetes.io/name: mariadb
+    helm.sh/chart: mariadb-12.2.9
+    app.kubernetes.io/instance: astrago
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: primary
+  annotations:
+spec:
+  type: NodePort
+  externalTrafficPolicy: "Cluster"
+  sessionAffinity: None
+  ports:
+    - name: mysql
+      port: 3306
+      protocol: TCP
+      targetPort: mysql
+  selector: 
+    app.kubernetes.io/name: mariadb
+    app.kubernetes.io/instance: astrago
+    app.kubernetes.io/component: primary
+---
+# Source: uyuni/charts/monitor/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: astrago-backend-monitor
+  namespace: astrago
+  labels:
+    helm.sh/chart: monitor-0.1.1
+    app.kubernetes.io/name: monitor
+    app.kubernetes.io/instance: astrago
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: NodePort
+  ports:
+    - port: 8080
+      targetPort: 8080
+      nodePort: 30083
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: monitor
+    app.kubernetes.io/instance: astrago
+---
+# Source: uyuni/templates/keycloak-external-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: keycloak-service
+  namespace: astrago
+spec:
+  type: ExternalName
+  externalName: keycloak.keycloak.svc.cluster.local
+---
+# Source: uyuni/templates/metric-server.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    k8s-app: metrics-server
+  name: metrics-server
+  namespace: kube-system
+spec:
+  ports:
+  - name: https
+    port: 443
+    protocol: TCP
+    targetPort: https
+  selector:
+    k8s-app: metrics-server
+---
+# Source: uyuni/templates/time-prediction.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: astrago-time-prediction
+  namespace: astrago
+spec:
+  selector:
+    app: astrago-time-prediction
+  ports:
+  - protocol: TCP
+    port: 8000
+    targetPort: 8000
+    nodePort: 30005
+  type: NodePort
+---
+# Source: uyuni/charts/batch/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: astrago-backend-batch
+  namespace: astrago
+  labels:
+    helm.sh/chart: batch-0.1.1
+    app.kubernetes.io/name: batch
+    app.kubernetes.io/instance: astrago
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: batch
+      app.kubernetes.io/instance: astrago
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: batch
+        app.kubernetes.io/instance: astrago
+    spec:
+      serviceAccountName: astrago-sa
+      securityContext:
+        {}
+      containers:
+        - name: batch
+          securityContext:
+            {}
+          image: "harbor.xiilab.com:32443/uyuni/server-batch:develop-6e7c988"
+          imagePullPolicy: Always
+
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: "jdbc:mariadb://astrago-mariadb:3306/astrago"
+            - name: SPRING_DATASOURCE_USERNAME
+              value: "astrago"
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: "xiirocks"
+            - name: SPRING_DATASOURCE_HIKARI_MAX-LIFETIME
+              value: "3595000"
+            - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWT_ISSUER-URI
+              value: "http://10.61.3.12:30001/realms/astrago"
+            - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWT_JWK-SET-URI
+              value: "http://10.61.3.12:30001/realms/astrago/protocol/openid-connect/certs"
+            - name: KEYCLOAK_REALM
+              value: "astrago"
+            - name: KEYCLOAK_AUTH-SERVER-URL
+              value: "http://10.61.3.12:30001"
+            - name: KEYCLOAK_RESOURCE
+              value: "astrago-client"
+            - name: ADMIN_NAME
+              value: "admin"
+            - name: ADMIN_PASSWORD
+              value: "xiirocks"
+            - name: ADMIN_INIT-PASSWORD
+              value: "astrago"
+          volumeMounts:
+            - name: astrago-workload-log
+              mountPath: /root/astrago
+
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          resources:
+            {}
+      volumes:
+        - name: astrago-workload-log
+          persistentVolumeClaim:
+            claimName: astrago-workload-log
+---
+# Source: uyuni/charts/core/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: astrago-backend-core
+  namespace: astrago
+  labels:
+    helm.sh/chart: core-0.1.1
+    app.kubernetes.io/name: core
+    app.kubernetes.io/instance: astrago
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: core
+      app.kubernetes.io/instance: astrago
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: core
+        app.kubernetes.io/instance: astrago
+    spec:
+      serviceAccountName: astrago-sa      
+      securityContext:
+        {}
+      containers:
+        - name: core
+          securityContext:
+            {}
+          image: "harbor.xiilab.com:32443/uyuni/server-core:develop-6e7c988"
+          imagePullPolicy: Always
+          
+          env:
+          - name: SPRING_DATASOURCE_URL
+            value: "jdbc:mariadb://astrago-mariadb:3306/astrago"
+          - name: SPRING_DATASOURCE_USERNAME
+            value: "astrago"
+          - name: SPRING_DATASOURCE_PASSWORD
+            value: "xiirocks"
+          - name: SPRING_DATASOURCE_HIKARI_MAX-LIFETIME
+            value: "3595000"
+          - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWT_ISSUER-URI
+            value: "http://10.61.3.12:30001/realms/astrago"
+          - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWT_JWK-SET-URI
+            value: "http://10.61.3.12:30001/realms/astrago/protocol/openid-connect/certs"
+          - name: KEYCLOAK_REALM
+            value: "astrago"
+          - name: KEYCLOAK_AUTH-SERVER-URL
+            value: "http://10.61.3.12:30001"
+          - name: KEYCLOAK_RESOURCE
+            value: "astrago-client"
+          - name: ADMIN_NAME
+            value: "admin"
+          - name: ADMIN_PASSWORD
+            value: "xiirocks"
+          - name: ADMIN_INIT-PASSWORD
+            value: "astrago"
+          volumeMounts:
+            - name: astrago-workload-log
+              mountPath: /root/astrago
+          
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+
+          resources:
+            {}
+      volumes:
+        - name: astrago-workload-log
+          persistentVolumeClaim:
+            claimName: astrago-workload-log
+      terminationGracePeriodSeconds: 10
+---
+# Source: uyuni/charts/frontend/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: astrago-frontend
+  namespace: astrago
+  labels:
+    helm.sh/chart: frontend-0.1.0
+    app.kubernetes.io/name: frontend
+    app.kubernetes.io/instance: astrago
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: frontend
+      app.kubernetes.io/instance: astrago
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: frontend
+        app.kubernetes.io/instance: astrago
+    spec:
+      serviceAccountName: default
+      securityContext:
+        {}
+      containers:
+        - name: frontend
+          securityContext:
+            {}
+          image: "harbor.xiilab.com:32443/uyuni/uyuni-frontend:develop-7e3aaf4"
+          imagePullPolicy: Always
+          
+          env:
+          - name: KEYCLOAK_HOST
+            value: "http://10.61.3.12:30001"
+          - name: KEYCLOAK_REALME
+            value: "astrago"
+          - name: KEYCLOAK_CLIENT_ID
+            value: "astrago-client"
+          - name: AUTH_CLIENT_SECRET
+            value: "astragosecret"
+          - name: NODE_OPTIONS
+            value: "--max-http-header-size=41960"
+          - name: NEXTAUTH_URL
+            value: "http://10.61.3.12:30080"
+          - name: NEXTAUTH_SECRET
+            value: "uuNj1L0Yg2xKcBPVp7yOVlm2nigL3hoHOzbwQXAwx1I="
+          - name: NEXT_PUBLIC_API_URL
+            value: "http://astrago-backend-core:8080"
+          - name: NEXT_PUBLIC_MONITOR_API_URL
+            value: "http://astrago-backend-monitor:8080"
+          - name: NEXT_PUBLIC_PREDICTION_API_URL
+            value: "http://astrago-time-prediction:8000"
+          - name: NEXT_PUBLIC_BATCH_API_URL
+            value: "http://astrago-backend-batch:8080"
+          - name: NEXT_PUBLIC_API_MOCKING
+            value: "disabled"
+          - name: NEXT_PUBLIC_WEBSOCKET_HOST
+            value: "http://astrago-backend-core:8080"
+          
+          ports:
+            - name: http
+              containerPort: 3000
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
+            {}
+---
+# Source: uyuni/charts/monitor/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: astrago-backend-monitor
+  namespace: astrago
+  labels:
+    helm.sh/chart: monitor-0.1.1
+    app.kubernetes.io/name: monitor
+    app.kubernetes.io/instance: astrago
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: monitor
+      app.kubernetes.io/instance: astrago
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: monitor
+        app.kubernetes.io/instance: astrago
+    spec:
+      serviceAccountName: astrago-sa      
+      securityContext:
+        {}
+      containers:
+        - name: monitor
+          securityContext:
+            {}
+          image: "harbor.xiilab.com:32443/uyuni/server-monitor:develop-6e7c988"
+          imagePullPolicy: Always
+          env:
+          - name: SPRING_DATASOURCE_URL
+            value: "jdbc:mariadb://astrago-mariadb:3306/astrago"
+          - name: SPRING_DATASOURCE_USERNAME
+            value: "astrago"
+          - name: SPRING_DATASOURCE_PASSWORD
+            value: "xiirocks"
+          - name: SPRING_DATASOURCE_HIKARI_MAX-LIFETIME
+            value: "3595000"
+          - name: SPRING_MVC_PATHMATCH_MATCHING-STRATEGY
+            value: "ant_path_matcher"
+          - name: PROMETHEUS_URL
+            value: "http://prometheus-kube-prometheus-prometheus.prometheus.svc.cluster.local:9090"
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          resources:
+            {}
+---
+# Source: uyuni/templates/binpack-scheduler/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    component: scheduler
+    tier: control-plane
+  name: binpack-scheduler
+  namespace: kube-system
+spec:
+  selector:
+    matchLabels:
+      component: scheduler
+      tier: control-plane
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        component: scheduler
+        tier: control-plane
+    spec:
+      nodeSelector:
+        node-role.kubernetes.io/control-plane: ""
+      tolerations:
+      - key: "node-role.kubernetes.io/master"
+        operator: "Exists"
+        effect: "NoSchedule"
+      serviceAccountName: binpack-scheduler
+      containers:
+      - name: kube-scheduler
+        command:
+        - /usr/local/bin/kube-scheduler
+        - --config=/etc/kubernetes/binpack-scheduler/gpu-binpack-scheduler-config.yaml
+        image: registry.k8s.io/kube-scheduler:v1.28.4
+        livenessProbe:
+          failureThreshold: 8
+          httpGet:
+            path: /healthz
+            port: 10259
+            scheme: HTTPS
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 15
+        startupProbe:
+          failureThreshold: 30
+          httpGet:
+            path: /healthz
+            port: 10259
+            scheme: HTTPS
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 15
+        resources:
+          requests:
+            cpu: 100m
+        securityContext:
+          privileged: false              
+        volumeMounts:
+          - name: config-volume
+            mountPath: /etc/kubernetes/binpack-scheduler
+            readOnly: true
+      priorityClassName: system-node-critical
+      restartPolicy: Always
+      hostNetwork: false
+      hostPID: false
+      volumes:
+        - name: config-volume
+          configMap:
+            name: binpack-scheduler-config
+---
+# Source: uyuni/templates/metric-server.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    k8s-app: metrics-server
+  name: metrics-server
+  namespace: kube-system
+spec:
+  selector:
+    matchLabels:
+      k8s-app: metrics-server
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        k8s-app: metrics-server
+    spec:
+      containers:
+      - args:
+        - --cert-dir=/tmp
+        - --secure-port=4443
+        - --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname
+        - --kubelet-use-node-status-port
+        - --metric-resolution=15s
+        - --kubelet-insecure-tls
+        image: registry.k8s.io/metrics-server/metrics-server:v0.7.0
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /livez
+            port: https
+            scheme: HTTPS
+          periodSeconds: 10
+        name: metrics-server
+        ports:
+        - containerPort: 4443
+          name: https
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /readyz
+            port: https
+            scheme: HTTPS
+          initialDelaySeconds: 20
+          periodSeconds: 10
+        resources:
+          requests:
+            cpu: 100m
+            memory: 200Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 1000
+          seccompProfile:
+            type: RuntimeDefault
+        volumeMounts:
+        - mountPath: /tmp
+          name: tmp-dir
+      hostNetwork: true
+      nodeSelector:
+        kubernetes.io/os: linux
+      priorityClassName: system-cluster-critical
+      serviceAccountName: metrics-server
+      volumes:
+      - emptyDir: {}
+        name: tmp-dir
+---
+# Source: uyuni/templates/time-prediction.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: astrago-time-prediction
+  namespace: astrago
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: astrago-time-prediction
+  template:
+    metadata:
+      labels:
+        app: astrago-time-prediction
+    spec:
+      containers:
+      - name: astrago-time-prediction
+        image: xiilab/astrago:time-prediction-v0.1  # 이미지 이름 수정
+        ports:
+        - containerPort: 8000
+---
+# Source: uyuni/charts/mariadb/templates/primary/statefulset.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: astrago-mariadb
+  namespace: "astrago"
+  labels:
+    app.kubernetes.io/name: mariadb
+    helm.sh/chart: mariadb-12.2.9
+    app.kubernetes.io/instance: astrago
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: primary
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels: 
+      app.kubernetes.io/name: mariadb
+      app.kubernetes.io/instance: astrago
+      app.kubernetes.io/component: primary
+  serviceName: astrago-mariadb
+  updateStrategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        checksum/configuration: cc86e83c1be5a9e330b51aa6929c9c0bdf61cd421b4baee85fbf3461d040034a
+      labels:
+        app.kubernetes.io/name: mariadb
+        helm.sh/chart: mariadb-12.2.9
+        app.kubernetes.io/instance: astrago
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/component: primary
+    spec:
+      
+      serviceAccountName: astrago-mariadb
+      affinity:
+        podAffinity:
+          
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: mariadb
+                    app.kubernetes.io/instance: astrago
+                    app.kubernetes.io/component: primary
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+          
+      securityContext:
+        fsGroup: 1001
+      containers:
+        - name: mariadb
+          image: docker.io/bitnami/mariadb:10.11.4-debian-11-r46
+          imagePullPolicy: "IfNotPresent"
+          securityContext:
+            allowPrivilegeEscalation: false
+            privileged: false
+            runAsNonRoot: true
+            runAsUser: 1001
+          env:
+            - name: BITNAMI_DEBUG
+              value: "false"
+            - name: MARIADB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: astrago-mariadb
+                  key: mariadb-root-password
+            - name: MARIADB_USER
+              value: "astrago"
+            - name: MARIADB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: astrago-mariadb
+                  key: mariadb-password
+            - name: MARIADB_DATABASE
+              value: "astrago"
+          ports:
+            - name: mysql
+              containerPort: 3306
+          livenessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 120
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+            exec:
+              command:
+                - /bin/bash
+                - -ec
+                - |
+                  password_aux="${MARIADB_ROOT_PASSWORD:-}"
+                  if [[ -f "${MARIADB_ROOT_PASSWORD_FILE:-}" ]]; then
+                      password_aux=$(cat "$MARIADB_ROOT_PASSWORD_FILE")
+                  fi
+                  mysqladmin status -uroot -p"${password_aux}"
+          readinessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+            exec:
+              command:
+                - /bin/bash
+                - -ec
+                - |
+                  password_aux="${MARIADB_ROOT_PASSWORD:-}"
+                  if [[ -f "${MARIADB_ROOT_PASSWORD_FILE:-}" ]]; then
+                      password_aux=$(cat "$MARIADB_ROOT_PASSWORD_FILE")
+                  fi
+                  mysqladmin status -uroot -p"${password_aux}"
+          resources: 
+            limits: {}
+            requests: {}
+          volumeMounts:
+            - name: data
+              mountPath: /bitnami/mariadb
+            - name: config
+              mountPath: /opt/bitnami/mariadb/conf/my.cnf
+              subPath: my.cnf
+      volumes:
+        - name: config
+          configMap:
+            name: astrago-mariadb
+        - name: data
+          persistentVolumeClaim:
+            claimName: astra-mariadb-volume
+---
+# Source: uyuni/templates/metric-server.yaml
+apiVersion: apiregistration.k8s.io/v1
+kind: APIService
+metadata:
+  labels:
+    k8s-app: metrics-server
+  name: v1beta1.metrics.k8s.io
+spec:
+  group: metrics.k8s.io
+  groupPriorityMinimum: 100
+  insecureSkipTLSVerify: true
+  service:
+    name: metrics-server
+    namespace: kube-system
+  version: v1beta1
+  versionPriority: 100
+
