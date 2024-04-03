@@ -1,0 +1,10 @@
+releases:
+- name: event-exporter
+  namespace: event-exporter 
+  # chart: prometheus-community/kube-prometheus-stack
+  chart: event-exporter
+  wait: true
+  labels:
+      app: event-exporter
+  values:
+  - event-exporter/custom_values.yaml
