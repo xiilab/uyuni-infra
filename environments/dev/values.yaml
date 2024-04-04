@@ -54,13 +54,13 @@ astrago:
         path: /kube_storage/astrago-log-volume
   core:
     repository: "harbor.xiilab.com:32443/uyuni/server-core"
-    imageTag: "develop-e303b64"
+    imageTag: "develop-af4b648"
   batch:
     repository: "harbor.xiilab.com:32443/uyuni/server-batch"
-    imageTag: "develop-e303b64"
+    imageTag: "develop-af4b648"
   monitor:
     repository: "harbor.xiilab.com:32443/uyuni/server-monitor"
-    imageTag: "develop-e303b64"
+    imageTag: "develop-af4b648"
   frontend:
     repository: "harbor.xiilab.com:32443/uyuni/uyuni-frontend"
     imageTag: develop-7e3aaf4
