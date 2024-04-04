@@ -2297,7 +2297,7 @@ spec:
         resources:
           requests:
             storage: 50Gi
-        storageClassName: prometheus-volume
+        storageClassName: local-storage
   additionalScrapeConfigs:
     name: prometheus-kube-prometheus-prometheus-scrape-confg
     key: additional-scrape-configs.yaml
