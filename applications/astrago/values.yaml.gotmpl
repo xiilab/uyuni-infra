@@ -125,6 +125,7 @@ mariadb:
   primary:
     service:
       type: NodePort
+      nodePorts: 33306
     persistence:
       storageClass: "{{ .Values.common.volume.nfs.storageClassName }}"
 
