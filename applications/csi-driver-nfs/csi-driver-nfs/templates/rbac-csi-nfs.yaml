@@ -3,14 +3,14 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: csi-{{ .Values.rbac.name }}-controller-sa
+  name: {{ .Values.serviceAccount.controller }}
   namespace: {{ .Release.Namespace }}
 {{ include "nfs.labels" . | indent 2 }}
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: csi-{{ .Values.rbac.name }}-node-sa
+  name: {{ .Values.serviceAccount.node }}
   namespace: {{ .Release.Namespace }}
 {{ include "nfs.labels" . | indent 2 }}
 ---
@@ -32,7 +32,6 @@ rules:
   - apiGroups: ["storage.k8s.io"]
     resources: ["storageclasses"]
     verbs: ["get", "list", "watch"]
-  {{- if .Values.externalSnapshotter.enabled }}
   - apiGroups: ["snapshot.storage.k8s.io"]
     resources: ["volumesnapshotclasses", "volumesnapshots"]
     verbs: ["get", "list", "watch"]
@@ -42,7 +41,6 @@ rules:
   - apiGroups: ["snapshot.storage.k8s.io"]
     resources: ["volumesnapshotcontents/status"]
     verbs: ["get", "update", "patch"]
-  {{- end }}
   - apiGroups: [""]
     resources: ["events"]
     verbs: ["get", "list", "watch", "create", "update", "patch"]
@@ -66,7 +64,7 @@ metadata:
 {{ include "nfs.labels" . | indent 2 }}
 subjects:
   - kind: ServiceAccount
-    name: csi-{{ .Values.rbac.name }}-controller-sa
+    name: {{ .Values.serviceAccount.controller }}
     namespace: {{ .Release.Namespace }}
 roleRef:
   kind: ClusterRole
