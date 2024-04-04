@@ -28,7 +28,6 @@ core:
       value: {{ .Values.keycloak.adminPassword }}
     - name: ADMIN_INIT-PASSWORD
       value: {{ .Values.astrago.userInitPassword }}
-  existingClaim: "{{ .Values.astrago.createVolume.workloadLog.name }}"
 
 batch:
   image:
@@ -59,7 +58,6 @@ batch:
       value: {{ .Values.keycloak.adminPassword }}
     - name: ADMIN_INIT-PASSWORD
       value: {{ .Values.astrago.userInitPassword }}
-  existingClaim: "{{ .Values.astrago.createVolume.workloadLog.name }}"
 
 monitor:
   image:
@@ -115,6 +113,9 @@ frontend:
     type: NodePort
     nodePort: {{ .Values.astrago.servicePort  }}
 
+persistence:
+  storageClass: "{{ .Values.common.volume.nfs.storageClassName }}"
+
 mariadb:
   auth:
     rootPassword: {{ .Values.astrago.mariadb.rootPassword }}
@@ -125,27 +126,5 @@ mariadb:
     service:
       type: NodePort
     persistence:
-      existingClaim: {{ .Values.astrago.createVolume.mariadb.name }} 
+      storageClass: "{{ .Values.common.volume.nfs.storageClassName }}"
 
-createVolume:
-  mariadb:
-    enabled: "{{ .Values.astrago.createVolume.mariadb.enabled }}"
-    name: "{{ .Values.astrago.createVolume.mariadb.name }}"
-    size: "{{ .Values.astrago.createVolume.mariadb.size }}"
-    accessModes:
-    - ReadWriteOnce
-    volumeType: "{{ .Values.astrago.createVolume.mariadb.volumeType }}"
-    nfs:
-      server: "{{ .Values.astrago.createVolume.mariadb.nfs.server }}"
-      path: "{{ .Values.astrago.createVolume.mariadb.nfs.path }}"
-
-  workloadLog:
-    enabled: "{{ .Values.astrago.createVolume.workloadLog.enabled }}"
-    name: "{{ .Values.astrago.createVolume.workloadLog.name }}"
-    size: "{{ .Values.astrago.createVolume.workloadLog.size }}"
-    accessModes:
-    - ReadWriteOnce
-    volumeType: "{{ .Values.astrago.createVolume.workloadLog.volumeType }}"
-    nfs:
-      server: "{{ .Values.astrago.createVolume.workloadLog.nfs.server }}"
-      path: "{{ .Values.astrago.createVolume.workloadLog.nfs.path }}"

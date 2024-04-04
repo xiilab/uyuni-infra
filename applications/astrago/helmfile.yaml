@@ -1,12 +1,12 @@
 releases:
-- name: astrago-volume
-  namespace: astrago
-  chart: astrago-volume
-  wait: true
-  labels:
-    app: astrago
-  values:
-  - values.yaml.gotmpl
+#- name: astrago-volume
+#  namespace: astrago
+#  chart: astrago-volume
+#  wait: true
+#  labels:
+#    app: astrago
+#  values:
+#  - values.yaml.gotmpl
 
 - name: astrago
   namespace: astrago

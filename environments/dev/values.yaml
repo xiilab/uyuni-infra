@@ -11,15 +11,6 @@ keycloak:
   adminUser: admin
   adminPassword: xiirocks
   servicePort: 30001
-prometheus:
-  createVolume:
-    enabled: true
-    name: prometheus-volume
-    size: 50Gi
-    volumeType: nfs
-    nfs:
-      server: 10.61.3.2
-      path: /kube_storage/develop-prometheus-volume
 astrago:
   servicePort: 30080
   userInitPassword: astrago
@@ -33,23 +24,6 @@ astrago:
     username: astrago
     password: xiirocks
     maxLifetime: "3595000"
-  createVolume:
-    mariadb:
-      enabled: true
-      name: astra-mariadb-volume
-      size: 8Gi
-      volumeType: nfs
-      nfs:
-        server: 10.61.3.2
-        path: /kube_storage/astra-mariadb-volume
-    workloadLog:
-      enabled: true
-      name: astrago-workload-log
-      size: 8Gi
-      volumeType: nfs
-      nfs:
-        server: 10.61.3.2
-        path: /kube_storage/astrago-log-volume
   core:
     repository: "harbor.xiilab.com:32443/uyuni/server-core"
     imageTag: "develop-f8da486"

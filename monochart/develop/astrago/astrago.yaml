@@ -1,67 +1,4 @@
 ---
-# Source: astrago-volume/templates/astrago-log-pv.yaml
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: astrago-workload-log
-  namespace: "astrago"
-spec:
-  capacity:
-    storage: "8Gi"
-  persistentVolumeReclaimPolicy: Retain
-  accessModes:
-    - "ReadWriteOnce"
-  storageClassName: workload-log-volume
-  nfs:
-    server: 10.61.3.2
-    path: /kube_storage/astrago-log-volume
----
-# Source: astrago-volume/templates/mariadb-pv.yaml
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: astra-mariadb-volume-pv
-  namespace: "astrago"
-spec:
-  capacity:
-    storage: "8Gi"
-  persistentVolumeReclaimPolicy: Retain
-  accessModes:
-    - "ReadWriteOnce"
-  storageClassName: astrago-mariadb
-  nfs:
-    server: 10.61.3.2
-    path: /kube_storage/astra-mariadb-volume
----
-# Source: astrago-volume/templates/astrago-log-pvc.yaml
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: astrago-workload-log
-  namespace: "astrago"
-spec:
-  resources:
-    requests:
-      storage: "8Gi"
-  accessModes:
-    - "ReadWriteOnce"
-  storageClassName: workload-log-volume
----
-# Source: astrago-volume/templates/mariadb-pvc.yaml
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: astra-mariadb-volume
-  namespace: "astrago"
-spec:
-  resources:
-    requests:
-      storage: "8Gi"
-  accessModes:
-    - "ReadWriteOnce"
-  storageClassName: astrago-mariadb
-
----
 # Source: uyuni/charts/mariadb/templates/serviceaccount.yaml
 apiVersion: v1
 kind: ServiceAccount
@@ -187,6 +124,19 @@ data:
             type: MostAllocated
         name: NodeResourcesFit
       schedulerName: binpack-scheduler
+---
+# Source: uyuni/templates/workload-log-pvc.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: workload-log-pvc
+  namespace: "astrago"
+spec:
+  resources:
+    requests:
+      storage: "10Gi"
+  accessModes:
+  storageClassName: astrago-nfs-csi
 ---
 # Source: uyuni/templates/binpack-scheduler/rbac.yaml
 kind: ClusterRole
@@ -595,7 +545,7 @@ spec:
       volumes:
         - name: astrago-workload-log
           persistentVolumeClaim:
-            claimName: astrago-workload-log
+            claimName: workload-log-pvc
 ---
 # Source: uyuni/charts/core/templates/deployment.yaml
 apiVersion: apps/v1
@@ -670,7 +620,7 @@ spec:
       volumes:
         - name: astrago-workload-log
           persistentVolumeClaim:
-            claimName: astrago-workload-log
+            claimName: workload-log-pvc
       terminationGracePeriodSeconds: 10
 ---
 # Source: uyuni/charts/frontend/templates/deployment.yaml
@@ -1098,9 +1048,20 @@ spec:
         - name: config
           configMap:
             name: astrago-mariadb
-        - name: data
-          persistentVolumeClaim:
-            claimName: astra-mariadb-volume
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+        labels: 
+          app.kubernetes.io/name: mariadb
+          app.kubernetes.io/instance: astrago
+          app.kubernetes.io/component: primary
+      spec:
+        accessModes:
+          - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: "8Gi"
+        storageClassName: astrago-nfs-csi
 ---
 # Source: uyuni/templates/metric-server.yaml
 apiVersion: apiregistration.k8s.io/v1

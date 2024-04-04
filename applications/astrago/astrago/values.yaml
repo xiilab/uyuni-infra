@@ -43,3 +43,8 @@ frontend:
     port: 3000
     nodePort: 30080      
 
+persistence:
+  storageClass: astrago-nfs-csi
+  accessModes:
+  - ReadWriteOnce
+  size: 10Gi
