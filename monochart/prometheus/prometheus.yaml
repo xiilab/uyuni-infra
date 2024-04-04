@@ -1,22 +1,4 @@
 ---
-# Source: prometheus-volume/templates/pv.yaml
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: prometheus-volume
-  namespace: "prometheus"
-spec:
-  capacity:
-    storage: "50Gi"
-  persistentVolumeReclaimPolicy: Retain
-  accessModes:
-    - "ReadWriteOnce"
-  storageClassName: prometheus-volume
-  nfs:
-    server: 10.61.3.2
-    path: /kube_storage/develop-prometheus-volume
-
----
 # Source: kube-prometheus-stack/charts/grafana/templates/serviceaccount.yaml
 apiVersion: v1
 kind: ServiceAccount
@@ -2297,7 +2279,7 @@ spec:
         resources:
           requests:
             storage: 50Gi
-        storageClassName: local-storage
+        storageClassName: astrago-nfs-csi
   additionalScrapeConfigs:
     name: prometheus-kube-prometheus-prometheus-scrape-confg
     key: additional-scrape-configs.yaml

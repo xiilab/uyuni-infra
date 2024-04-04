@@ -47,24 +47,14 @@ prometheus:
     storageSpec:
       volumeClaimTemplate:
         spec:
-          storageClassName: local-storage
+          storageClassName: {{ .Values.common.volume.nfs.storageClassName }}
           accessModes: ["ReadWriteOnce"]
           resources:
             requests:
-              storage: {{ .Values.prometheus.createVolume.size }}
+              storage: 50Gi
 
 grafana:          
   service:
     enabled: true
     type: NodePort
 
-createVolume:
-  enabled: "{{ .Values.prometheus.createVolume.enabled }}"
-  name: "{{ .Values.prometheus.createVolume.name }}"
-  size: "{{ .Values.prometheus.createVolume.size }}"
-  accessModes:
-    - ReadWriteOnce
-  volumeType: "{{ .Values.prometheus.createVolume.volumeType }}"
-  nfs:
-    server: "{{ .Values.prometheus.createVolume.nfs.server }}"
-    path: "{{ .Values.prometheus.createVolume.nfs.path }}"
