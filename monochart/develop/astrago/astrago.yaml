@@ -136,6 +136,7 @@ spec:
     requests:
       storage: "10Gi"
   accessModes:
+    - "ReadWriteOnce"
   storageClassName: astrago-nfs-csi
 ---
 # Source: uyuni/templates/binpack-scheduler/rbac.yaml
