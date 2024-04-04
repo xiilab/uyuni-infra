@@ -15,6 +15,10 @@ helmDefaults:
   timeout: 600
 
 helmfiles:
+- path: applications/csi-driver-nfs/helmfile.yaml
+  values:
+  - {{ toYaml .Values | nindent 4 }}
+
 - path: applications/gpu-operator/helmfile.yaml
   values:
   - {{ toYaml .Values | nindent 4 }}

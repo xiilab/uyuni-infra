@@ -1,5 +1,11 @@
 common:
   externalIP: 10.61.3.12
+  volume:
+    volumeType: nfs
+    nfs:
+      storageClassName: astrago-nfs-csi
+      server: 10.61.3.2
+      basePath: /kube_storage/develop-astrago
 keycloak:
   themeVersion: v1.0.13
   adminUser: admin

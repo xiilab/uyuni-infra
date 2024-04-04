@@ -48,16 +48,18 @@ postgresql:
   primary:
     persistence:
       enabled: true
-      existingClaim: "{{ .Values.keycloak.createVolume.name }}"
+      storageClass: "{{ .Values.common.volume.nfs.storageClassName }}"
+      
+ #     existingClaim: "{{ .Values.keycloak.createVolume.name }}"
 
 
-createVolume:
-  enabled: "{{ .Values.keycloak.createVolume.enabled }}"
-  name: "{{ .Values.keycloak.createVolume.name }}"
-  size: "{{ .Values.keycloak.createVolume.size }}"
-  accessModes:
-    - ReadWriteOnce     
-  volumeType: "{{ .Values.keycloak.createVolume.volumeType }}"
-  nfs:
-    server: "{{ .Values.keycloak.createVolume.nfs.server }}"
-    path: "{{ .Values.keycloak.createVolume.nfs.path }}"
+#createVolume:
+#  enabled: "{{ .Values.keycloak.createVolume.enabled }}"
+#  name: "{{ .Values.keycloak.createVolume.name }}"
+#  size: "{{ .Values.keycloak.createVolume.size }}"
+#  accessModes:
+#    - ReadWriteOnce     
+#  volumeType: "{{ .Values.keycloak.createVolume.volumeType }}"
+#  nfs:
+#    server: "{{ .Values.keycloak.createVolume.nfs.server }}"
+#    path: "{{ .Values.keycloak.createVolume.nfs.path }}"

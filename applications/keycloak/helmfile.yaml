@@ -1,12 +1,12 @@
 releases:
-- name: keycloak-volume
-  namespace: keycloak
-  chart: keycloak-volume
-  wait: true
-  labels:
-    app: keycloak
-  values:
-  - values.yaml.gotmpl
+#- name: keycloak-volume
+#  namespace: keycloak
+#  chart: keycloak-volume
+#  wait: true
+#  labels:
+#    app: keycloak
+#  values:
+#  - values.yaml.gotmpl
 
 - name: keycloak
   namespace: keycloak
