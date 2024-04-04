@@ -8,7 +8,7 @@ spec:
     requests:
       storage: {{ .Values.persistence.size | quote }}
   accessModes:
-    {{- range .Values.persistence.accessMode }}
+    {{- range .Values.persistence.accessModes }}
     - {{ . | quote }}
     {{- end }}
   storageClassName: {{ .Values.persistence.storageClass }}
