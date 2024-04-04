@@ -11,14 +11,6 @@ keycloak:
   adminUser: admin
   adminPassword: xiirocks
   servicePort: 30001
-  createVolume:
-    enabled: true
-    name: keycloak-volume
-    size: 8Gi
-    volumeType: nfs
-    nfs:
-      server: 10.61.3.2
-      path: /kube_storage/develop-astrago-keycloak-volume
 prometheus:
   createVolume:
     enabled: true
