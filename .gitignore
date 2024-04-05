@@ -27,3 +27,5 @@
 .ionide
 
 # End of https://www.toptal.com/developers/gitignore/api/helm,visualstudiocode
+
+environments/astrago

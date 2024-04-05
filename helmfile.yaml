@@ -8,6 +8,9 @@ environments:
   stage:
     values:
     - environments/stage/values.yaml
+  astrago:
+    values:
+    - environments/astrago/values.yaml
 
 helmDefaults:
   wait: true
