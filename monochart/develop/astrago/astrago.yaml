@@ -402,6 +402,7 @@ spec:
       port: 3306
       protocol: TCP
       targetPort: mysql
+      nodePort: 33306
   selector: 
     app.kubernetes.io/name: mariadb
     app.kubernetes.io/instance: astrago
@@ -505,7 +506,7 @@ spec:
         - name: batch
           securityContext:
             {}
-          image: "harbor.xiilab.com:32443/uyuni/server-batch:develop-f8da486"
+          image: "harbor.xiilab.com:32443/uyuni/server-batch:develop-e0cd64d"
           imagePullPolicy: Always
 
           env:
@@ -579,7 +580,7 @@ spec:
         - name: core
           securityContext:
             {}
-          image: "harbor.xiilab.com:32443/uyuni/server-core:develop-f8da486"
+          image: "harbor.xiilab.com:32443/uyuni/server-core:develop-e0cd64d"
           imagePullPolicy: Always
           
           env:
@@ -655,7 +656,7 @@ spec:
         - name: frontend
           securityContext:
             {}
-          image: "harbor.xiilab.com:32443/uyuni/uyuni-frontend:develop-582f00f"
+          image: "harbor.xiilab.com:32443/uyuni/uyuni-frontend:develop-41d86ff"
           imagePullPolicy: Always
           
           env:
@@ -732,7 +733,7 @@ spec:
         - name: monitor
           securityContext:
             {}
-          image: "harbor.xiilab.com:32443/uyuni/server-monitor:develop-f8da486"
+          image: "harbor.xiilab.com:32443/uyuni/server-monitor:develop-e0cd64d"
           imagePullPolicy: Always
           env:
           - name: SPRING_DATASOURCE_URL
