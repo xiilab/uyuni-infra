@@ -402,7 +402,7 @@ spec:
       port: 3306
       protocol: TCP
       targetPort: mysql
-      nodePort: 33306
+      nodePort: 23306
   selector: 
     app.kubernetes.io/name: mariadb
     app.kubernetes.io/instance: astrago
