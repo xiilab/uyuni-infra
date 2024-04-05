@@ -126,7 +126,7 @@ mariadb:
     service:
       type: NodePort
       nodePorts: 
-        mysql: 23306
+        mysql: 30010
     persistence:
       storageClass: "{{ .Values.common.volume.nfs.storageClassName }}"
 
