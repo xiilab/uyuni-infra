@@ -27,4 +27,4 @@ migManager:
     default: "all-disabled"
 
 mig:
-  strategy: mixed
+  strategy: single
