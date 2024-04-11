@@ -27,11 +27,13 @@ elif [ "$1" == "deploy" ]; then
     if [ ! -d "environments/$environment_name" ]; then
         echo "환경 디렉토리가 존재하지 않습니다. 생성 중..."
         mkdir "environments/$environment_name"
-        cp -r environments/stage/* "environments/$environment_name"
         echo "환경 디렉토리가 생성되었습니다."
     else
         echo "환경 디렉토리가 이미 존재합니다."
     fi
+    cp -r environments/stage/* "environments/$environment_name"
+    # 생성된 환경 파일 경로 출력
+    echo "환경 파일이 생성된 경로: $(realpath "environments/$environment_name")"
 
     # 사용자로부터 외부 접속 IP 주소를 입력 받음
     while true; do
@@ -82,8 +84,6 @@ elif [ "$1" == "deploy" ]; then
     echo "helmfile -e $environment_name sync를 실행합니다."
     helmfile -e "$environment_name" sync
 
-    # 생성된 환경 파일 경로 출력
-    echo "환경 파일이 생성된 경로: $(realpath "environments/$environment_name")"
 
 elif [ "$1" == "sync" ]; then
     # 이미 설정된 환경에 대해 helmfile sync를 실행합니다.
