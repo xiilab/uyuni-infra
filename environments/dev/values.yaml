@@ -26,13 +26,13 @@ astrago:
     maxLifetime: "3595000"
   core:
     repository: "harbor.xiilab.com:32443/uyuni/server-core"
-    imageTag: "develop-128cdde"
+    imageTag: "develop-e5504bf"
   batch:
     repository: "harbor.xiilab.com:32443/uyuni/server-batch"
-    imageTag: "develop-128cdde"
+    imageTag: "develop-e5504bf"
   monitor:
     repository: "harbor.xiilab.com:32443/uyuni/server-monitor"
-    imageTag: "develop-128cdde"
+    imageTag: "develop-e5504bf"
   frontend:
     repository: "harbor.xiilab.com:32443/uyuni/uyuni-frontend"
     imageTag: develop-6628772
