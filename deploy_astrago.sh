@@ -3,11 +3,23 @@
 environment_name="astrago"  # 환경 이름을 고정
 
 if [ "$1" == "--help" ]; then
-    echo "사용법: $0 [deploy|sync|destroy]"
+    echo "사용법: $0 [deploy|sync|destroy|sync_only|destroy_only]"
     echo ""
-    echo "deploy    : 환경을 배포합니다."
-    echo "sync      : 이미 설정된 환경에 대해 helmfile sync를 실행합니다."
-    echo "destroy   : 이미 설정된 환경에 대해 helmfile destroy를 실행합니다."
+    echo "deploy        : 새로운 환경을 만들고 astrago 전체 앱을 설치합니다. 사용자로부터 외부 접속 IP 주소, NFS 서버의 IP 주소, NFS의 base 경로를 입력받습니다."
+    echo "sync          : 이미 설정된 환경에 대해 astrago 전체 앱을 설치(업데이트)합니다."
+    echo "destroy       : 이미 설정된 환경에 대해 astrago 전체 앱을 삭제합니다."
+    echo "sync_only     : 특정 앱에 대해 설치(업데이트)합니다."
+    echo "                사용법: $0 sync_only <앱 이름>"
+    echo "destroy_only  : 특정 앱에 대해 삭제합니다."
+    echo "                사용법: $0 destroy_only <앱 이름>"
+    echo ""
+    echo "앱 종류:"
+    echo "nfs-provisioner"
+    echo "gpu-operator"
+    echo "prometheus"
+    echo "event-exporter"
+    echo "keycloak"
+    echo "astrago"
     exit 0
 
 elif [ "$1" == "deploy" ]; then
@@ -70,6 +82,9 @@ elif [ "$1" == "deploy" ]; then
     echo "helmfile -e $environment_name sync를 실행합니다."
     helmfile -e "$environment_name" sync
 
+    # 생성된 환경 파일 경로 출력
+    echo "환경 파일이 생성된 경로: $(realpath "environments/$environment_name")"
+
 elif [ "$1" == "sync" ]; then
     # 이미 설정된 환경에 대해 helmfile sync를 실행합니다.
     if [ -d "environments/$environment_name" ]; then
@@ -88,7 +103,25 @@ elif [ "$1" == "destroy" ]; then
         echo "환경이 설정되어 있지 않습니다. deploy를 먼저 실행하세요."
     fi
 
+elif [ "$1" == "sync_only" ]; then
+    # 특정 앱에 대해 helmfile sync를 실행합니다.
+    if [ -n "$2" ]; then
+        echo "helmfile -e $environment_name -l app=$2 sync를 실행합니다."
+        helmfile -e "$environment_name" -l "app=$2" sync
+    else
+        echo "사용법: $0 sync_only <앱 이름>"
+    fi
+
+elif [ "$1" == "destroy_only" ]; then
+    # 특정 앱에 대해 helmfile destroy를 실행합니다.
+    if [ -n "$2" ]; then
+        echo "helmfile -e $environment_name -l app=$2 destroy를 실행합니다."
+        helmfile -e "$environment_name" -l "app=$2" destroy
+    else
+        echo "사용법: $0 destroy_only <앱 이름>"
+    fi
+
 else
-    echo "사용법: $0 [deploy|sync|destroy]"
+    echo "사용법: $0 [deploy|sync|destroy|sync_only|destroy_only]"
     exit 1
 fi
