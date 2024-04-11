@@ -35,4 +35,4 @@ astrago:
     imageTag: "0.1-6b45-rc"
   frontend:
     repository: "xiilab/astrago-frontend"
-    imageTag: 0.1-4a780-rc
+    imageTag: 0.1-656d-rc
