@@ -2,7 +2,15 @@
 
 environment_name="astrago"  # 환경 이름을 고정
 
-if [ "$1" == "deploy" ]; then
+if [ "$1" == "--help" ]; then
+    echo "사용법: $0 [deploy|sync|destroy]"
+    echo ""
+    echo "deploy    : 환경을 배포합니다."
+    echo "sync      : 이미 설정된 환경에 대해 helmfile sync를 실행합니다."
+    echo "destroy   : 이미 설정된 환경에 대해 helmfile destroy를 실행합니다."
+    exit 0
+
+elif [ "$1" == "deploy" ]; then
     # 환경 디렉토리 생성
     if [ ! -d "environments/$environment_name" ]; then
         echo "환경 디렉토리가 존재하지 않습니다. 생성 중..."
@@ -84,4 +92,3 @@ else
     echo "사용법: $0 [deploy|sync|destroy]"
     exit 1
 fi
-
