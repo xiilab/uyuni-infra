@@ -9,11 +9,11 @@
 
 이 스크립트는 다섯 가지 주요 옵션을 지원합니다. 각각의 옵션은 특정 작업을 수행합니다.
 
-- `deploy`: 새로운 환경을 배포합니다. 새로운 환경을 만들고 설정된 앱을 설치합니다. 사용자로부터 외부 접속 IP 주소, NFS 서버의 IP 주소, NFS의 base 경로를 입력받습니다. 
-- `sync`: 이미 설정된 환경에 대해 helmfile sync를 실행합니다. 환경의 변경 사항을 적용합니다. 
-- `destroy`: 이미 설정된 환경을 제거합니다. 모든 앱을 삭제하고 환경을 초기 상태로 되돌립니다. 
-- `sync_only`: 특정 앱에 대해 helmfile sync를 실행합니다. 특정 앱의 변경 사항만을 적용합니다. 
-- `destroy_only`: 특정 앱에 대해 helmfile destroy를 실행합니다. 특정 앱을 삭제합니다.
+- `deploy`: 새로운 환경을 만들고 astrago 전체 앱을 설치합니다. 사용자로부터 외부 접속 IP 주소, NFS 서버의 IP 주소, NFS의 base 경로를 입력받습니다." 
+- `sync`: 이미 설정된 환경에 대해 astrago 전체 앱을 설치(업데이트)합니다.
+- `destroy`: 이미 설정된 환경에 대해 astrago 전체 앱을 삭제합니다. 
+- `sync_only`: 특정 앱에 대해 설치(업데이트)합니다. 
+- `destroy_only`: 특정 앱에 대해 삭제합니다.
 
 ## 앱 종류:
 - nfs-provisioner: NFS 프로비저너
@@ -24,20 +24,32 @@
 - astrago: Astrago 자체 앱
 
 ## 예시:
-### 새로운 환경 배포:
+### 새로운 환경을 생성하고 astrago 앱 전체 설치:
 ```bash
 ./astrago.sh deploy
 ```
-`deploy` 옵션을 사용하여 astrago 전체 환경을 배포합니다. 이 명령은 새로운 환경을 생성하고 설정된 앱을 설치합니다.
+`deploy` 옵션을 사용하여 astrago 전체 환경을 배포합니다. 이 명령은 새로운 환경을 생성하고 설정된 astrago 전체 앱을 설치합니다.
 
-### 이미 설정된 환경 동기화:
+### 이미 설정된 환경으로 astrago 앱 전체 설치:
 ```bash
 ./astrago.sh sync
 ```
 `sync` 옵션을 사용하여 설정된 환경에 대해 전체 앱에 대하여 변경 사항을 동기화합니다. 
 
-### 특정 앱 동기화:
+### 이미 설정된 환경으로 astrago 앱 전체 삭제:
+```bash
+./astrago.sh destroy
+```
+`destroy` 옵션을 사용하여 설정된 환경에 대해 astrago 전체 앱을 삭제합니다. 
+
+### 특정 앱 설치(업데이트):
 ```bash
 ./astrago.sh sync_only prometheus
 ```
 `sync_only` 옵션을 사용하여 특정 앱에 대해 변경 사항을 배포합니다. 이 명령은 지정된 앱에 대해서만 helmfile sync를 실행합니다.
+
+### 특정 앱 삭제:
+```bash
+./astrago.sh destroy_only prometheus
+```
+`destroy_only` 옵션을 사용하여 특정 앱을 삭제합니다. 이 명령은 지정된 앱에 대해서만 helmfile sync를 실행합니다.

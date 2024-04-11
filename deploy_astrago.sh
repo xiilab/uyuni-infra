@@ -27,7 +27,7 @@ elif [ "$1" == "deploy" ]; then
     if [ ! -d "environments/$environment_name" ]; then
         echo "환경 디렉토리가 존재하지 않습니다. 생성 중..."
         mkdir "environments/$environment_name"
-        cp -r environments/dev/* "environments/$environment_name"
+        cp -r environments/stage/* "environments/$environment_name"
         echo "환경 디렉토리가 생성되었습니다."
     else
         echo "환경 디렉토리가 이미 존재합니다."
