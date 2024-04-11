@@ -4,7 +4,7 @@
 ## 사용법:
 
 ```bash
-./astrago.sh [deploy|sync|destroy|sync_only|destroy_only]
+./deploy_astrago.sh [deploy|sync|destroy|sync_only|destroy_only]
 ```
 
 이 스크립트는 다섯 가지 주요 옵션을 지원합니다. 각각의 옵션은 특정 작업을 수행합니다.
