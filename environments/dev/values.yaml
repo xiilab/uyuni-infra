@@ -11,6 +11,7 @@ local:
   enabled: false
   storageClassName: local-storage
   nodeName: worker-1
+  basePath: /astrago/data
 
 # Keycloak Settings
 keycloak:
