@@ -83,12 +83,12 @@ data:
     collation-server=utf8_general_ci
     long_query_time=10.0
     interactive_timeout = 3600
-    //wait_timeout = 3600
+    #wait_timeout = 3600
     wait_timeout = 300
     max_connections = 500
-    //slow_query_log = 1
+    #slow_query_log = 1
     
-    //mysql logging
+    #mysql logging
     slow_query_log=on
     slow_query_log_file=/opt/bitnami/mariadb/logs/slow_query.log
     long_query_time=1
@@ -964,7 +964,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/configuration: 6b44b169fda1f5f5521b250e2fdaabbdf10d8b391011a5f3886eb2f4d8e9a277
+        checksum/configuration: 43e87b5f38cff157a283bb0eab2a927d79acb122645f945d0a5b107fd798cb99
       labels:
         app.kubernetes.io/name: mariadb
         helm.sh/chart: mariadb-12.2.9
