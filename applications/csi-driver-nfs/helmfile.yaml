@@ -6,15 +6,16 @@ releases:
 - name: nfs-provisioner
   namespace: "kube-system"
   chart: csi-driver-nfs
+  condition: nfs.enabled
   wait: true
   labels:
     app: nfs-provisioner
   values:
   - values.yaml.gotmpl
 
-- name: nfs-sc
+- name: storage-class
   namespace: "kube-system"
-  chart: nfs-sc
+  chart: storage-class
   wait: true
   labels:
     app: nfs-provisioner

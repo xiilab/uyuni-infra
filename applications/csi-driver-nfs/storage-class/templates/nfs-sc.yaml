@@ -1,11 +1,12 @@
+{{- if .Values.nfs.enabled }}
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: {{ .Values.storageClassName }}
+  name: {{ .Values.nfs.storageClassName }}
 provisioner: nfs.csi.k8s.io
 parameters:
-  server: {{ .Values.server }}
-  share: {{ .Values.basePath }}
+  server: {{ .Values.nfs.server }}
+  share: {{ .Values.nfs.basePath }}
   # csi.storage.k8s.io/provisioner-secret is only needed for providing mountOptions in DeleteVolume
   # csi.storage.k8s.io/provisioner-secret-name: "mount-options"
   # csi.storage.k8s.io/provisioner-secret-namespace: "default"
@@ -13,3 +14,4 @@ reclaimPolicy: Retain
 volumeBindingMode: Immediate
 mountOptions:
   - nfsvers=4.1
+{{- end }}
