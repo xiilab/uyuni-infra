@@ -1,0 +1,26 @@
+{{- if .Values.local.enabled }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: data-astrago-mariadb-0
+  namespace: {{ .Release.Namespace | quote }}
+spec:
+  capacity:
+    storage: {{ .Values.local.size | quote }}
+  persistentVolumeReclaimPolicy: Retain
+  accessModes:
+    {{- range .Values.local.accessModes }}
+    - {{ . | quote }}
+    {{- end }}
+  storageClassName: {{ .Values.local.storageClassName }}
+  local:
+    path: {{ .Values.local.basePath }}/astrago-mariadb-volume
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - {{ .Values.local.nodeName }}
+{{- end }}

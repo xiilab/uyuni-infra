@@ -1,0 +1,16 @@
+local:
+  enabled: true
+  name: astrago-volume
+  size: 10Gi
+  storageClassName: local-storage
+  accessModes:
+  - ReadWriteOnce
+  basePath: /data
+  nodeName: worker-1
+
+nfs:
+  enabled: true
+  size: 10Gi
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: astrago-nfs-csi
