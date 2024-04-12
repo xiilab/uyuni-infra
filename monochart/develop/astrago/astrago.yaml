@@ -86,17 +86,11 @@ data:
     #wait_timeout = 3600
     wait_timeout = 300
     max_connections = 500
-    #slow_query_log = 1
+    slow_query_log = 1
     
     #mysql logging
-    slow_query_log=on
-    slow_query_log_file=/opt/bitnami/mariadb/logs/slow_query.log
-    long_query_time=1
-    log-error=/opt/bitnami/mariadb/logs/error.log
-    general_log=0
-    general_log_file=/opt/bitnami/mariadb/logs/general_query.log
     log-bin=/opt/bitnami/mariadb/logs/mysql_bin
-    server-id=1
+    #server-id=1
     binlog_format=STATEMENT
     expire_logs_days=7
     binlog_checksum=NONE
@@ -964,7 +958,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/configuration: 43e87b5f38cff157a283bb0eab2a927d79acb122645f945d0a5b107fd798cb99
+        checksum/configuration: f85dbfd6c3a696a3d2139104ded686a6f6d7a7517771d3def8c3a48b7278b0ec
       labels:
         app.kubernetes.io/name: mariadb
         helm.sh/chart: mariadb-12.2.9
