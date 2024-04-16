@@ -83,8 +83,7 @@ data:
     collation-server=utf8_general_ci
     long_query_time=10.0
     interactive_timeout = 3600
-    #wait_timeout = 3600
-    wait_timeout = 300
+    wait_timeout = 3600
     max_connections = 500
     slow_query_log = 1
     
@@ -958,7 +957,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/configuration: f85dbfd6c3a696a3d2139104ded686a6f6d7a7517771d3def8c3a48b7278b0ec
+        checksum/configuration: eda3e9d152d217939b8fc32eb988a19bc353054d086dc3f7f5b484eaf41f4947
       labels:
         app.kubernetes.io/name: mariadb
         helm.sh/chart: mariadb-12.2.9
