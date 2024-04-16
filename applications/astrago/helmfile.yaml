@@ -7,11 +7,11 @@ releases:
   values:
   - local-volume.yaml.gotmpl
 
-#- name: astrago
-#  namespace: astrago
-#  chart: astrago
-#  wait: true
-#  labels:
-#    app: astrago
-#  values:
- # - values.yaml.gotmpl
+- name: astrago
+  namespace: astrago
+  chart: astrago
+  wait: true
+  labels:
+    app: astrago
+  values:
+  - values.yaml.gotmpl

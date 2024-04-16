@@ -1,8 +1,6 @@
-{{- if .Values.local.enabled }}
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: local-storage
+  name: {{ .Values.local.storageClassName }}
 provisioner: kubernetes.io/no-provisioner
 volumeBindingMode: WaitForFirstConsumer
-{{- end }}

@@ -1,16 +1,26 @@
-common:
-  externalIP: 10.61.3.161
-  volume:
-    volumeType: nfs
-    nfs:
-      storageClassName: astrago-nfs-csi
-      server: 10.61.3.2
-      basePath: /kube_storage/stage-astrago
+# externalIP:
+externalIP: 10.61.3.161
+
+# Volume Settings
+nfs:
+  enabled: true
+  storageClassName: astrago-nfs-csi
+  server: 10.61.3.2
+  basePath: /kube_storage/stage-astrago
+local:
+  enabled: false
+  storageClassName: astrago-local-storage
+  nodeName:
+  basePath:
+
+# Keycloak Settings
 keycloak:
   themeVersion: v1.0.13
   adminUser: admin
   adminPassword: xiirocks
   servicePort: 30001
+
+# Astrago Settings
 astrago:
   servicePort: 30080
   userInitPassword: astrago
@@ -23,7 +33,7 @@ astrago:
     rootPassword: root
     username: astrago
     password: xiirocks
-    maxLifetime: "3595000"
+    maxLifetime: "3595000"  
   core:
     repository: "harbor.xiilab.com:32443/astrago/core"
     imageTag: "0.1-9227-rc"

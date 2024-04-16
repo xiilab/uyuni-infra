@@ -1,9 +1,8 @@
 nfs:
-  enabled: {{ .Values.nfs.enabled }}
   storageClassName: {{ .Values.nfs.storageClassName  }}
   server: {{ .Values.nfs.server }}
   basePath: {{ .Values.nfs.basePath }}
 local:
-  enabled: {{ .Values.local.enabled }}
   storageClassName: {{ .Values.local.storageClassName }}
-  
+  nodeName: {{ .Values.local.nodeName }}
+  basePath: {{ .Values.local.basePath }}  

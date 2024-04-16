@@ -13,9 +13,10 @@ releases:
   values:
   - values.yaml.gotmpl
 
-- name: storage-class
+- name: local-provisioner
   namespace: "kube-system"
-  chart: storage-class
+  chart: local-provisioner
+  condition: local.enabled
   wait: true
   labels:
     app: nfs-provisioner
