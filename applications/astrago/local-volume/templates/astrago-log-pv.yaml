@@ -4,6 +4,8 @@ kind: PersistentVolume
 metadata:
   name: workload-log-pv
   namespace: {{ .Release.Namespace | quote }}
+  labels:
+    type: workload-log
 spec:
   capacity:
     storage: {{ .Values.local.size | quote }}

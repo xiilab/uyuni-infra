@@ -4,6 +4,8 @@ kind: PersistentVolume
 metadata:
   name: data-astrago-mariadb-0
   namespace: {{ .Release.Namespace | quote }}
+  labels:
+    type: mariadb
 spec:
   capacity:
     storage: {{ .Values.local.size | quote }}

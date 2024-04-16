@@ -13,5 +13,8 @@ spec:
     - {{ . | quote }}
     {{- end }}
   storageClassName: {{ .Values.local.storageClassName }}
+  selector:
+    matchLabels:
+      type: mariadb
 {{- end }}
 
