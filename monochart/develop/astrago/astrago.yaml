@@ -87,6 +87,14 @@ data:
     max_connections = 500
     slow_query_log = 1
     
+    #mysql logging
+    log-bin=/opt/bitnami/mariadb/logs/mysql_bin
+    #server-id=1
+    binlog_format=STATEMENT
+    expire_logs_days=7
+    binlog_checksum=NONE
+    binlog_row_image=FULL
+    
     [client]
     port=3306
     socket=/opt/bitnami/mariadb/tmp/mysql.sock
@@ -506,7 +514,7 @@ spec:
         - name: batch
           securityContext:
             {}
-          image: "harbor.xiilab.com:32443/uyuni/server-batch:develop-07c21f4"
+          image: "harbor.xiilab.com:32443/uyuni/server-batch:develop-03455da"
           imagePullPolicy: Always
 
           env:
@@ -580,7 +588,7 @@ spec:
         - name: core
           securityContext:
             {}
-          image: "harbor.xiilab.com:32443/uyuni/server-core:develop-07c21f4"
+          image: "harbor.xiilab.com:32443/uyuni/server-core:develop-03455da"
           imagePullPolicy: Always
           
           env:
@@ -656,7 +664,7 @@ spec:
         - name: frontend
           securityContext:
             {}
-          image: "harbor.xiilab.com:32443/uyuni/uyuni-frontend:develop-e2a975b"
+          image: "harbor.xiilab.com:32443/uyuni/uyuni-frontend:develop-ab78253"
           imagePullPolicy: Always
           
           env:
@@ -733,7 +741,7 @@ spec:
         - name: monitor
           securityContext:
             {}
-          image: "harbor.xiilab.com:32443/uyuni/server-monitor:develop-07c21f4"
+          image: "harbor.xiilab.com:32443/uyuni/server-monitor:develop-03455da"
           imagePullPolicy: Always
           env:
           - name: SPRING_DATASOURCE_URL
@@ -949,7 +957,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/configuration: cc86e83c1be5a9e330b51aa6929c9c0bdf61cd421b4baee85fbf3461d040034a
+        checksum/configuration: eda3e9d152d217939b8fc32eb988a19bc353054d086dc3f7f5b484eaf41f4947
       labels:
         app.kubernetes.io/name: mariadb
         helm.sh/chart: mariadb-12.2.9
