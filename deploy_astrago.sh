@@ -31,9 +31,9 @@ elif [ "$1" == "deploy" ]; then
     else
         echo "환경 디렉토리가 이미 존재합니다."
     fi
-    cp -r environments/stage/* "environments/$environment_name"
+    cp environments/default/values.yaml "environments/$environment_name/values.yaml"
     # 생성된 환경 파일 경로 출력
-    echo "환경 파일이 생성된 경로: $(realpath "environments/$environment_name")"
+    echo "환경 파일이 생성된 경로: $(realpath "environments/$environment_name/values.yaml")"
 
     # 사용자로부터 외부 접속 IP 주소를 입력 받음
     while true; do
@@ -48,41 +48,77 @@ elif [ "$1" == "deploy" ]; then
         fi
     done
 
-    # 사용자로부터 NFS 서버의 IP 주소를 입력 받음
+    # 사용자로부터 볼륨 타입을 입력 받음
     while true; do
-        echo -n "NFS 서버의 IP 주소를 입력하시오: "
-        read -r nfs_server_ip
+        echo -n "볼륨 타입을 입력하세요 (nfs 또는 local): "
+        read -r volume_type
 
-        # 입력받은 IP 주소가 유효한지 확인합니다.
-        if [[ $nfs_server_ip =~ ^([0-9]{1,3}\.){3}[0-9]{1,3}$ ]]; then
+        # 입력받은 볼륨 타입이 유효한지 확인합니다.
+        if [ "$volume_type" == "nfs" ]; then
+            # 사용자로부터 NFS 서버의 IP 주소를 입력 받음
+            while true; do
+                echo -n "NFS 서버의 IP 주소를 입력하시오: "
+                read -r nfs_server_ip
+
+                # 입력받은 IP 주소가 유효한지 확인합니다.
+                if [[ $nfs_server_ip =~ ^([0-9]{1,3}\.){3}[0-9]{1,3}$ ]]; then
+                    break
+                else
+                    echo "유효하지 않은 IP 주소입니다. 다시 입력하세요."
+                fi
+            done
+
+            # 사용자로부터 NFS의 base 경로를 입력 받음
+            echo -n "NFS의 base 경로를 입력하시오: "
+            read -r nfs_base_path
+
+            # values.yaml 파일 경로
+            values_file="environments/$environment_name/values.yaml"
+
+            # externalIP 수정
+            yq -i ".externalIP = \"$external_ip\"" "$values_file"
+
+            # nfs 서버 IP 주소와 base 경로 수정
+            yq -i ".nfs.enabled = true" "$values_file"
+            yq -i ".nfs.server = \"$nfs_server_ip\"" "$values_file"
+            yq -i ".nfs.basePath = \"$nfs_base_path\"" "$values_file"
+
+            echo "values.yaml 파일이 수정되었습니다."
+
+            # helmfile로 환경을 sync합니다.
+            echo "helmfile -e $environment_name sync를 실행합니다."
+            helmfile -e "$environment_name" sync
+            break
+        elif [ "$volume_type" == "local" ]; then
+            # 사용자로부터 노드 이름을 입력 받음
+            echo -n "데이터를 저장할 K8S 노드 이름을 입력하시오: "
+            read -r node_name
+
+            # 사용자로부터 base 경로를 입력 받음
+            echo -n "데이터를 저장할 base 경로를 입력하시오: "
+            read -r local_base_path
+
+            # values.yaml 파일 경로
+            values_file="environments/$environment_name/values.yaml"
+
+            # externalIP 수정
+            yq -i ".externalIP = \"$external_ip\"" "$values_file"
+
+            # node 이름과 base 경로 수정
+            yq -i ".local.enabled = true" "$values_file"
+            yq -i ".local.nodeName = \"$node_name\"" "$values_file"
+            yq -i ".local.basePath = \"$local_base_path/\"" "$values_file"
+
+            echo "values.yaml 파일이 수정되었습니다."
+
+            # helmfile로 환경을 sync합니다.
+            echo "helmfile -e $environment_name sync를 실행합니다."
+            helmfile -e "$environment_name" sync
             break
         else
-            echo "유효하지 않은 IP 주소입니다. 다시 입력하세요."
+            echo "유효하지 않은 볼륨 타입입니다. 다시 입력하세요."
         fi
     done
-
-    # 사용자로부터 NFS의 base 경로를 입력 받음
-    echo -n "NFS의 base 경로를 입력하시오: "
-    read -r nfs_base_path
-
-    # nfs_base_path에서 슬래시를 이스케이프 처리
-    escaped_nfs_base_path=$(echo "$nfs_base_path" | sed 's/\//\\\//g')
-
-    # values.yaml 파일 경로
-    values_file="environments/$environment_name/values.yaml"
-
-    # externalIP 수정
-    sed -i '' "s/externalIP: .*/externalIP: $external_ip/" "$values_file"
-
-    # nfs 서버 IP 주소와 base 경로 수정
-    sed -i '' "s/server: .*/server: $nfs_server_ip/" "$values_file"
-    sed -i '' "s/basePath: .*/basePath: $escaped_nfs_base_path/" "$values_file"
-
-    echo "values.yaml 파일이 수정되었습니다."
-
-    # helmfile로 환경을 sync합니다.
-    echo "helmfile -e $environment_name sync를 실행합니다."
-    helmfile -e "$environment_name" sync
 
 
 elif [ "$1" == "sync" ]; then
