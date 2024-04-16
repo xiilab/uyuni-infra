@@ -1,0 +1,8 @@
+enabled: true
+name: prometheus-volume
+size: 50Gi
+storageClassName: local-storage
+accessModes:
+- ReadWriteOnce
+basePath: /data
+nodeName: worker-1

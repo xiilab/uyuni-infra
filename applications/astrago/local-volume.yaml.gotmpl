@@ -1,0 +1,16 @@
+local:
+  enabled: {{ .Values.local.enabled }}
+  name: astrago-volume
+  size: 10Gi
+  storageClassName: {{ .Values.local.storageClassName }}
+  accessModes:
+  - ReadWriteOnce
+  basePath: {{ .Values.local.basePath }}
+  nodeName: {{ .Values.local.nodeName }}
+
+nfs:
+  enabled: {{ .Values.nfs.enabled }}
+  size: 10Gi
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: {{ .Values.nfs.storageClassName }}

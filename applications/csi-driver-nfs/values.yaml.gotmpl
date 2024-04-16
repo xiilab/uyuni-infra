@@ -1,3 +1,8 @@
-storageClassName: {{ .Values.common.volume.nfs.storageClassName  }}
-server: {{ .Values.common.volume.nfs.server }}
-basePath: {{ .Values.common.volume.nfs.basePath }}
+nfs:
+  storageClassName: {{ .Values.nfs.storageClassName  }}
+  server: {{ .Values.nfs.server }}
+  basePath: {{ .Values.nfs.basePath }}
+local:
+  storageClassName: {{ .Values.local.storageClassName }}
+  nodeName: {{ .Values.local.nodeName }}
+  basePath: {{ .Values.local.basePath }}  

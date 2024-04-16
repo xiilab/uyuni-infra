@@ -1,0 +1,8 @@
+nfs:
+  enabled: false
+  storageClassName: astrago-nfs-csi
+  server: 10.61.3.2
+  basePath: /storage
+local:
+  enabled: false
+  storageClassName: local-storage

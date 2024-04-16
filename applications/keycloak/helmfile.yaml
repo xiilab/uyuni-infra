@@ -1,12 +1,13 @@
 releases:
-#- name: keycloak-volume
-#  namespace: keycloak
-#  chart: keycloak-volume
-#  wait: true
-#  labels:
-#    app: keycloak
-#  values:
-#  - values.yaml.gotmpl
+- name: keycloak-local-volume
+  namespace: keycloak
+  chart: local-volume
+  condition: local.enabled
+  wait: true
+  labels:
+    app: keycloak
+  values:
+  - local-volume.yaml.gotmpl
 
 - name: keycloak
   namespace: keycloak

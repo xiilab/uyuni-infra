@@ -13,13 +13,13 @@ core:
     - name: SPRING_DATASOURCE_HIKARI_MAX-LIFETIME
       value: {{ .Values.astrago.mariadb.maxLifetime | quote }}
     - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWT_ISSUER-URI
-      value: http://{{ .Values.common.externalIP }}:{{ .Values.keycloak.servicePort }}/realms/{{ .Values.astrago.keycloak.realm }}
+      value: http://{{ .Values.externalIP }}:{{ .Values.keycloak.servicePort }}/realms/{{ .Values.astrago.keycloak.realm }}
     - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWT_JWK-SET-URI
-      value: http://{{ .Values.common.externalIP }}:{{ .Values.keycloak.servicePort }}/realms/{{ .Values.astrago.keycloak.realm }}/protocol/openid-connect/certs
+      value: http://{{ .Values.externalIP }}:{{ .Values.keycloak.servicePort }}/realms/{{ .Values.astrago.keycloak.realm }}/protocol/openid-connect/certs
     - name: KEYCLOAK_REALM
       value: {{ .Values.astrago.keycloak.realm }}
     - name: KEYCLOAK_AUTH-SERVER-URL
-      value: http://{{ .Values.common.externalIP }}:{{ .Values.keycloak.servicePort }}
+      value: http://{{ .Values.externalIP }}:{{ .Values.keycloak.servicePort }}
     - name: KEYCLOAK_RESOURCE
       value: {{ .Values.astrago.keycloak.client }}
     - name: ADMIN_NAME
@@ -43,13 +43,13 @@ batch:
     - name: SPRING_DATASOURCE_HIKARI_MAX-LIFETIME
       value: {{ .Values.astrago.mariadb.maxLifetime | quote }}
     - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWT_ISSUER-URI
-      value: http://{{ .Values.common.externalIP }}:{{ .Values.keycloak.servicePort }}/realms/{{ .Values.astrago.keycloak.realm }}
+      value: http://{{ .Values.externalIP }}:{{ .Values.keycloak.servicePort }}/realms/{{ .Values.astrago.keycloak.realm }}
     - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWT_JWK-SET-URI
-      value: http://{{ .Values.common.externalIP }}:{{ .Values.keycloak.servicePort }}/realms/{{ .Values.astrago.keycloak.realm }}/protocol/openid-connect/certs
+      value: http://{{ .Values.externalIP }}:{{ .Values.keycloak.servicePort }}/realms/{{ .Values.astrago.keycloak.realm }}/protocol/openid-connect/certs
     - name: KEYCLOAK_REALM
       value: {{ .Values.astrago.keycloak.realm }}
     - name: KEYCLOAK_AUTH-SERVER-URL
-      value: http://{{ .Values.common.externalIP }}:{{ .Values.keycloak.servicePort }}
+      value: http://{{ .Values.externalIP }}:{{ .Values.keycloak.servicePort }}
     - name: KEYCLOAK_RESOURCE
       value: {{ .Values.astrago.keycloak.client }}
     - name: ADMIN_NAME
@@ -84,7 +84,7 @@ frontend:
     tag: "{{ .Values.astrago.frontend.imageTag }}" 
   env:
     - name: KEYCLOAK_HOST
-      value: http://{{ .Values.common.externalIP }}:{{ .Values.keycloak.servicePort }}
+      value: http://{{ .Values.externalIP }}:{{ .Values.keycloak.servicePort }}
     - name: KEYCLOAK_REALME
       value: {{ .Values.astrago.keycloak.realm }}
     - name: KEYCLOAK_CLIENT_ID
@@ -94,7 +94,7 @@ frontend:
     - name: NODE_OPTIONS
       value: "--max-http-header-size=41960"
     - name: NEXTAUTH_URL
-      value: http://{{ .Values.common.externalIP }}:{{ .Values.astrago.servicePort }}
+      value: http://{{ .Values.externalIP }}:{{ .Values.astrago.servicePort }}
     - name: NEXTAUTH_SECRET
       value: uuNj1L0Yg2xKcBPVp7yOVlm2nigL3hoHOzbwQXAwx1I=
     - name: NEXT_PUBLIC_API_URL
@@ -113,9 +113,6 @@ frontend:
     type: NodePort
     nodePort: {{ .Values.astrago.servicePort  }}
 
-persistence:
-  storageClass: "{{ .Values.common.volume.nfs.storageClassName }}"
-
 mariadb:
   auth:
     rootPassword: {{ .Values.astrago.mariadb.rootPassword }}
@@ -128,7 +125,11 @@ mariadb:
       nodePorts: 
         mysql: 30010
     persistence:
-      storageClass: "{{ .Values.common.volume.nfs.storageClassName }}"
+{{ if .Values.nfs.enabled }}
+      storageClass: "{{ .Values.nfs.storageClassName }}"
+{{ else if .Values.local.enabled }}
+      existingClaim: data-astrago-mariadb-0
+{{ end }}
 
     configuration: |-
       [mysqld]

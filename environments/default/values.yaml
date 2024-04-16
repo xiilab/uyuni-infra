@@ -1,26 +1,48 @@
-common:
-  ingress:
-    domain: "default.com"
+# externalIP: 
+externalIP:
 
+# Volume Settings
 nfs:
-  server: 192.168.2.39
-  share: /kube-storage
+  enabled: false
+  storageClassName: astrago-nfs-csi
+  server:
+  basePath:
+local:
+  enabled: false
+  storageClassName: astrago-local-storage
+  nodeName:
+  basePath:
 
-uyuni:
-  nodePort: 30100
-  keycloakUrl: http://192.168.1.235:30051/auth
+# Keycloak Settings
+keycloak:
+  themeVersion: v1.0.13
+  adminUser: admin
+  adminPassword: xiirocks
+  servicePort: 30001
+
+# Astrago Settings
+astrago:
+  servicePort: 30080
+  userInitPassword: astrago
+  keycloak:
+    realm: astrago
+    client: astrago-client
+    clientSecret: astragosecret
+    userInitPassword: astrago
+  mariadb:
+    rootPassword: root
+    username: astrago
+    password: xiirocks
+    maxLifetime: "3595000"
   core:
-    repository: xiilab/uyuni-backend-core
-    imageTag: master
-
+    repository: "harbor.xiilab.com:32443/uyuni/server-core"
+    imageTag: "develop-07c21f4"
   batch:
-    repository: xiilab/uyuni-backend-batch
-    imageTag: master
-
+    repository: "harbor.xiilab.com:32443/uyuni/server-batch"
+    imageTag: "develop-07c21f4"
   monitor:
-    repository: xiilab/uyuni-backend-monitor
-    imageTag: master
-
+    repository: "harbor.xiilab.com:32443/uyuni/server-monitor"
+    imageTag: "develop-07c21f4"
   frontend:
-    repository: xiilab/uyuni-frontend
-    imageTag: master
+    repository: "harbor.xiilab.com:32443/uyuni/uyuni-frontend"
+    imageTag: develop-e2a975b

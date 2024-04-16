@@ -3,14 +3,15 @@ repositories:
     url: https://prometheus-community.github.io/helm-charts
 
 releases:
-#- name: prometheus-volume
-#  namespace: prometheus
-#  chart: prometheus-volume
-#  wait: true
-#  labels:
-#    app: prometheus
-#  values:
-#  - values.yaml.gotmpl
+- name: prometheus-volume
+  namespace: prometheus
+  chart: local-volume
+  condition: local.enabled
+  wait: true
+  labels:
+    app: prometheus
+  values:
+  - local-volume.yaml.gotmpl
 
 - name: prometheus
   namespace: prometheus
