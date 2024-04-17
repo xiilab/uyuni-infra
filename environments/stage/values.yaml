@@ -42,4 +42,4 @@ astrago:
     imageTag: "0.1-839b-rc"
   frontend:
     repository: "harbor.xiilab.com:32443/astrago/frontend"
-    imageTag: 0.1-b34df-rc
+    imageTag: 0.1-9d648-rc
