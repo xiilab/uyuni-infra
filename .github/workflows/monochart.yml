@@ -49,6 +49,7 @@ jobs:
           helmfile -e stage -l app=prometheus template > monochart/stage/prometheus/prometheus.yaml
           helmfile -e stage -l app=keycloak template > monochart/stage/keycloak/keycloak.yaml
           helmfile -e stage -l app=nfs-provisioner template > monochart/stage/nfs-provisioner/nfs-provisioner.yaml
+          helmfile -e stage -l app=gpu-operator template > monochart/stage/gpu-operator/gpu-operator.yaml
           
       # Runs a set of commands using the runners shell
       - uses: stefanzweifel/git-auto-commit-action@v5
