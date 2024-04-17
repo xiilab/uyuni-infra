@@ -6,7 +6,7 @@ environment_name="astrago"
 
 # 사용법 출력 함수
 print_usage() {
-    echo "사용법: $0 [deploy|sync|destroy|sync_only|destroy_only]"
+    echo "사용법: $0 [deploy|sync|destroy]"
     echo ""
     echo "deploy        : 새로운 환경을 만들고 astrago 전체 앱을 설치합니다. 사용자로부터 외부 접속 IP 주소, NFS 서버의 IP 주소, NFS의 base 경로를 입력받습니다."
     echo "sync          : 이미 설정된 환경에 대해 astrago 전체 앱을 설치(업데이트)합니다."
