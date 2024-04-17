@@ -1,6 +1,5 @@
 # externalIP:
 externalIP: 10.61.3.161
-
 # Volume Settings
 nfs:
   enabled: true
@@ -12,14 +11,12 @@ local:
   storageClassName: astrago-local-storage
   nodeName:
   basePath:
-
 # Keycloak Settings
 keycloak:
   themeVersion: v1.0.13
   adminUser: admin
   adminPassword: xiirocks
   servicePort: 30001
-
 # Astrago Settings
 astrago:
   servicePort: 30080
@@ -33,16 +30,16 @@ astrago:
     rootPassword: root
     username: astrago
     password: xiirocks
-    maxLifetime: "3595000"  
+    maxLifetime: "3595000"
   core:
     repository: "harbor.xiilab.com:32443/astrago/core"
-    imageTag: "0.1-9227-rc"
+    imageTag: "0.1-839b-rc"
   batch:
     repository: "harbor.xiilab.com:32443/astrago/batch"
-    imageTag: "0.1-9227-rc"
+    imageTag: "0.1-839b-rc"
   monitor:
     repository: "harbor.xiilab.com:32443/astrago/monitor"
-    imageTag: "0.1-9227-rc"
+    imageTag: "0.1-839b-rc"
   frontend:
     repository: "xiilab/astrago-frontend"
     imageTag: 0.1-656d-rc
