@@ -41,5 +41,5 @@ astrago:
     repository: "harbor.xiilab.com:32443/astrago/monitor"
     imageTag: "0.1-839b-rc"
   frontend:
-    repository: "xiilab/astrago-frontend"
-    imageTag: 0.1-656d-rc
+    repository: "harbor.xiilab.com:32443/astrago/frontend"
+    imageTag: 0.1-b34df-rc
