@@ -1,6 +1,16 @@
 # Astrago 배포 및 관리 스크립트
 
 이 스크립트는 Astrago 환경을 배포하고 관리하기 위한 유틸리티입니다. Astrago를 쉽게 배포하고 관리할 수 있도록 도와주는 툴입니다. 이 스크립트를 사용하여 Astrago 환경을 손쉽게 관리할 수 있습니다.
+## 사전준비
+1. yq, curl 설치
+```aidl
+apt install -y yq curl
+```
+2. helm, helmfile 설치
+```aidl
+sh tools/install_helmfile.sh
+```
+
 ## 사용법:
 
 ```bash
