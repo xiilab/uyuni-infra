@@ -12,7 +12,7 @@ dependencies:
   repository: file://charts/grafana
   version: 7.0.17
 - name: prometheus-windows-exporter
-  repository: https://prometheus-community.github.io/helm-charts
+  repository: file://charts/prometheus-windows-exporter
   version: 0.1.2
-digest: sha256:831d61e4b2865965d4ab5aa7f7431912e77891e2525d465acc1881a771e4f717
-generated: "2023-12-14T06:12:36.20816351Z"
+digest: sha256:87de49003f7fbb99ec2425e9e0a288bd7950ff01b8ebdbef24dbb74b69b6618a
+generated: "2024-04-18T12:25:49.133613+09:00"

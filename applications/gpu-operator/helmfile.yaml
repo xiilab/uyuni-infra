@@ -1,6 +1,6 @@
-repositories:
-  - name: nvidia
-    url: https://helm.ngc.nvidia.com/nvidia
+#repositories:
+#  - name: nvidia
+#    url: https://helm.ngc.nvidia.com/nvidia
 
 releases:
   - name: gpu-operator
