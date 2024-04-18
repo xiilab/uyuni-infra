@@ -35,7 +35,7 @@ data:
       large_client_header_buffers  8 8k;
 
       # 파일 업로드 용량 제한을 100MB로 설정
-      client_max_body_size 100m;
+      client_max_body_size 0;
 
       server {
         listen 80;
