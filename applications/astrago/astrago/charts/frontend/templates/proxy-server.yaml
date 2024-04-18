@@ -29,7 +29,10 @@ data:
       tcp_nopush on;
       tcp_nodelay on;
       keepalive_timeout 65;
-      types_hash_max_size 2048;
+      proxy_buffer_size   128k;
+      proxy_buffers   4 256k;
+      proxy_busy_buffers_size   256k;
+      large_client_header_buffers  8 8k;
 
       # 파일 업로드 용량 제한을 100MB로 설정
       client_max_body_size 100m;
