@@ -4,6 +4,8 @@ kind: PersistentVolumeClaim
 metadata:
   name: data-astrago-mariadb-0
   namespace: {{ .Release.Namespace | quote }}
+  annotations:
+    helm.sh/resource-policy: keep
 spec:
   resources:
     requests:

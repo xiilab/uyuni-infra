@@ -6,6 +6,8 @@ metadata:
   namespace: {{ .Release.Namespace | quote }}
   labels:
     type: workload-log
+  annotations:
+    helm.sh/resource-policy: keep
 spec:
   capacity:
     storage: {{ .Values.local.size | quote }}
