@@ -5,6 +5,8 @@ kind: PersistentVolumeClaim
 metadata:
   name: workload-log-pvc
   namespace: "astrago"
+  annotations:
+    helm.sh/resource-policy: keep
 spec:
   resources:
     requests:
