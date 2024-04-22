@@ -2731,7 +2731,7 @@ spec:
         - args:
           - -c
           - |
-            echo "check_certificate = off" >> ~/.wgetrc && wget https://github.com/xiilab/uyuni-login-theme/releases/download/v1.0.13/keycloak-theme.jar -P /theme
+            echo "check_certificate = off" >> ~/.wgetrc && wget https://github.com/xiilab/uyuni-login-theme/releases/download/v1.0.14/keycloak-theme.jar -P /theme
           command:
           - sh
           image: jacobcarlborg/docker-alpine-wget
