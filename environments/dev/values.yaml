@@ -42,4 +42,4 @@ astrago:
     imageTag: "develop-26800e6"
   frontend:
     repository: "harbor.xiilab.com:32443/uyuni/uyuni-frontend"
-    imageTag: develop-113ec44
+    imageTag: develop-9a16a95
