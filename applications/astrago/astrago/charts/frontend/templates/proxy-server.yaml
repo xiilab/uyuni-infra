@@ -64,7 +64,7 @@ data:
           proxy_pass http://astrago-time-prediction:8080/;
         }
 
-        location /gitlab/
+        location /gitlab/ {
           proxy_pass http://gitlab-service:8181;
           proxy_set_header Host $host;
           proxy_set_header X-Real-IP $remote_addr;
