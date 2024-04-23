@@ -136,6 +136,14 @@ data:
           proxy_pass http://astrago-time-prediction:8080/;
         }
 
+        location /gitlab/
+          proxy_pass http://gitlab-service:8181;
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+        }
+
         # 웹소켓 프록시 설정
         location /ws/workload {
             proxy_pass http://astrago-backend-core:8080/ws/workload;
@@ -535,15 +543,15 @@ spec:
     app.kubernetes.io/name: monitor
     app.kubernetes.io/instance: astrago
 ---
-# Source: uyuni/templates/keycloak-external-service.yaml
+# Source: uyuni/templates/gitlab-external-service.yaml
 apiVersion: v1
 kind: Service
 metadata:
-  name: keycloak-service
+  name: gitlab-service
   namespace: astrago
 spec:
   type: ExternalName
-  externalName: keycloak.keycloak.svc.cluster.local
+  externalName: gitlab-webservice-default.gitlab.svc.cluster.local
 ---
 # Source: uyuni/templates/metric-server.yaml
 apiVersion: v1
