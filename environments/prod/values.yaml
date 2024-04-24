@@ -32,14 +32,14 @@ astrago:
     password: xiirocks
     maxLifetime: "3595000"
   core:
-    repository: "harbor.xiilab.com:32443/uyuni/server-core"
-    imageTag: "develop-ddce5ce"
+    repository: "xiilab/astrago/core"
+    imageTag: ""
   batch:
-    repository: "harbor.xiilab.com:32443/uyuni/server-batch"
-    imageTag: "develop-ddce5ce"
+    repository: "xiilab/astrago/batch"
+    imageTag: ""
   monitor:
-    repository: "harbor.xiilab.com:32443/uyuni/server-monitor"
-    imageTag: "develop-ddce5ce"
+    repository: "xiilab/astrago/monitor"
+    imageTag: ""
   frontend:
     repository: "harbor.xiilab.com:32443/uyuni/uyuni-frontend"
     imageTag: develop-0523cb4
