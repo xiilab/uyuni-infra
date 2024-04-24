@@ -32,13 +32,13 @@ astrago:
     password: xiirocks
     maxLifetime: "3595000"
   core:
-    repository: "xiilab/astrago/core"
+    repository: "xiilab/astrago"
     imageTag: ""
   batch:
-    repository: "xiilab/astrago/batch"
+    repository: "xiilab/astrago"
     imageTag: ""
   monitor:
-    repository: "xiilab/astrago/monitor"
+    repository: "xiilab/astrago"
     imageTag: ""
   frontend:
     repository: "harbor.xiilab.com:32443/uyuni/uyuni-frontend"
