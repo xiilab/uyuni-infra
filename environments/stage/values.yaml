@@ -32,14 +32,14 @@ astrago:
     password: xiirocks
     maxLifetime: "3595000"
   core:
-    repository: "harbor.xiilab.com:32443/astrago/core"
-    imageTag: "0.1-839b-rc"
+    repository: "xiilab/astrago/core"
+    imageTag: "0.1-901a-rc"
   batch:
-    repository: "harbor.xiilab.com:32443/astrago/batch"
-    imageTag: "0.1-839b-rc"
+    repository: "xiilab/astrago/batch"
+    imageTag: "0.1-901a-rc"
   monitor:
-    repository: "harbor.xiilab.com:32443/astrago/monitor"
-    imageTag: "0.1-839b-rc"
+    repository: "xiilab/astrago/monitor"
+    imageTag: "0.1-901a-rc"
   frontend:
     repository: "harbor.xiilab.com:32443/astrago/frontend"
     imageTag: 0.1-9d648-rc
