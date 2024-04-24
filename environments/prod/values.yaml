@@ -33,13 +33,13 @@ astrago:
     maxLifetime: "3595000"
   core:
     repository: "xiilab/astrago"
-    imageTag: ""
+    imageTag: "v0.1.1"
   batch:
     repository: "xiilab/astrago"
-    imageTag: ""
+    imageTag: "v0.1.1"
   monitor:
     repository: "xiilab/astrago"
-    imageTag: ""
+    imageTag: "v0.1.1"
   frontend:
     repository: "harbor.xiilab.com:32443/uyuni/uyuni-frontend"
     imageTag: develop-0523cb4
