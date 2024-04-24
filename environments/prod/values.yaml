@@ -1,0 +1,45 @@
+# externalIP: 
+externalIP: 10.61.3.12
+# Volume Settings
+nfs:
+  enabled: true
+  storageClassName: astrago-nfs-csi
+  server: 10.61.3.2
+  basePath: /kube_storage/develop-astrago
+local:
+  enabled: false
+  storageClassName: astrago-local-storage
+  nodeName:
+  basePath:
+# Keycloak Settings
+keycloak:
+  themeVersion: v1.0.14
+  adminUser: admin
+  adminPassword: xiirocks
+  servicePort: 30001
+# Astrago Settings
+astrago:
+  servicePort: 30080
+  userInitPassword: astrago
+  keycloak:
+    realm: astrago
+    client: astrago-client
+    clientSecret: astragosecret
+    userInitPassword: astrago
+  mariadb:
+    rootPassword: root
+    username: astrago
+    password: xiirocks
+    maxLifetime: "3595000"
+  core:
+    repository: "harbor.xiilab.com:32443/uyuni/server-core"
+    imageTag: "develop-ddce5ce"
+  batch:
+    repository: "harbor.xiilab.com:32443/uyuni/server-batch"
+    imageTag: "develop-ddce5ce"
+  monitor:
+    repository: "harbor.xiilab.com:32443/uyuni/server-monitor"
+    imageTag: "develop-ddce5ce"
+  frontend:
+    repository: "harbor.xiilab.com:32443/uyuni/uyuni-frontend"
+    imageTag: develop-0523cb4
