@@ -609,7 +609,7 @@ spec:
         - name: batch
           securityContext:
             {}
-          image: "harbor.xiilab.com:32443/astrago/batch:stag-abb3f-rc"
+          image: "harbor.xiilab.com:32443/astrago/batch:stag-fff5"
           imagePullPolicy: Always
 
           env:
@@ -683,7 +683,7 @@ spec:
         - name: core
           securityContext:
             {}
-          image: "harbor.xiilab.com:32443/astrago/core:stag-abb3f-rc"
+          image: "harbor.xiilab.com:32443/astrago/core:stag-fff5"
           imagePullPolicy: Always
           
           env:
@@ -866,7 +866,7 @@ spec:
         - name: monitor
           securityContext:
             {}
-          image: "harbor.xiilab.com:32443/astrago/monitor:stag-abb3f-rc"
+          image: "harbor.xiilab.com:32443/astrago/monitor:stag-fff5"
           imagePullPolicy: Always
           env:
           - name: SPRING_DATASOURCE_URL
