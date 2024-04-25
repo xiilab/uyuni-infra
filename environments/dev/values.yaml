@@ -41,5 +41,5 @@ astrago:
     repository: "harbor.xiilab.com:32443/astrago/monitor"
     imageTag: "dev-c3d4"
   frontend:
-    repository: "harbor.xiilab.com:32443/uyuni/uyuni-frontend"
-    imageTag: develop-97171a7
+    repository: "harbor.xiilab.com:32443/astrago/frontend"
+    imageTag: dev-96d7
