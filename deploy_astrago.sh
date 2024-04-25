@@ -35,7 +35,7 @@ create_environment_directory() {
     else
         echo "환경 디렉토리가 이미 존재합니다."
     fi
-    cp -r environments/default/* "environments/$environment_name/"
+    cp -r environments/prod/* "environments/$environment_name/"
     # 생성된 환경 파일 경로 출력
     echo "환경 파일이 생성된 경로: $(realpath "environments/$environment_name")"
 }
