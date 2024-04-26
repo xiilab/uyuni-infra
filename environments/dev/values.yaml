@@ -42,4 +42,4 @@ astrago:
     imageTag: "dev-cad8"
   frontend:
     repository: "harbor.xiilab.com:32443/astrago/frontend"
-    imageTag: dev-9c74
+    imageTag: dev-3fc6
