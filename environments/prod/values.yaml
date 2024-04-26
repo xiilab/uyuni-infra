@@ -41,5 +41,5 @@ astrago:
     repository: "xiilab/astrago"
     imageTag: "v1.0.0"
   frontend:
-    repository: "harbor.xiilab.com:32443/uyuni/uyuni-frontend"
-    imageTag: develop-0523cb4
+    repository: "xiilab/astrago"
+    imageTag: v1.0.0
