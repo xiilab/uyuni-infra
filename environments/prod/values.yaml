@@ -1,11 +1,11 @@
 # externalIP: 
-externalIP: 10.61.3.12
+externalIP:
 # Volume Settings
 nfs:
-  enabled: true
+  enabled: false
   storageClassName: astrago-nfs-csi
-  server: 10.61.3.2
-  basePath: /kube_storage/develop-astrago
+  server:
+  basePath:
 local:
   enabled: false
   storageClassName: astrago-local-storage
@@ -13,7 +13,7 @@ local:
   basePath:
 # Keycloak Settings
 keycloak:
-  themeVersion: v1.1.0
+  themeVersion: v1.1.1
   adminUser: admin
   adminPassword: xiirocks
   servicePort: 30001
