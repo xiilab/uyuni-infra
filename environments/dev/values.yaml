@@ -42,4 +42,4 @@ astrago:
     imageTag: "dev-ac5d"
   frontend:
     repository: "harbor.xiilab.com:32443/astrago/frontend"
-    imageTag: dev-9f62
+    imageTag: dev-e0fa
