@@ -132,7 +132,7 @@ data:
           proxy_pass http://astrago-backend-monitor:8080/api/v1/monitor/report/;
         }
 
-        location /api/v1/predict/ {
+        location /api/v1/predict {
           proxy_pass http://astrago-time-prediction:8000/api/v1/predict/;
         }
 
