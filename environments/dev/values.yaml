@@ -42,4 +42,4 @@ astrago:
     imageTag: "dev-cfa2"
   frontend:
     repository: "harbor.xiilab.com:32443/astrago/frontend"
-    imageTag: dev-9389
+    imageTag: dev-4178
