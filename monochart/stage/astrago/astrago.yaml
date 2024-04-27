@@ -711,6 +711,8 @@ spec:
             value: "xiirocks"
           - name: ADMIN_INIT-PASSWORD
             value: "astrago"
+          - name: PROMETHEUS_URL
+            value: "http://prometheus-kube-prometheus-prometheus.prometheus.svc.cluster.local:9090"
           volumeMounts:
             - name: astrago-workload-log
               mountPath: /root/astrago
