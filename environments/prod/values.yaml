@@ -42,4 +42,4 @@ astrago:
     imageTag: "v1.0.2"
   frontend:
     repository: "xiilab/astrago"
-    imageTag: v1.0.2
+    imageTag: v1.0.3
