@@ -42,4 +42,4 @@ astrago:
     imageTag: "monitor-v1.0.4"
   frontend:
     repository: "xiilab/astrago"
-    imageTag: v1.0.5
+    imageTag: v1.0.6
