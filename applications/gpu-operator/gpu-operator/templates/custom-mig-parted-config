@@ -3,6 +3,8 @@ apiVersion: v1
 metadata:
   name: custom-mig-parted-config
   namespace: {{ .Release.Namespace }}
+  annotations:
+    helm.sh/resource-policy: keep
 data:
   config.yaml: |
     version: v1
