@@ -44,16 +44,9 @@ create_environment_directory() {
 get_ip_address() {
     local ip_variable=$1
     local message=$2
-    while true; do
-        echo -n "$message: "
-        read -r ip
-        if [[ $ip =~ ^([0-9]{1,3}\.){3}[0-9]{1,3}$ ]]; then
-            eval "$ip_variable=$ip"
-            break
-        else
-            echo "유효하지 않은 IP 주소입니다. 다시 입력하세요."
-        fi
-    done
+    echo -n "$message: "
+    read -r ip
+    eval "$ip_variable=$ip"
 }
 
 # 사용자로부터 볼륨 타입 입력 받는 함수
@@ -90,7 +83,7 @@ main() {
             create_environment_directory
 
             # 사용자로부터 외부 접속 IP 주소를 입력 받음
-            get_ip_address external_ip "외부 접속 IP 주소를 입력하시오"
+            get_ip_address connect_url "접속 URL(IP)를 입력하시오(e.g http://xiilab.com or http://10.61.3.12)"
 
             # 사용자로부터 볼륨 타입을 입력 받음
             get_volume_type volume_type
@@ -105,7 +98,7 @@ main() {
                 values_file="environments/$environment_name/values.yaml"
 
                 # externalIP 수정
-                yq -i ".externalIP = \"$external_ip\"" "$values_file"
+                yq -i ".connectUrl = \"$connect_url\"" "$values_file"
 
                 # nfs 서버 IP 주소와 base 경로 수정
                 yq -i ".nfs.enabled = true" "$values_file"
