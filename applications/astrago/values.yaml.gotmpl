@@ -13,13 +13,25 @@ core:
     - name: SPRING_DATASOURCE_HIKARI_MAX-LIFETIME
       value: {{ .Values.astrago.mariadb.maxLifetime | quote }}
     - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWT_ISSUER-URI
-      value: http://{{ .Values.externalIP }}:{{ .Values.keycloak.servicePort }}/realms/{{ .Values.astrago.keycloak.realm }}
+      {{ if .Values.astrago.keycloak.externalKeycloakUrl }}
+      value: {{ .Values.astrago.keycloak.externalKeycloakUrl }}/realms/{{ .Values.astrago.keycloak.realm }}
+      {{ else }}
+      value: {{ .Values.connectUrl }}:{{ .Values.keycloak.servicePort }}/realms/{{ .Values.astrago.keycloak.realm }}
+      {{ end }}
     - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWT_JWK-SET-URI
-      value: http://{{ .Values.externalIP }}:{{ .Values.keycloak.servicePort }}/realms/{{ .Values.astrago.keycloak.realm }}/protocol/openid-connect/certs
+      {{ if .Values.astrago.keycloak.externalKeycloakUrl }}
+      value: {{ .Values.astrago.keycloak.externalKeycloakUrl }}/realms/{{ .Values.astrago.keycloak.realm }}/protocol/openid-connect/certs
+      {{ else }}
+      value: {{ .Values.connectUrl }}:{{ .Values.keycloak.servicePort }}/realms/{{ .Values.astrago.keycloak.realm }}/protocol/openid-connect/certs
+      {{ end }}
     - name: KEYCLOAK_REALM
       value: {{ .Values.astrago.keycloak.realm }}
     - name: KEYCLOAK_AUTH-SERVER-URL
-      value: http://{{ .Values.externalIP }}:{{ .Values.keycloak.servicePort }}
+      {{ if .Values.astrago.keycloak.externalKeycloakUrl }}
+      value: {{ .Values.astrago.keycloak.externalKeycloakUrl }}
+      {{ else }}
+      value: {{ .Values.connectUrl }}:{{ .Values.keycloak.servicePort }}
+      {{ end }}
     - name: KEYCLOAK_RESOURCE
       value: {{ .Values.astrago.keycloak.client }}
     - name: ADMIN_NAME
@@ -45,13 +57,25 @@ batch:
     - name: SPRING_DATASOURCE_HIKARI_MAX-LIFETIME
       value: {{ .Values.astrago.mariadb.maxLifetime | quote }}
     - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWT_ISSUER-URI
-      value: http://{{ .Values.externalIP }}:{{ .Values.keycloak.servicePort }}/realms/{{ .Values.astrago.keycloak.realm }}
+      {{ if .Values.astrago.keycloak.externalKeycloakUrl }}
+      value: {{ .Values.astrago.keycloak.externalKeycloakUrl }}/realms/{{ .Values.astrago.keycloak.realm }}
+      {{ else }}
+      value: {{ .Values.connectUrl }}:{{ .Values.keycloak.servicePort }}/realms/{{ .Values.astrago.keycloak.realm }}
+      {{ end }}
     - name: SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWT_JWK-SET-URI
-      value: http://{{ .Values.externalIP }}:{{ .Values.keycloak.servicePort }}/realms/{{ .Values.astrago.keycloak.realm }}/protocol/openid-connect/certs
+      {{ if .Values.astrago.keycloak.externalKeycloakUrl }}
+      value: {{ .Values.astrago.keycloak.externalKeycloakUrl }}/realms/{{ .Values.astrago.keycloak.realm }}/protocol/openid-connect/certs
+      {{ else }}
+      value: {{ .Values.connectUrl }}:{{ .Values.keycloak.servicePort }}/realms/{{ .Values.astrago.keycloak.realm }}/protocol/openid-connect/certs
+      {{ end }}
     - name: KEYCLOAK_REALM
       value: {{ .Values.astrago.keycloak.realm }}
     - name: KEYCLOAK_AUTH-SERVER-URL
-      value: http://{{ .Values.externalIP }}:{{ .Values.keycloak.servicePort }}
+      {{ if .Values.astrago.keycloak.externalKeycloakUrl }}
+      value: {{ .Values.astrago.keycloak.externalKeycloakUrl }}
+      {{ else }}
+      value: {{ .Values.connectUrl }}:{{ .Values.keycloak.servicePort }}
+      {{ end }}
     - name: KEYCLOAK_RESOURCE
       value: {{ .Values.astrago.keycloak.client }}
     - name: ADMIN_NAME
@@ -86,7 +110,11 @@ frontend:
     tag: "{{ .Values.astrago.frontend.imageTag }}" 
   env:
     - name: KEYCLOAK_HOST
-      value: http://{{ .Values.externalIP }}:{{ .Values.keycloak.servicePort }}
+      {{ if .Values.astrago.keycloak.externalKeycloakUrl }}
+      value: {{ .Values.astrago.keycloak.externalKeycloakUrl }}
+      {{ else }}
+      value: {{ .Values.connectUrl }}:{{ .Values.keycloak.servicePort }}
+      {{ end }}
     - name: KEYCLOAK_REALME
       value: {{ .Values.astrago.keycloak.realm }}
     - name: KEYCLOAK_CLIENT_ID
@@ -96,7 +124,11 @@ frontend:
     - name: NODE_OPTIONS
       value: "--max-http-header-size=41960"
     - name: NEXTAUTH_URL
-      value: http://{{ .Values.externalIP }}:{{ .Values.astrago.servicePort }}
+      {{ if .Values.astrago.proxyUrl }}
+      value: {{ .Values.astrago.proxyUrl }}
+      {{ else }}
+      value: {{ .Values.connectUrl }}:{{ .Values.astrago.servicePort }}
+      {{ end }}
     - name: NEXTAUTH_SECRET
       value: uuNj1L0Yg2xKcBPVp7yOVlm2nigL3hoHOzbwQXAwx1I=
     - name: NEXT_PUBLIC_API_URL
