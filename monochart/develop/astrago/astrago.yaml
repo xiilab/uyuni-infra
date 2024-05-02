@@ -761,7 +761,7 @@ spec:
         - name: frontend
           securityContext:
             {}
-          image: "harbor.xiilab.com:32443/astrago/frontend:dev-cd24"
+          image: "harbor.xiilab.com:32443/astrago/frontend:dev-ed91"
           imagePullPolicy: Always
           
           env:
