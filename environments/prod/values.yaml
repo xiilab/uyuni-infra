@@ -33,13 +33,13 @@ astrago:
     maxLifetime: "3595000"
   core:
     repository: "xiilab/astrago"
-    imageTag: "core-v1.0.4"
+    imageTag: "core-v1.0.5"
   batch:
     repository: "xiilab/astrago"
-    imageTag: "batch-v1.0.4"
+    imageTag: "batch-v1.0.5"
   monitor:
     repository: "xiilab/astrago"
-    imageTag: "monitor-v1.0.4"
+    imageTag: "monitor-v1.0.5"
   frontend:
     repository: "xiilab/astrago"
     imageTag: v1.0.6
