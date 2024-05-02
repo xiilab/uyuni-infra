@@ -42,6 +42,7 @@ jobs:
           helmfile -e dev -l app=prometheus template > monochart/develop/prometheus/prometheus.yaml
           helmfile -e dev -l app=keycloak template > monochart/develop/keycloak/keycloak.yaml
           helmfile -e dev -l app=nfs-provisioner template > monochart/develop/nfs-provisioner/nfs-provisioner.yaml
+          helmfile -e dev -l app=gpu-operator template > monochart/develop/gpu-operator/gpu-operator.yaml
 
       - name: Run stage monochart template script
         run: |
