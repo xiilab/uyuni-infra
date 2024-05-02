@@ -65,13 +65,13 @@ metadata:
 data:
   KEYCLOAK_ADMIN: "admin"
   KEYCLOAK_HTTP_PORT: "8080"
-  KEYCLOAK_PROXY: "passthrough"
+  KEYCLOAK_PROXY: "edge"
   KEYCLOAK_ENABLE_STATISTICS: "false"
   KEYCLOAK_DATABASE_HOST: "keycloak-postgresql"
   KEYCLOAK_DATABASE_PORT: "5432"
   KEYCLOAK_DATABASE_NAME: "bitnami_keycloak"
   KEYCLOAK_DATABASE_USER: "bn_keycloak"
-  KEYCLOAK_PRODUCTION:  "false"
+  KEYCLOAK_PRODUCTION:  "true"
   KEYCLOAK_ENABLE_HTTPS: "false"
   KEYCLOAK_CACHE_TYPE: "ispn"
   KEYCLOAK_CACHE_STACK: "kubernetes"
@@ -2698,7 +2698,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/configmap-env-vars: 0e9e0be1559b7035a8246af56ec9d3bffb6d88c4155ea9936ac432abdfa79145
+        checksum/configmap-env-vars: 9b1ac3aa3c4f7a2470845f82501dd1836817980e405e00a12e5d48ece707a95e
         checksum/secrets: 7d79524d9906893c1e9fcd43511df8d36f0159c1df6018fff5af95b112b05706
       labels:
         app.kubernetes.io/instance: keycloak
