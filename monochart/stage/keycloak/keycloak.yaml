@@ -75,6 +75,7 @@ data:
   KEYCLOAK_ENABLE_HTTPS: "false"
   KEYCLOAK_CACHE_TYPE: "ispn"
   KEYCLOAK_CACHE_STACK: "kubernetes"
+  SPI_LOGIN_PROTOCOL_OPENID_CONNECT_LEGACY_LOGOUT_REDIRECT_URI: true
   JAVA_OPTS_APPEND: "-Djgroups.dns.query=keycloak-headless.keycloak.svc.cluster.local"
   KEYCLOAK_LOG_OUTPUT: "default"
   KC_LOG_LEVEL: "INFO"
