@@ -791,6 +791,8 @@ spec:
             value: "disabled"
           - name: NEXT_PUBLIC_WEBSOCKET_HOST
             value: "http://astrago-backend-core:8080"
+          - name: NODE_TLS_REJECT_UNAUTHORIZED
+            value: "0"
           
           ports:
             - name: http
