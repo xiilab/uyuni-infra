@@ -2775,7 +2775,7 @@ spec:
             - name: KEYCLOAK_HTTP_RELATIVE_PATH
               value: "/"
             - name: KEYCLOAK_EXTRA_ARGS
-              value: --import-realm
+              value: --import-realm --spi-login-protocol-openid-connect-legacy-logout-redirect-uri=true
           envFrom:
             - configMapRef:
                 name: keycloak-env-vars
