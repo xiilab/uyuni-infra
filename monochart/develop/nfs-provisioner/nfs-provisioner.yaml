@@ -40,7 +40,7 @@ parameters:
 reclaimPolicy: Retain
 volumeBindingMode: Immediate
 mountOptions:
-  - nfsvers=3
+  - nfsvers=4
 ---
 # Source: csi-driver-nfs/templates/rbac-csi-nfs.yaml
 kind: ClusterRole
