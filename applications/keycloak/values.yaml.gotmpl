@@ -12,7 +12,7 @@ service:
 
 extraEnvVars:
   - name: KEYCLOAK_EXTRA_ARGS
-    value: "--import-realm"
+    value: "--import-realm --spi-login-protocol-openid-connect-legacy-logout-redirect-uri=true"
 
 extraVolumes:
   - name: theme
