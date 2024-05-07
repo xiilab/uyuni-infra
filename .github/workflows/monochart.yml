@@ -39,18 +39,18 @@ jobs:
       - name: Run a dev monochart template script
         run: |
           helmfile -e dev -l app=astrago template > monochart/develop/astrago/astrago.yaml
-          helmfile -e dev -l app=prometheus template > monochart/develop/prometheus/prometheus.yaml
+          helmfile -e dev -l app=prometheus template --include-crds > monochart/develop/prometheus/prometheus.yaml
           helmfile -e dev -l app=keycloak template > monochart/develop/keycloak/keycloak.yaml
           helmfile -e dev -l app=nfs-provisioner template > monochart/develop/nfs-provisioner/nfs-provisioner.yaml
-          helmfile -e dev -l app=gpu-operator template > monochart/develop/gpu-operator/gpu-operator.yaml
+          helmfile -e dev -l app=gpu-operator template --include-crds > monochart/develop/gpu-operator/gpu-operator.yaml
 
       - name: Run stage monochart template script
         run: |
           helmfile -e stage -l app=astrago template > monochart/stage/astrago/astrago.yaml
-          helmfile -e stage -l app=prometheus template > monochart/stage/prometheus/prometheus.yaml
+          helmfile -e stage -l app=prometheus template --include-crds > monochart/stage/prometheus/prometheus.yaml
           helmfile -e stage -l app=keycloak template > monochart/stage/keycloak/keycloak.yaml
           helmfile -e stage -l app=nfs-provisioner template > monochart/stage/nfs-provisioner/nfs-provisioner.yaml
-          helmfile -e stage -l app=gpu-operator template > monochart/stage/gpu-operator/gpu-operator.yaml
+          helmfile -e stage -l app=gpu-operator template --include-crds > monochart/stage/gpu-operator/gpu-operator.yaml
           
       # Runs a set of commands using the runners shell
       - uses: stefanzweifel/git-auto-commit-action@v5
