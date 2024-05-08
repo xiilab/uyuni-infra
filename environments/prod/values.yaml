@@ -1,5 +1,5 @@
 # externalIP: 
-connectUrl:
+externalIP:
 # Volume Settings
 nfs:
   enabled: false

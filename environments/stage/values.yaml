@@ -1,5 +1,5 @@
 # externalIP:
-connectUrl: http://10.61.3.161
+externalIP: 10.61.3.161
 # Volume Settings
 nfs:
   enabled: true
