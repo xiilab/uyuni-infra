@@ -6,9 +6,9 @@ environment_name="astrago"
 
 # 사용법 출력 함수
 print_usage() {
-    echo "사용법: $0 [deploy|sync|destroy]"
+    echo "사용법: $0 [env|sync|destroy]"
     echo ""
-    echo "deploy        : 새로운 환경을 만들고 astrago 전체 앱을 설치합니다. 사용자로부터 외부 접속 IP 주소, NFS 서버의 IP 주소, NFS의 base 경로를 입력받습니다."
+    echo "env           : 새로운 환경 설정 파일을 생성합니다. 사용자로부터 외부 접속 IP 주소, NFS 서버의 IP 주소, NFS의 base 경로를 입력받습니다."
     echo "sync          : 이미 설정된 환경에 대해 astrago 전체 앱을 설치(업데이트)합니다."
     echo "destroy       : 이미 설정된 환경에 대해 astrago 전체 앱을 삭제합니다."
     echo "sync <앱 이름>     : 특정 앱에 대해 설치(업데이트)합니다."
@@ -37,7 +37,7 @@ create_environment_directory() {
     fi
     cp -r environments/prod/* "environments/$environment_name/"
     # 생성된 환경 파일 경로 출력
-    echo "환경 파일이 생성된 경로: $(realpath "environments/$environment_name")"
+    echo "환경 파일이 생성된 경로: $(realpath "environments/$environment_name/values.yaml"), 자세한 설정은 해당 파일을 수정해주세요." 
 }
 
 # 사용자로부터 IP 주소 입력 받는 함수
@@ -79,11 +79,9 @@ main() {
         "--help")
             print_usage
             ;;
-        "deploy")
-            create_environment_directory
-
+        "env")
             # 사용자로부터 외부 접속 IP 주소를 입력 받음
-            get_ip_address connect_url "접속 URL(IP)를 입력하시오(e.g http://xiilab.com or http://10.61.3.12)"
+            get_ip_address external_ip "접속 URL를 입력하시오(e.g. 10.61.3.12)"
 
             # 사용자로부터 볼륨 타입을 입력 받음
             get_volume_type volume_type
@@ -97,8 +95,9 @@ main() {
 
                 values_file="environments/$environment_name/values.yaml"
 
+                create_environment_directory
                 # externalIP 수정
-                yq -i ".connectUrl = \"$connect_url\"" "$values_file"
+                yq -i ".externalIP = \"$connect_url\"" "$values_file"
 
                 # nfs 서버 IP 주소와 base 경로 수정
                 yq -i ".nfs.enabled = true" "$values_file"
@@ -114,7 +113,8 @@ main() {
                 read -r local_base_path
 
                 values_file="environments/$environment_name/values.yaml"
-
+                
+                create_environment_directory
                 # externalIP 수정
                 yq -i ".externalIP = \"$external_ip\"" "$values_file"
 
@@ -125,14 +125,10 @@ main() {
             fi
 
             echo "values.yaml 파일이 수정되었습니다."
-
-            # helmfile로 환경을 sync합니다.
-            echo "helmfile -e $environment_name sync를 실행합니다."
-            helmfile -e "$environment_name" sync
             ;;
         "sync" | "destroy")
             if [ ! -d "environments/$environment_name" ]; then
-                echo "환경이 설정되어 있지 않습니다. deploy를 먼저 실행하세요."
+                echo "환경이 설정되어 있지 않습니다. env를 먼저 실행하세요."
             elif [ -n "$2" ]; then
                 echo "helmfile -e $environment_name -l app=$2 $1를 실행합니다."
                 helmfile -e "$environment_name" -l "app=$2" "$1"
