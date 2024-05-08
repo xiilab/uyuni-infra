@@ -19,11 +19,11 @@ keycloak:
   servicePort: 30001
 # Astrago Settings
 astrago:
-  proxyUrl:
+  proxyUrl: http://59.10.103.94:41277
   servicePort: 30080
   userInitPassword: astrago
   keycloak:
-    externalKeycloakUrl:
+    externalKeycloakUrl: http://59.10.103.94:42253
     realm: astrago
     client: astrago-client
     clientSecret: astragosecret
