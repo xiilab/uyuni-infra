@@ -4,12 +4,15 @@ environments:
     - environments/default/values.yaml
   dev:
     values:
+    - environments/common/values.yaml
     - environments/dev/values.yaml
   stage:
     values:
+    - environments/common/values.yaml
     - environments/stage/values.yaml
   astrago:
     values:
+    - environments/common/values.yaml
     - environments/astrago/values.yaml
 
 helmDefaults:
