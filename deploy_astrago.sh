@@ -1,22 +1,22 @@
 #!/bin/bash
 export LANG=en_US.UTF-8
 
-# 환경 이름을 고정
+# Fixing the environment name
 environment_name="astrago"
 
-# 사용법 출력 함수
+# Function to print usage
 print_usage() {
-    echo "사용법: $0 [env|sync|destroy]"
+    echo "Usage: $0 [env|sync|destroy]"
     echo ""
-    echo "env           : 새로운 환경 설정 파일을 생성합니다. 사용자로부터 외부 접속 IP 주소, NFS 서버의 IP 주소, NFS의 base 경로를 입력받습니다."
-    echo "sync          : 이미 설정된 환경에 대해 astrago 전체 앱을 설치(업데이트)합니다."
-    echo "destroy       : 이미 설정된 환경에 대해 astrago 전체 앱을 삭제합니다."
-    echo "sync <앱 이름>     : 특정 앱에 대해 설치(업데이트)합니다."
-    echo "                사용법: $0 sync <앱 이름>"
-    echo "destroy <앱 이름>  : 특정 앱에 대해 삭제합니다."
-    echo "                사용법: $0 destroy <앱 이름>"
+    echo "env          : Create a new environment configuration file. Prompts the user for the external connection IP address, NFS server IP address, and base path of NFS."
+    echo "sync         : Install (or update) the entire Astrago app for the already configured environment."
+    echo "destroy      : Uninstall the entire Astrago app for the already configured environment."
+    echo "sync <app name>    : Install (or update) a specific app."
+    echo "                Usage: $0 sync <app name>"
+    echo "destroy <app name> : Uninstall a specific app."
+    echo "                Usage: $0 destroy <app name>"
     echo ""
-    echo "앱 종류:"
+    echo "Available Apps:"
     echo "nfs-provisioner"
     echo "gpu-operator"
     echo "prometheus"
@@ -26,21 +26,21 @@ print_usage() {
     exit 0
 }
 
-# 환경 디렉토리 생성 함수
+# Function to create environment directory
 create_environment_directory() {
     if [ ! -d "environments/$environment_name" ]; then
-        echo "환경 디렉토리가 존재하지 않습니다. 생성 중..."
+        echo "Environment directory does not exist. Creating..."
         mkdir "environments/$environment_name"
-        echo "환경 디렉토리가 생성되었습니다."
+        echo "Environment directory has been created."
     else
-        echo "환경 디렉토리가 이미 존재합니다."
+        echo "Environment directory already exists."
     fi
     cp -r environments/prod/* "environments/$environment_name/"
-    # 생성된 환경 파일 경로 출력
-    echo "환경 파일이 생성된 경로: $(realpath "environments/$environment_name/values.yaml"), 자세한 설정은 해당 파일을 수정해주세요." 
+    # Print the path of the created environment file
+    echo "Path where environment file is created: $(realpath "environments/$environment_name/values.yaml"), Please modify this file for detailed settings."
 }
 
-# 사용자로부터 IP 주소 입력 받는 함수
+# Function to get the IP address from the user
 get_ip_address() {
     local ip_variable=$1
     local message=$2
@@ -49,22 +49,22 @@ get_ip_address() {
     eval "$ip_variable=$ip"
 }
 
-# 사용자로부터 볼륨 타입 입력 받는 함수
+# Function to get the volume type from the user
 get_volume_type() {
     local volume_type_variable=$1
     while true; do
-        echo -n "볼륨 타입을 입력하세요 (nfs 또는 local): "
+        echo -n "Enter the volume type (nfs or local): "
         read -r volume_type
         if [ "$volume_type" == "nfs" ] || [ "$volume_type" == "local" ]; then
             eval "$volume_type_variable=$volume_type"
             break
         else
-            echo "유효하지 않은 볼륨 타입입니다. 다시 입력하세요."
+            echo "Invalid volume type. Please enter again."
         fi
     done
 }
 
-# 사용자로부터 폴더 생성을 위한 basePath 입력 받는 함수
+# Function to get the base path for folder creation from the user
 get_base_path() {
     local base_path_variable=$1
     local message=$2
@@ -73,67 +73,68 @@ get_base_path() {
     eval "$base_path_variable=$base_path"
 }
 
-# main 함수
+# Main function
 main() {
     case "$1" in
         "--help")
             print_usage
             ;;
         "env")
-            # 사용자로부터 외부 접속 IP 주소를 입력 받음
-            get_ip_address external_ip "접속 URL를 입력하시오(e.g. 10.61.3.12)"
+            # Get the external IP address from the user
+            get_ip_address external_ip "Enter the connection URL (e.g. 10.61.3.12)"
 
-            # 사용자로부터 볼륨 타입을 입력 받음
+            # Get the volume type from the user
             get_volume_type volume_type
 
             if [ "$volume_type" == "nfs" ]; then
-                # 사용자로부터 NFS 서버의 IP 주소를 입력 받음
-                get_ip_address nfs_server_ip "NFS 서버의 IP 주소를 입력하시오"
+                # Get the NFS server IP address from the user
+                get_ip_address nfs_server_ip "Enter the NFS server IP address"
 
-                # 사용자로부터 NFS의 base 경로를 입력 받음
-                get_base_path nfs_base_path "NFS의 base 경로를 입력하시오"
+                # Get the base path of NFS from the user
+                get_base_path nfs_base_path "Enter the base path of NFS"
 
                 values_file="environments/$environment_name/values.yaml"
 
                 create_environment_directory
-                # externalIP 수정
-                yq -i ".externalIP = \"$connect_url\"" "$values_file"
+                # Modify externalIP
+                yq -i ".externalIP = \"$external_ip\"" "$values_file"
 
-                # nfs 서버 IP 주소와 base 경로 수정
+                # Modify nfs server IP address and base path
                 yq -i ".nfs.enabled = true" "$values_file"
+                yq -i ".nfs.server = \"$nfs_server_ip\"" "$values_file"
                 yq -i ".nfs.server = \"$nfs_server_ip\"" "$values_file"
                 yq -i ".nfs.basePath = \"$nfs_base_path\"" "$values_file"
             elif [ "$volume_type" == "local" ]; then
-                # 사용자로부터 노드 이름을 입력 받음
-                echo -n "데이터를 저장할 K8S 노드 이름을 입력하시오: "
+                # Get the node name from the user
+                echo -n "Enter the K8S node name to store data: "
                 read -r node_name
 
-                # 사용자로부터 base 경로를 입력 받음
-                echo -n "데이터를 저장할 base 경로를 입력하시오: "
+                # Get the base path from the user
+                echo -n "Enter the base path to store data: "
                 read -r local_base_path
 
                 values_file="environments/$environment_name/values.yaml"
-                
+
                 create_environment_directory
-                # externalIP 수정
+                # Modify externalIP
                 yq -i ".externalIP = \"$external_ip\"" "$values_file"
 
-                # node 이름과 base 경로 수정
+                # Modify node name and base path
                 yq -i ".local.enabled = true" "$values_file"
                 yq -i ".local.nodeName = \"$node_name\"" "$values_file"
                 yq -i ".local.basePath = \"$local_base_path\"" "$values_file"
             fi
 
-            echo "values.yaml 파일이 수정되었습니다."
+            echo "values.yaml file has been modified."
             ;;
         "sync" | "destroy")
             if [ ! -d "environments/$environment_name" ]; then
-                echo "환경이 설정되어 있지 않습니다. env를 먼저 실행하세요."
+                echo "Environment is not configured. Please run env first."
             elif [ -n "$2" ]; then
-                echo "helmfile -e $environment_name -l app=$2 $1를 실행합니다."
+                echo "Running helmfile -e $environment_name -l app=$2 $1."
                 helmfile -e "$environment_name" -l "app=$2" "$1"
             else
-                echo "helmfile -e $environment_name $1를 실행합니다."
+                echo "Running helmfile -e $environment_name $1."
                 helmfile -e "$environment_name" "$1"
             fi
             ;;
@@ -143,6 +144,6 @@ main() {
     esac
 }
 
-# 스크립트 실행
+# Script execution
 main "$@"
 
