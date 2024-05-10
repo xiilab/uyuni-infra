@@ -11,10 +11,12 @@ appVersion: 22.0.5
 dependencies:
 - condition: postgresql.enabled
   name: postgresql
-  repository: oci://registry-1.docker.io/bitnamicharts
+  # repository: oci://registry-1.docker.io/bitnamicharts
+  repository: file://charts/postgresql
   version: 13.x.x
 - name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
+  # repository: oci://registry-1.docker.io/bitnamicharts
+  repository: file://charts/common
   tags:
   - bitnami-common
   version: 2.x.x
