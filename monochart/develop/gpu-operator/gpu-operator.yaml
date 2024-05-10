@@ -4843,7 +4843,7 @@ spec:
     imagePullPolicy: IfNotPresent
     env: 
       - name: WITH_REBOOT
-        value: "false"
+        value: "true"
     config: 
       default: all-disabled
       name: custom-mig-parted-config
