@@ -2,6 +2,8 @@ nfs:
   storageClassName: {{ .Values.nfs.storageClassName  }}
   server: {{ .Values.nfs.server }}
   basePath: {{ .Values.nfs.basePath }}
+driver:
+  mountPermissions: 0777
 local:
   storageClassName: {{ .Values.local.storageClassName }}
   nodeName: {{ .Values.local.nodeName }}
