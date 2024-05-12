@@ -216,7 +216,7 @@ spec:
             - "--nodeid=$(NODE_ID)"
             - "--endpoint=$(CSI_ENDPOINT)"
             - "--drivername=nfs.csi.k8s.io"
-            - "--mount-permissions=0"
+            - "--mount-permissions=511"
           env:
             - name: NODE_ID
               valueFrom:
@@ -387,7 +387,7 @@ spec:
             - "--nodeid=$(NODE_ID)"
             - "--endpoint=$(CSI_ENDPOINT)"
             - "--drivername=nfs.csi.k8s.io"
-            - "--mount-permissions=0"
+            - "--mount-permissions=511"
             - "--working-mount-dir=/tmp"
             - "--default-ondelete-policy=delete"
           env:
