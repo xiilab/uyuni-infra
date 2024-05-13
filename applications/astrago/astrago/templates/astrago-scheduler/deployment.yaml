@@ -4,8 +4,8 @@ metadata:
   labels:
     component: scheduler
     tier: control-plane
-  name: binpack-scheduler
-  namespace: kube-system
+  name: astrago-scheduler
+  namespace: {{ .Release.Namespace }}
 spec:
   selector:
     matchLabels:

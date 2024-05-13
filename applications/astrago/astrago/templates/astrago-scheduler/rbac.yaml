@@ -2,7 +2,6 @@ kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: binpack-scheduler
-  namespace: kube-system
 rules:
 - apiGroups:
   - ""
@@ -17,11 +16,10 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: binpack-scheduler
-  namespace: kube-system
 subjects:
 - kind: ServiceAccount
   name: binpack-scheduler
-  namespace: kube-system
+  namespace: {{ .Release.Namespace }}
 roleRef:
   kind: ClusterRole
   name: binpack-scheduler
@@ -31,11 +29,10 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: binpack-scheduler-as-kube-scheduler
-  namespace: kube-system
 subjects:
 - kind: ServiceAccount
   name: binpack-scheduler
-  namespace: kube-system
+  namespace: {{ .Release.Namespace }}
 roleRef:
   kind: ClusterRole
   name: system:kube-scheduler
@@ -45,11 +42,10 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: binpack-scheduler-as-volume-scheduler
-  namespace: kube-system
 subjects:
 - kind: ServiceAccount
   name: binpack-scheduler
-  namespace: kube-system
+  namespace: {{ .Release.Namespace }}
 roleRef:
   kind: ClusterRole
   name: system:volume-scheduler
