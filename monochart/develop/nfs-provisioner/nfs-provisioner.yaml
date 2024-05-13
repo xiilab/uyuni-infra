@@ -4,7 +4,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: csi-nfs-controller-sa
-  namespace: kube-system
+  namespace: nfs-provisioner
   labels:
     app.kubernetes.io/instance: "nfs-provisioner"
     app.kubernetes.io/managed-by: "Helm"
@@ -17,7 +17,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: csi-nfs-node-sa
-  namespace: kube-system
+  namespace: nfs-provisioner
   labels:
     app.kubernetes.io/instance: "nfs-provisioner"
     app.kubernetes.io/managed-by: "Helm"
@@ -103,7 +103,7 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: csi-nfs-controller-sa
-    namespace: kube-system
+    namespace: nfs-provisioner
 roleRef:
   kind: ClusterRole
   name: nfs-external-provisioner-role
@@ -114,7 +114,7 @@ kind: DaemonSet
 apiVersion: apps/v1
 metadata:
   name: csi-nfs-node
-  namespace: kube-system
+  namespace: nfs-provisioner
   labels:
     app.kubernetes.io/instance: "nfs-provisioner"
     app.kubernetes.io/managed-by: "Helm"
@@ -265,7 +265,7 @@ kind: Deployment
 apiVersion: apps/v1
 metadata:
   name: csi-nfs-controller
-  namespace: kube-system
+  namespace: nfs-provisioner
   labels:
     app.kubernetes.io/instance: "nfs-provisioner"
     app.kubernetes.io/managed-by: "Helm"
@@ -315,7 +315,7 @@ spec:
             - "-v=2"
             - "--csi-address=$(ADDRESS)"
             - "--leader-election"
-            - "--leader-election-namespace=kube-system"
+            - "--leader-election-namespace=nfs-provisioner"
             - "--extra-create-metadata=true"
             - "--timeout=1200s"
           env:
@@ -338,7 +338,7 @@ spec:
           args:
             - "--v=2"
             - "--csi-address=$(ADDRESS)"
-            - "--leader-election-namespace=kube-system"
+            - "--leader-election-namespace=nfs-provisioner"
             - "--leader-election"
             - "--timeout=1200s"
           env:
