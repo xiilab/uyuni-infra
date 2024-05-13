@@ -4,6 +4,21 @@ nfs:
   basePath: {{ .Values.nfs.basePath }}
 driver:
   mountPermissions: 0777
+storageClass:
+  create: true
+  name: {{ .Values.nfs.storageClassName }}
+  parameters:
+    server: {{ .Values.nfs.server }}
+    share: {{ .Values.nfs.basePath }}
+#     subDir:
+#     mountPermissions: "0"
+#     csi.storage.k8s.io/provisioner-secret is only needed for providing mountOptions in DeleteVolume
+#     csi.storage.k8s.io/provisioner-secret-name: "mount-options"
+#     csi.storage.k8s.io/provisioner-secret-namespace: "default"
+  reclaimPolicy: Retain
+  volumeBindingMode: Immediate
+  mountOptions:
+    - nfsvers=4.1
 local:
   storageClassName: {{ .Values.local.storageClassName }}
   nodeName: {{ .Values.local.nodeName }}
