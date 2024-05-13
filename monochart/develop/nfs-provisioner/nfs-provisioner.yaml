@@ -9,8 +9,8 @@ metadata:
     app.kubernetes.io/instance: "nfs-provisioner"
     app.kubernetes.io/managed-by: "Helm"
     app.kubernetes.io/name: "csi-driver-nfs"
-    app.kubernetes.io/version: "v4.6.0"
-    helm.sh/chart: "csi-driver-nfs-v4.6.0"
+    app.kubernetes.io/version: "v4.7.0"
+    helm.sh/chart: "csi-driver-nfs-v4.7.0"
 ---
 # Source: csi-driver-nfs/templates/rbac-csi-nfs.yaml
 apiVersion: v1
@@ -22,25 +22,27 @@ metadata:
     app.kubernetes.io/instance: "nfs-provisioner"
     app.kubernetes.io/managed-by: "Helm"
     app.kubernetes.io/name: "csi-driver-nfs"
-    app.kubernetes.io/version: "v4.6.0"
-    helm.sh/chart: "csi-driver-nfs-v4.6.0"
+    app.kubernetes.io/version: "v4.7.0"
+    helm.sh/chart: "csi-driver-nfs-v4.7.0"
 ---
-# Source: csi-driver-nfs/templates/nfs-sc.yaml
+# Source: csi-driver-nfs/templates/storageclass.yaml
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
   name: astrago-nfs-csi
+  labels:
+    app.kubernetes.io/instance: "nfs-provisioner"
+    app.kubernetes.io/managed-by: "Helm"
+    app.kubernetes.io/name: "csi-driver-nfs"
+    app.kubernetes.io/version: "v4.7.0"
+    helm.sh/chart: "csi-driver-nfs-v4.7.0"
 provisioner: nfs.csi.k8s.io
 parameters:
   server: 10.61.3.2
   share: /kube_storage/develop-astrago
-  # csi.storage.k8s.io/provisioner-secret is only needed for providing mountOptions in DeleteVolume
-  # csi.storage.k8s.io/provisioner-secret-name: "mount-options"
-  # csi.storage.k8s.io/provisioner-secret-namespace: "default"
 reclaimPolicy: Retain
 volumeBindingMode: Immediate
 mountOptions:
-  - hard
   - nfsvers=4.1
 ---
 # Source: csi-driver-nfs/templates/rbac-csi-nfs.yaml
@@ -52,8 +54,8 @@ metadata:
     app.kubernetes.io/instance: "nfs-provisioner"
     app.kubernetes.io/managed-by: "Helm"
     app.kubernetes.io/name: "csi-driver-nfs"
-    app.kubernetes.io/version: "v4.6.0"
-    helm.sh/chart: "csi-driver-nfs-v4.6.0"
+    app.kubernetes.io/version: "v4.7.0"
+    helm.sh/chart: "csi-driver-nfs-v4.7.0"
 rules:
   - apiGroups: [""]
     resources: ["persistentvolumes"]
@@ -98,8 +100,8 @@ metadata:
     app.kubernetes.io/instance: "nfs-provisioner"
     app.kubernetes.io/managed-by: "Helm"
     app.kubernetes.io/name: "csi-driver-nfs"
-    app.kubernetes.io/version: "v4.6.0"
-    helm.sh/chart: "csi-driver-nfs-v4.6.0"
+    app.kubernetes.io/version: "v4.7.0"
+    helm.sh/chart: "csi-driver-nfs-v4.7.0"
 subjects:
   - kind: ServiceAccount
     name: csi-nfs-controller-sa
@@ -119,8 +121,8 @@ metadata:
     app.kubernetes.io/instance: "nfs-provisioner"
     app.kubernetes.io/managed-by: "Helm"
     app.kubernetes.io/name: "csi-driver-nfs"
-    app.kubernetes.io/version: "v4.6.0"
-    helm.sh/chart: "csi-driver-nfs-v4.6.0"
+    app.kubernetes.io/version: "v4.7.0"
+    helm.sh/chart: "csi-driver-nfs-v4.7.0"
 spec:
   updateStrategy:
     rollingUpdate:
@@ -135,8 +137,8 @@ spec:
         app.kubernetes.io/instance: "nfs-provisioner"
         app.kubernetes.io/managed-by: "Helm"
         app.kubernetes.io/name: "csi-driver-nfs"
-        app.kubernetes.io/version: "v4.6.0"
-        helm.sh/chart: "csi-driver-nfs-v4.6.0"
+        app.kubernetes.io/version: "v4.7.0"
+        helm.sh/chart: "csi-driver-nfs-v4.7.0"
         app: csi-nfs-node
     spec:
       hostNetwork: true # original nfs connection would be broken without hostNetwork setting
@@ -210,7 +212,7 @@ spec:
               add: ["SYS_ADMIN"]
             allowPrivilegeEscalation: true
             readOnlyRootFilesystem: true
-          image: "registry.k8s.io/sig-storage/nfsplugin:v4.6.0"
+          image: "registry.k8s.io/sig-storage/nfsplugin:v4.7.0"
           args :
             - "--v=5"
             - "--nodeid=$(NODE_ID)"
@@ -270,8 +272,8 @@ metadata:
     app.kubernetes.io/instance: "nfs-provisioner"
     app.kubernetes.io/managed-by: "Helm"
     app.kubernetes.io/name: "csi-driver-nfs"
-    app.kubernetes.io/version: "v4.6.0"
-    helm.sh/chart: "csi-driver-nfs-v4.6.0"
+    app.kubernetes.io/version: "v4.7.0"
+    helm.sh/chart: "csi-driver-nfs-v4.7.0"
 spec:
   replicas: 1
   selector:
@@ -285,8 +287,8 @@ spec:
         app.kubernetes.io/instance: "nfs-provisioner"
         app.kubernetes.io/managed-by: "Helm"
         app.kubernetes.io/name: "csi-driver-nfs"
-        app.kubernetes.io/version: "v4.6.0"
-        helm.sh/chart: "csi-driver-nfs-v4.6.0"
+        app.kubernetes.io/version: "v4.7.0"
+        helm.sh/chart: "csi-driver-nfs-v4.7.0"
         app: csi-nfs-controller
     spec:
       hostNetwork: true  # controller also needs to mount nfs to create dir
@@ -374,7 +376,7 @@ spec:
           securityContext:
             readOnlyRootFilesystem: true
         - name: nfs
-          image: "registry.k8s.io/sig-storage/nfsplugin:v4.6.0"
+          image: "registry.k8s.io/sig-storage/nfsplugin:v4.7.0"
           securityContext:
             privileged: true
             capabilities:
