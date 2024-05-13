@@ -895,7 +895,7 @@ metadata:
   labels:
     component: scheduler
     tier: control-plane
-  name: astrago-scheduler
+  name: binpack-scheduler
   namespace: astrago
 spec:
   selector:
