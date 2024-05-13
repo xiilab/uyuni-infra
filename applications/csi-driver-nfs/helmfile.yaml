@@ -4,7 +4,7 @@
 #
 releases:
 - name: nfs-provisioner
-  namespace: "kube-system"
+  namespace: nfs-provisioner
   chart: csi-driver-nfs
   condition: nfs.enabled
   wait: true
@@ -14,7 +14,7 @@ releases:
   - values.yaml.gotmpl
 
 - name: local-provisioner
-  namespace: "kube-system"
+  namespace: nfs-provisioner
   chart: local-provisioner
   condition: local.enabled
   wait: true
