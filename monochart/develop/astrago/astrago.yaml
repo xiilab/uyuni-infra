@@ -37,12 +37,12 @@ metadata:
   name: astrago-sa
   namespace: astrago
 ---
-# Source: uyuni/templates/binpack-scheduler/serviceaccount.yaml
+# Source: uyuni/templates/astrago-scheduler/serviceaccount.yaml
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: binpack-scheduler
-  namespace: kube-system
+  namespace: astrago
 ---
 # Source: uyuni/templates/metric-server.yaml
 apiVersion: v1
@@ -201,12 +201,12 @@ data:
     socket=/opt/bitnami/mariadb/tmp/mysql.sock
     pid-file=/opt/bitnami/mariadb/tmp/mysqld.pid
 ---
-# Source: uyuni/templates/binpack-scheduler/configmap.yaml
+# Source: uyuni/templates/astrago-scheduler/configmap.yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: binpack-scheduler-config
-  namespace: kube-system
+  namespace: astrago
 data:
   gpu-binpack-scheduler-config.yaml: |
     apiVersion: kubescheduler.config.k8s.io/v1
@@ -228,12 +228,11 @@ data:
         name: NodeResourcesFit
       schedulerName: binpack-scheduler
 ---
-# Source: uyuni/templates/binpack-scheduler/rbac.yaml
+# Source: uyuni/templates/astrago-scheduler/rbac.yaml
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: binpack-scheduler
-  namespace: kube-system
 rules:
 - apiGroups:
   - ""
@@ -303,46 +302,43 @@ roleRef:
   name: cluster-admin
   apiGroup: rbac.authorization.k8s.io
 ---
-# Source: uyuni/templates/binpack-scheduler/rbac.yaml
+# Source: uyuni/templates/astrago-scheduler/rbac.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: binpack-scheduler
-  namespace: kube-system
 subjects:
 - kind: ServiceAccount
   name: binpack-scheduler
-  namespace: kube-system
+  namespace: astrago
 roleRef:
   kind: ClusterRole
   name: binpack-scheduler
   apiGroup: rbac.authorization.k8s.io
 ---
-# Source: uyuni/templates/binpack-scheduler/rbac.yaml
+# Source: uyuni/templates/astrago-scheduler/rbac.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: binpack-scheduler-as-kube-scheduler
-  namespace: kube-system
 subjects:
 - kind: ServiceAccount
   name: binpack-scheduler
-  namespace: kube-system
+  namespace: astrago
 roleRef:
   kind: ClusterRole
   name: system:kube-scheduler
   apiGroup: rbac.authorization.k8s.io
 ---
-# Source: uyuni/templates/binpack-scheduler/rbac.yaml
+# Source: uyuni/templates/astrago-scheduler/rbac.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: binpack-scheduler-as-volume-scheduler
-  namespace: kube-system
 subjects:
 - kind: ServiceAccount
   name: binpack-scheduler
-  namespace: kube-system
+  namespace: astrago
 roleRef:
   kind: ClusterRole
   name: system:volume-scheduler
@@ -892,15 +888,15 @@ spec:
           resources:
             {}
 ---
-# Source: uyuni/templates/binpack-scheduler/deployment.yaml
+# Source: uyuni/templates/astrago-scheduler/deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
     component: scheduler
     tier: control-plane
-  name: binpack-scheduler
-  namespace: kube-system
+  name: astrago-scheduler
+  namespace: astrago
 spec:
   selector:
     matchLabels:
