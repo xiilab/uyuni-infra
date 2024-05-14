@@ -3,8 +3,8 @@
 # Declare variables to be passed into your templates.
 core:
   image:
-    repository: xiilab/uyuni-backend-core
-    tag: master
+    repository: xiilab/astrago
+    tag: core-v1.0.7
   serviceAccount:
     name: "astrago-sa"
   service:
@@ -14,8 +14,8 @@ core:
       
 batch:
   image:
-    repository: xiilab/uyuni-backend-batch
-    tag: master
+    repository: xiilab/astrago
+    tag: batch-v1.0.7
   serviceAccount:
     name: "astrago-sa"      
   service:
@@ -25,8 +25,8 @@ batch:
 
 monitor:
   image:
-    repository: xiilab/uyuni-backend-monitor
-    tag: master
+    repository: xiilab/astrago
+    tag: monitor-v1.0.7
   serviceAccount:
     name: "astrago-sa"      
   service:
@@ -36,8 +36,8 @@ monitor:
 
 frontend:
   image:
-    repository: xiilab/uyuni-frontend
-    tag: master
+    repository: xiilab/astrago
+    tag: v1.0.8
   service:
     type: NodePort
     port: 3000
