@@ -1,5 +1,5 @@
 ---
-# Source: gpu-operator/crds/nvidia.com_clusterpolicies_crd.yaml
+# Source: custom-gpu-operator/charts/gpu-operator/crds/nvidia.com_clusterpolicies_crd.yaml
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -2388,7 +2388,7 @@ spec:
       status: {}
 
 ---
-# Source: gpu-operator/crds/nvidia.com_nvidiadrivers.yaml
+# Source: custom-gpu-operator/charts/gpu-operator/crds/nvidia.com_nvidiadrivers.yaml
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -3191,7 +3191,7 @@ spec:
       status: {}
 
 ---
-# Source: gpu-operator/charts/node-feature-discovery/crds/nfd-api-crds.yaml
+# Source: custom-gpu-operator/charts/gpu-operator/charts/node-feature-discovery/crds/nfd-api-crds.yaml
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -3620,7 +3620,7 @@ spec:
     storage: true
 
 ---
-# Source: gpu-operator/charts/node-feature-discovery/templates/serviceaccount.yaml
+# Source: custom-gpu-operator/charts/gpu-operator/charts/node-feature-discovery/templates/serviceaccount.yaml
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -3633,7 +3633,7 @@ metadata:
     app.kubernetes.io/version: "v0.15.4"
     app.kubernetes.io/managed-by: Helm
 ---
-# Source: gpu-operator/templates/serviceaccount.yaml
+# Source: custom-gpu-operator/charts/gpu-operator/templates/serviceaccount.yaml
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -3646,7 +3646,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: "gpu-operator"
 ---
-# Source: gpu-operator/charts/node-feature-discovery/templates/nfd-master-conf.yaml
+# Source: custom-gpu-operator/charts/gpu-operator/charts/node-feature-discovery/templates/nfd-master-conf.yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -3663,7 +3663,7 @@ data:
     extraLabelNs:
     - nvidia.com
 ---
-# Source: gpu-operator/charts/node-feature-discovery/templates/nfd-topologyupdater-conf.yaml
+# Source: custom-gpu-operator/charts/gpu-operator/charts/node-feature-discovery/templates/nfd-topologyupdater-conf.yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -3679,7 +3679,7 @@ data:
   nfd-topology-updater.conf: |-
     null
 ---
-# Source: gpu-operator/charts/node-feature-discovery/templates/nfd-worker-conf.yaml
+# Source: custom-gpu-operator/charts/gpu-operator/charts/node-feature-discovery/templates/nfd-worker-conf.yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -3704,7 +3704,372 @@ data:
         deviceLabelFields:
         - vendor
 ---
-# Source: gpu-operator/charts/node-feature-discovery/templates/clusterrole.yaml
+# Source: custom-gpu-operator/templates/custom-mig-parted-config
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: custom-mig-parted-config
+  namespace: gpu-operator
+  annotations:
+    helm.sh/resource-policy: keep
+data:
+  config.yaml: |
+    version: v1
+    mig-configs:
+      all-disabled:
+        - devices: all
+          mig-enabled: false
+
+      # A100-40GB, A800-40GB
+      all-1g.5gb:
+        - devices: all
+          mig-enabled: true
+          mig-devices:
+            "1g.5gb": 7
+
+      all-1g.5gb.me:
+        - devices: all
+          mig-enabled: true
+          mig-devices:
+            "1g.5gb+me": 1
+
+      all-2g.10gb:
+        - devices: all
+          mig-enabled: true
+          mig-devices:
+            "2g.10gb": 3
+
+      all-3g.20gb:
+        - devices: all
+          mig-enabled: true
+          mig-devices:
+            "3g.20gb": 2
+
+      all-4g.20gb:
+        - devices: all
+          mig-enabled: true
+          mig-devices:
+            "4g.20gb": 1
+
+      all-7g.40gb:
+        - devices: all
+          mig-enabled: true
+          mig-devices:
+            "7g.40gb": 1
+
+      # H100-80GB, H800-80GB, A100-80GB, A800-80GB, A100-40GB, A800-40GB
+      all-1g.10gb:
+        # H100-80GB, H800-80GB, A100-80GB, A800-80GB
+        - device-filter: ["0x233010DE", "0x233110DE", "0x232210DE", "0x20B210DE", "0x20B510DE", "0x20F310DE", "0x20F510DE"]
+          devices: all
+          mig-enabled: true
+          mig-devices:
+            "1g.10gb": 7
+
+        # A100-40GB, A800-40GB
+        - device-filter: ["0x20B010DE", "0x20B110DE", "0x20F110DE", "0x20F610DE"]
+          devices: all
+          mig-enabled: true
+          mig-devices:
+            "1g.10gb": 4
+
+      # H100-80GB, H800-80GB, A100-80GB, A800-80GB
+      all-1g.10gb.me:
+        - devices: all
+          mig-enabled: true
+          mig-devices:
+            "1g.10gb+me": 1
+
+      # H100-80GB, H800-80GB, A100-80GB, A800-80GB
+      all-1g.20gb:
+        - devices: all
+          mig-enabled: true
+          mig-devices:
+            "1g.20gb": 4
+
+      all-2g.20gb:
+        - devices: all
+          mig-enabled: true
+          mig-devices:
+            "2g.20gb": 3
+
+      all-3g.40gb:
+        - devices: all
+          mig-enabled: true
+          mig-devices:
+            "3g.40gb": 2
+
+      all-4g.40gb:
+        - devices: all
+          mig-enabled: true
+          mig-devices:
+            "4g.40gb": 1
+
+      all-7g.80gb:
+        - devices: all
+          mig-enabled: true
+          mig-devices:
+            "7g.80gb": 1
+
+      # A30-24GB
+      all-1g.6gb:
+        - devices: all
+          mig-enabled: true
+          mig-devices:
+            "1g.6gb": 4
+
+      all-1g.6gb.me:
+        - devices: all
+          mig-enabled: true
+          mig-devices:
+            "1g.6gb+me": 1
+
+      all-2g.12gb:
+        - devices: all
+          mig-enabled: true
+          mig-devices:
+            "2g.12gb": 2
+
+      all-2g.12gb.me:
+        - devices: all
+          mig-enabled: true
+          mig-devices:
+            "2g.12gb+me": 1
+
+      all-4g.24gb:
+        - devices: all
+          mig-enabled: true
+          mig-devices:
+            "4g.24gb": 1
+
+      # H100 NVL, H800 NVL
+      all-1g.12gb:
+        - devices: all
+          mig-enabled: true
+          mig-devices:
+            "1g.12gb": 7
+
+      all-1g.12gb.me:
+        - devices: all
+          mig-enabled: true
+          mig-devices:
+            "1g.12gb+me": 1
+
+      all-1g.24gb:
+        - devices: all
+          mig-enabled: true
+          mig-devices:
+            "1g.24gb": 4
+
+      all-2g.24gb:
+        - devices: all
+          mig-enabled: true
+          mig-devices:
+            "2g.24gb": 3
+
+      all-3g.47gb:
+        - devices: all
+          mig-enabled: true
+          mig-devices:
+            "3g.47gb": 2
+
+      all-4g.47gb:
+        - devices: all
+          mig-enabled: true
+          mig-devices:
+            "4g.47gb": 1
+
+      all-7g.94gb:
+        - devices: all
+          mig-enabled: true
+          mig-devices:
+            "7g.94gb": 1
+
+      # H100-96GB, PG506-96GB
+      all-3g.48gb:
+        - devices: all
+          mig-enabled: true
+          mig-devices:
+            "3g.48gb": 2
+
+      all-4g.48gb:
+        - devices: all
+          mig-enabled: true
+          mig-devices:
+            "4g.48gb": 1
+
+      all-7g.96gb:
+        - devices: all
+          mig-enabled: true
+          mig-devices:
+            "7g.96gb": 1
+
+
+      # H100-96GB, H100 NVL, H800 NVL, H100-80GB, H800-80GB, A800-40GB, A800-80GB, A100-40GB, A100-80GB, A30-24GB, PG506-96GB
+      all-balanced:
+        # H100 NVL, H800 NVL
+        - device-filter: ["0x232110DE", "0x233A10DE"]
+          devices: all
+          mig-enabled: true
+          mig-devices:
+            "1g.12gb": 1
+            "2g.24gb": 1
+            "3g.47gb": 1
+
+        # H100-80GB, H800-80GB, A100-80GB, A800-80GB
+        - device-filter: ["0x233010DE", "0x233110DE", "0x232210DE", "0x20B210DE", "0x20B510DE", "0x20F310DE", "0x20F510DE"]
+          devices: all
+          mig-enabled: true
+          mig-devices:
+            "1g.10gb": 2
+            "2g.20gb": 1
+            "3g.40gb": 1
+
+        # A100-40GB, A800-40GB
+        - device-filter: ["0x20B010DE", "0x20B110DE", "0x20F110DE", "0x20F610DE"]
+          devices: all
+          mig-enabled: true
+          mig-devices:
+            "1g.5gb": 2
+            "2g.10gb": 1
+            "3g.20gb": 1
+
+        # A30-24GB
+        - device-filter: "0x20B710DE"
+          devices: all
+          mig-enabled: true
+          mig-devices:
+            "1g.6gb": 2
+            "2g.12gb": 1
+
+        # H100-96GB, PG506-96GB
+        - device-filter: ["0x233D10DE", "0x20B610DE"]
+          devices: all
+          mig-enabled: true
+          mig-devices:
+            "1g.12gb": 2
+            "2g.24gb": 1
+            "3g.48gb": 1
+---
+# Source: custom-gpu-operator/templates/metrics-config.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: metrics-config
+  namespace: gpu-operator
+data:
+  dcgm-metrics.csv: |-
+    # Format
+    # If line starts with a '#' it is considered a comment
+    # DCGM FIELD, Prometheus metric type, help message
+    
+    # Clocks
+    DCGM_FI_DEV_SM_CLOCK,  gauge, SM clock frequency (in MHz).
+    DCGM_FI_DEV_MEM_CLOCK, gauge, Memory clock frequency (in MHz).
+    
+    # Temperature
+    DCGM_FI_DEV_MEMORY_TEMP, gauge, Memory temperature (in C).
+    DCGM_FI_DEV_GPU_TEMP,    gauge, GPU temperature (in C).
+    
+    # Power
+    DCGM_FI_DEV_POWER_USAGE,              gauge, Power draw (in W).
+    DCGM_FI_DEV_TOTAL_ENERGY_CONSUMPTION, counter, Total energy consumption since boot (in mJ).
+    DCGM_FI_DEV_FAN_SPEED,                gauge, Fan speed for the device in percent (in %).	
+    
+    # PCIE
+    # DCGM_FI_DEV_PCIE_TX_THROUGHPUT,  counter, Total number of bytes transmitted through PCIe TX (in KB) via NVML.
+    # DCGM_FI_DEV_PCIE_RX_THROUGHPUT,  counter, Total number of bytes received through PCIe RX (in KB) via NVML.
+    DCGM_FI_DEV_PCIE_REPLAY_COUNTER, counter, Total number of PCIe retries.
+    
+    # Utilization (the sample period varies depending on the product)
+    DCGM_FI_DEV_GPU_UTIL,      gauge, GPU utilization (in %).
+    DCGM_FI_DEV_MEM_COPY_UTIL, gauge, Memory utilization (in %).
+    DCGM_FI_DEV_ENC_UTIL,      gauge, Encoder utilization (in %).
+    DCGM_FI_DEV_DEC_UTIL ,     gauge, Decoder utilization (in %).
+    
+    # Errors and violations
+    DCGM_FI_DEV_XID_ERRORS,            gauge,   Value of the last XID error encountered.
+    # DCGM_FI_DEV_POWER_VIOLATION,       counter, Throttling duration due to power constraints (in us).
+    # DCGM_FI_DEV_THERMAL_VIOLATION,     counter, Throttling duration due to thermal constraints (in us).
+    # DCGM_FI_DEV_SYNC_BOOST_VIOLATION,  counter, Throttling duration due to sync-boost constraints (in us).
+    # DCGM_FI_DEV_BOARD_LIMIT_VIOLATION, counter, Throttling duration due to board limit constraints (in us).
+    # DCGM_FI_DEV_LOW_UTIL_VIOLATION,    counter, Throttling duration due to low utilization (in us).
+    # DCGM_FI_DEV_RELIABILITY_VIOLATION, counter, Throttling duration due to reliability constraints (in us).
+    
+    # Memory usage
+    DCGM_FI_DEV_FB_FREE, gauge, Framebuffer memory free (in MiB).
+    DCGM_FI_DEV_FB_USED, gauge, Framebuffer memory used (in MiB).
+    
+    # ECC
+    # DCGM_FI_DEV_ECC_SBE_VOL_TOTAL, counter, Total number of single-bit volatile ECC errors.
+    # DCGM_FI_DEV_ECC_DBE_VOL_TOTAL, counter, Total number of double-bit volatile ECC errors.
+    # DCGM_FI_DEV_ECC_SBE_AGG_TOTAL, counter, Total number of single-bit persistent ECC errors.
+    # DCGM_FI_DEV_ECC_DBE_AGG_TOTAL, counter, Total number of double-bit persistent ECC errors.
+    
+    # Retired pages
+    # DCGM_FI_DEV_RETIRED_SBE,     counter, Total number of retired pages due to single-bit errors.
+    # DCGM_FI_DEV_RETIRED_DBE,     counter, Total number of retired pages due to double-bit errors.
+    # DCGM_FI_DEV_RETIRED_PENDING, counter, Total number of pages pending retirement.
+    
+    # NVLink
+    # DCGM_FI_DEV_NVLINK_CRC_FLIT_ERROR_COUNT_TOTAL, counter, Total number of NVLink flow-control CRC errors.
+    # DCGM_FI_DEV_NVLINK_CRC_DATA_ERROR_COUNT_TOTAL, counter, Total number of NVLink data CRC errors.
+    # DCGM_FI_DEV_NVLINK_REPLAY_ERROR_COUNT_TOTAL,   counter, Total number of NVLink retries.
+    # DCGM_FI_DEV_NVLINK_RECOVERY_ERROR_COUNT_TOTAL, counter, Total number of NVLink recovery errors.
+    DCGM_FI_DEV_NVLINK_BANDWIDTH_TOTAL,            counter, Total number of NVLink bandwidth counters for all lanes.
+    # DCGM_FI_DEV_NVLINK_BANDWIDTH_L0,               counter, The number of bytes of active NVLink rx or tx data including both header and payload.
+    
+    # VGPU License status
+    DCGM_FI_DEV_VGPU_LICENSE_STATUS, gauge, vGPU License status
+    
+    # Remapped rows
+    DCGM_FI_DEV_UNCORRECTABLE_REMAPPED_ROWS, counter, Number of remapped rows for uncorrectable errors
+    DCGM_FI_DEV_CORRECTABLE_REMAPPED_ROWS,   counter, Number of remapped rows for correctable errors
+    DCGM_FI_DEV_ROW_REMAP_FAILURE,           gauge,   Whether remapping of rows has failed
+    
+    # Static configuration information. These appear as labels on the other metrics
+    DCGM_FI_DRIVER_VERSION,        label, Driver Version
+    # DCGM_FI_NVML_VERSION,          label, NVML Version
+    # DCGM_FI_DEV_BRAND,             label, Device Brand
+    # DCGM_FI_DEV_SERIAL,            label, Device Serial Number
+    # DCGM_FI_DEV_OEM_INFOROM_VER,   label, OEM inforom version
+    # DCGM_FI_DEV_ECC_INFOROM_VER,   label, ECC inforom version
+    # DCGM_FI_DEV_POWER_INFOROM_VER, label, Power management object inforom version
+    # DCGM_FI_DEV_INFOROM_IMAGE_VER, label, Inforom image version
+    # DCGM_FI_DEV_VBIOS_VERSION,     label, VBIOS version of the device
+    
+    # DCP metrics
+    DCGM_FI_PROF_GR_ENGINE_ACTIVE,   gauge, Ratio of time the graphics engine is active (in %).
+    # DCGM_FI_PROF_SM_ACTIVE,          gauge, The ratio of cycles an SM has at least 1 warp assigned (in %).
+    # DCGM_FI_PROF_SM_OCCUPANCY,       gauge, The ratio of number of warps resident on an SM (in %).
+    DCGM_FI_PROF_PIPE_TENSOR_ACTIVE, gauge, Ratio of cycles the tensor (HMMA) pipe is active (in %).
+    DCGM_FI_PROF_DRAM_ACTIVE,        gauge, Ratio of cycles the device memory interface is active sending or receiving data (in %).
+    # DCGM_FI_PROF_PIPE_FP64_ACTIVE,   gauge, Ratio of cycles the fp64 pipes are active (in %).
+    # DCGM_FI_PROF_PIPE_FP32_ACTIVE,   gauge, Ratio of cycles the fp32 pipes are active (in %).
+    # DCGM_FI_PROF_PIPE_FP16_ACTIVE,   gauge, Ratio of cycles the fp16 pipes are active (in %).
+    DCGM_FI_PROF_PCIE_TX_BYTES,      gauge, The rate of data transmitted over the PCIe bus - including both protocol headers and data payloads - in bytes per second.
+    DCGM_FI_PROF_PCIE_RX_BYTES,      gauge, The rate of data received over the PCIe bus - including both protocol headers and data payloads - in bytes per second.
+    
+    # Datadog additional recommended    fields
+    DCGM_FI_DEV_COUNT,                  counter, Number of Devices on the node.
+    DCGM_FI_DEV_FAN_SPEED,              gauge,   Fan speed for the device in percent 0-100.
+    DCGM_FI_DEV_SLOWDOWN_TEMP,          gauge,   Slowdown temperature for the device.
+    DCGM_FI_DEV_POWER_MGMT_LIMIT,       gauge,   Current power limit for the device.
+    DCGM_FI_DEV_PSTATE,                 gauge,   Performance state (P-State) 0-15. 0=highest
+    DCGM_FI_DEV_FB_TOTAL,               gauge,
+    DCGM_FI_DEV_FB_RESERVED,            gauge,
+    DCGM_FI_DEV_FB_USED_PERCENT,        gauge,
+    DCGM_FI_DEV_CLOCK_THROTTLE_REASONS, gauge,  Current clock throttle reasons (bitmask of DCGM_CLOCKS_THROTTLE_REASON_*)
+    
+    DCGM_FI_PROCESS_NAME,               label,  The Process Name.
+    DCGM_FI_CUDA_DRIVER_VERSION,        label,
+    DCGM_FI_DEV_NAME,                   label,
+    DCGM_FI_DEV_MINOR_NUMBER,           label,
+    DCGM_FI_DRIVER_VERSION,             label,
+    DCGM_FI_DEV_BRAND,                  label,
+    DCGM_FI_DEV_SERIAL,                 label,
+---
+# Source: custom-gpu-operator/charts/gpu-operator/charts/node-feature-discovery/templates/clusterrole.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -3751,7 +4116,7 @@ rules:
   - get
   - update
 ---
-# Source: gpu-operator/charts/node-feature-discovery/templates/clusterrole.yaml
+# Source: custom-gpu-operator/charts/gpu-operator/charts/node-feature-discovery/templates/clusterrole.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -3791,7 +4156,7 @@ rules:
   - delete
   - list
 ---
-# Source: gpu-operator/templates/role.yaml
+# Source: custom-gpu-operator/charts/gpu-operator/templates/role.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -3971,7 +4336,7 @@ rules:
   - patch
   - create
 ---
-# Source: gpu-operator/charts/node-feature-discovery/templates/clusterrolebinding.yaml
+# Source: custom-gpu-operator/charts/gpu-operator/charts/node-feature-discovery/templates/clusterrolebinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -3991,7 +4356,7 @@ subjects:
   name: node-feature-discovery
   namespace: gpu-operator
 ---
-# Source: gpu-operator/charts/node-feature-discovery/templates/clusterrolebinding.yaml
+# Source: custom-gpu-operator/charts/gpu-operator/charts/node-feature-discovery/templates/clusterrolebinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -4011,7 +4376,7 @@ subjects:
   name: node-feature-discovery
   namespace: gpu-operator
 ---
-# Source: gpu-operator/templates/rolebinding.yaml
+# Source: custom-gpu-operator/charts/gpu-operator/templates/rolebinding.yaml
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
@@ -4035,7 +4400,7 @@ roleRef:
   name: gpu-operator
   apiGroup: rbac.authorization.k8s.io
 ---
-# Source: gpu-operator/charts/node-feature-discovery/templates/role.yaml
+# Source: custom-gpu-operator/charts/gpu-operator/charts/node-feature-discovery/templates/role.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
@@ -4057,7 +4422,7 @@ rules:
   - get
   - update
 ---
-# Source: gpu-operator/charts/node-feature-discovery/templates/rolebinding.yaml
+# Source: custom-gpu-operator/charts/gpu-operator/charts/node-feature-discovery/templates/rolebinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
@@ -4078,7 +4443,7 @@ subjects:
   name: node-feature-discovery
   namespace: gpu-operator
 ---
-# Source: gpu-operator/charts/node-feature-discovery/templates/worker.yaml
+# Source: custom-gpu-operator/charts/gpu-operator/charts/node-feature-discovery/templates/worker.yaml
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
@@ -4207,7 +4572,7 @@ spec:
           key: nvidia.com/gpu
           operator: Exists
 ---
-# Source: gpu-operator/charts/node-feature-discovery/templates/master.yaml
+# Source: custom-gpu-operator/charts/gpu-operator/charts/node-feature-discovery/templates/master.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -4316,7 +4681,7 @@ spec:
           operator: Equal
           value: ""
 ---
-# Source: gpu-operator/charts/node-feature-discovery/templates/nfd-gc.yaml
+# Source: custom-gpu-operator/charts/gpu-operator/charts/node-feature-discovery/templates/nfd-gc.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -4372,7 +4737,7 @@ spec:
           - name: metrics
             containerPort: 8081
 ---
-# Source: gpu-operator/templates/operator.yaml
+# Source: custom-gpu-operator/charts/gpu-operator/templates/operator.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -4482,7 +4847,7 @@ spec:
           operator: Equal
           value: ""
 ---
-# Source: gpu-operator/templates/clusterpolicy.yaml
+# Source: custom-gpu-operator/charts/gpu-operator/templates/clusterpolicy.yaml
 apiVersion: nvidia.com/v1
 kind: ClusterPolicy
 metadata:
