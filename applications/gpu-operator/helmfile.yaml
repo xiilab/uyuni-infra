@@ -6,7 +6,7 @@ releases:
   - name: gpu-operator
     namespace: gpu-operator
       #    chart: nvidia/gpu-operator
-    chart: gpu-operator
+    chart: custom-gpu-operator
     wait: true
     labels:
       app: gpu-operator

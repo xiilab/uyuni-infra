@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: metrics-config
+  namespace: {{ .Release.Namespace }}
+data:
+  dcgm-metrics.csv: |-
+{{ .Files.Get "files/dcgm-metrics.csv" | indent 4 }}
+
