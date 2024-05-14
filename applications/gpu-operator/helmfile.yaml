@@ -12,4 +12,4 @@ releases:
       app: gpu-operator
       type: infra
     values:
-    - gpu-operator/custom_values.yaml
+    - custom_values.yaml
