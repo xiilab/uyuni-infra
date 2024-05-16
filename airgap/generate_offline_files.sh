@@ -2,9 +2,9 @@
 
 # Define variables
 CURRENT_DIR=$(dirname "$(realpath "$0")")
-K8S_OFFLINE_PATH=$(realpath $CURRENT_DIR/../kubespray/contrib/offline)
+K8S_OFFLINE_PATH=$(realpath "$CURRENT_DIR/../kubespray/contrib/offline")
 IMAGE_LIST_FILE_NAME="images.list"
-export IMAGES_FROM_FILE=$K8S_OFFLINE_PATH/temp/$IMAGE_LIST_FILE_NAME
+export IMAGES_FROM_FILE="$K8S_OFFLINE_PATH/temp/$IMAGE_LIST_FILE_NAME"
 
 # Check if HTTP server is needed
 NO_HTTP_SERVER=no
