@@ -43,4 +43,4 @@ astrago:
     imageTag: "dev-d02e"
   frontend:
     repository: "harbor.xiilab.com:32443/astrago/frontend"
-    imageTag: dev-8108
+    imageTag: dev-047d
