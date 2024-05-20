@@ -34,13 +34,13 @@ astrago:
     maxLifetime: "3595000"
   core:
     repository: "harbor.xiilab.com:32443/astrago/core"
-    imageTag: "stag-add9"
+    imageTag: "stag-8e5a"
   batch:
     repository: "harbor.xiilab.com:32443/astrago/batch"
-    imageTag: "stag-add9"
+    imageTag: "stag-8e5a"
   monitor:
     repository: "harbor.xiilab.com:32443/astrago/monitor"
-    imageTag: "stag-add9"
+    imageTag: "stag-8e5a"
   frontend:
     repository: "harbor.xiilab.com:32443/astrago/frontend"
     imageTag: stag-4e7c
