@@ -3,11 +3,15 @@
 # Define variables
 CURRENT_DIR=$(dirname "$(realpath "$0")")
 IMAGE_LIST_FILE_NAME="images.list"
-IMAGES_FROM_FILE="$CURRENT_DIR/temp/$IMAGE_LIST_FILE_NAME"
+IMAGES_FROM_FILE="$CURRENT_DIR/$IMAGE_LIST_FILE_NAME"
 REGISTRY_PORT=25000
 REGISTRY_NAME=ready-registry
 runtime=docker
 RETRY_COUNT=3
+OFFLINE_FILES_DIR_NAME="offline-files"
+OFFLINE_FILES_DIR="${CURRENT_DIR}/${OFFLINE_FILES_DIR_NAME}"
+OFFLINE_FILES_ARCHIVE="${CURRENT_DIR}/offline-files.tar.gz"
+FILES_LIST=${FILES_LIST:-"${CURRENT_DIR}/temp/files.list"}
 
 
 export NO_HTTP_SERVER=no
@@ -21,7 +25,7 @@ add_helm_images() {
 
 # Function to process Helm charts and prepare the images list
 prepare_images_list() {
-  cp $IMAGES_FROM_FILE .
+  cp "$IMAGES_FROM_FILE" .
 
   # List of helm chart paths
   local helm_charts=(
@@ -40,12 +44,12 @@ prepare_images_list() {
 
 # Function to download and register images to local registry
 download_images() {
-  echo "========== Download Images  =========="
+  echo "========== Download Images =========="
 
   set +e
-  sudo docker container inspect registry >/dev/null 2>&1
+  sudo docker container inspect $REGISTRY_NAME >/dev/null 2>&1
   if [ $? -ne 0 ]; then
-      sudo docker run --restart=always -d -p "${REGISTRY_PORT}":"5000" -v $CURRENT_DIR/registry:/var/lib/registry --name $REGISTRY_NAME registry:latest
+    sudo docker run --restart=always -d -p "${REGISTRY_PORT}:5000" -v "$CURRENT_DIR/registry:/var/lib/registry" --name $REGISTRY_NAME registry:latest
   fi
   set -e
 
@@ -54,9 +58,7 @@ download_images() {
   while read -r image; do
     image_without_tag="${image%:*}"
     tag="${image##*:}"
-    repository="${image_without_tag%/*}"
-    new_repository="${DESTINATION_REGISTRY}/${image_without_tag#*/}"
-    new_image="${new_repository}:${tag}"
+    new_image="${DESTINATION_REGISTRY}/${image_without_tag#*/}:${tag}"
     echo $new_image
 
     # Retry logic for pulling images
@@ -84,7 +86,8 @@ download_images() {
         sleep 2
       }
     done
-  done <<< "$(cat ${IMAGES_FROM_FILE})"
+  done < "$IMAGES_FROM_FILE"
+
   sudo docker stop $REGISTRY_NAME && sudo docker rm $REGISTRY_NAME
   echo "Succeeded to register container images to local registry."
 }
@@ -92,11 +95,11 @@ download_images() {
 # Function to execute manage-offline-files.sh
 execute_manage_offline_files() {
   echo "========== Download WebServer File =========="
-  # Generate offline files
-  sh $CURRENT_DIR/manage-offline-files.sh
+  rm -rf "${OFFLINE_FILES_DIR}"
+  rm "${OFFLINE_FILES_ARCHIVE}"
+  mkdir  "${OFFLINE_FILES_DIR}"
 
-  # Clean up temporary files
-  rm -rf $CURRENT_DIR/offline-files.tar.gz
+  wget -x -P "${OFFLINE_FILES_DIR}" -i "${FILES_LIST}"
 }
 
 # Prepare the images list
@@ -109,3 +112,4 @@ download_images
 execute_manage_offline_files
 
 echo "Finished ready to Offline"
+
