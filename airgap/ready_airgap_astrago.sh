@@ -1,31 +1,34 @@
 #!/bin/sh
 
 # Define variables
+runtime=docker
 CURRENT_DIR=$(dirname "$(realpath "$0")")
+RETRY_COUNT=3
+
+AIRGAP_FILES_DIR=$CURRENT_DIR/airgap-files
+
 IMAGE_LIST_FILE_NAME="images.list"
-IMAGES_FROM_FILE="$CURRENT_DIR/$IMAGE_LIST_FILE_NAME"
+IMAGES_FROM_FILE="$AIRGAP_FILES_DIR/$IMAGE_LIST_FILE_NAME"
 REGISTRY_PORT=25000
 REGISTRY_NAME=ready-registry
-runtime=docker
-RETRY_COUNT=3
+
 OFFLINE_FILES_DIR_NAME="offline-files"
-OFFLINE_FILES_DIR="${CURRENT_DIR}/${OFFLINE_FILES_DIR_NAME}"
-OFFLINE_FILES_ARCHIVE="${CURRENT_DIR}/offline-files.tar.gz"
+OFFLINE_FILES_DIR="$AIRGAP_FILES_DIR/${OFFLINE_FILES_DIR_NAME}"
 FILES_LIST=${FILES_LIST:-"${CURRENT_DIR}/temp/files.list"}
 
 
-export NO_HTTP_SERVER=no
+mkdir airgap-files
 
 # Function to add images from helm charts to the images list
 add_helm_images() {
   local chart_path=$1
   echo "Processing images from chart: $chart_path"
-  helm images get "$chart_path" >> "$IMAGE_LIST_FILE_NAME"
+  helm images get "$chart_path" >> "$IMAGES_FROM_FILE"
 }
 
 # Function to process Helm charts and prepare the images list
 prepare_images_list() {
-  cp "$IMAGES_FROM_FILE" .
+  cp "$IMAGES_FROM_FILE" airgap-files/
 
   # List of helm chart paths
   local helm_charts=(
@@ -44,12 +47,12 @@ prepare_images_list() {
 
 # Function to download and register images to local registry
 download_images() {
-  echo "========== Download Images =========="
+  echo "========== Download Airgap Images =========="
 
   set +e
   sudo docker container inspect $REGISTRY_NAME >/dev/null 2>&1
   if [ $? -ne 0 ]; then
-    sudo docker run --restart=always -d -p "${REGISTRY_PORT}:5000" -v "$CURRENT_DIR/registry:/var/lib/registry" --name $REGISTRY_NAME registry:latest
+    sudo docker run --restart=always -d -p "${REGISTRY_PORT}:5000" -v "$CURRENT_DIR/airgap-files/registry:/var/lib/registry" --name $REGISTRY_NAME registry:latest
   fi
   set -e
 
@@ -94,12 +97,12 @@ download_images() {
 
 # Function to execute manage-offline-files.sh
 execute_manage_offline_files() {
-  echo "========== Download WebServer File =========="
+  echo "========== Download Airgap WebServer Files =========="
   rm -rf "${OFFLINE_FILES_DIR}"
-  rm "${OFFLINE_FILES_ARCHIVE}"
   mkdir  "${OFFLINE_FILES_DIR}"
 
   wget -x -P "${OFFLINE_FILES_DIR}" -i "${FILES_LIST}"
+  echo "Succeeded to download offline files"
 }
 
 # Prepare the images list
@@ -110,6 +113,4 @@ download_images
 
 # Execute manage-offline-files.sh
 execute_manage_offline_files
-
-echo "Finished ready to Offline"
 
