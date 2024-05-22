@@ -43,4 +43,4 @@ astrago:
     imageTag: "monitor-seoultech-ede0"
   frontend:
     repository: "xiilab/astrago"
-    imageTag: frontend-seoultech-fad2
+    imageTag: frontend-seoultech-07d0
