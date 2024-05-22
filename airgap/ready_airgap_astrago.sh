@@ -8,7 +8,8 @@ RETRY_COUNT=3
 AIRGAP_FILES_DIR=$CURRENT_DIR/airgap-files
 
 IMAGE_LIST_FILE_NAME="images.list"
-IMAGES_FROM_FILE="$AIRGAP_FILES_DIR/$IMAGE_LIST_FILE_NAME"
+TEMP_IMAGE_LIST="$CURRENT_DIR/temp/$IMAGE_LIST_FILE_NAME"
+IMAGE_LIST="$AIRGAP_FILES_DIR/$IMAGE_LIST_FILE_NAME"
 REGISTRY_PORT=25000
 REGISTRY_NAME=ready-registry
 
@@ -17,18 +18,18 @@ OFFLINE_FILES_DIR="$AIRGAP_FILES_DIR/${OFFLINE_FILES_DIR_NAME}"
 FILES_LIST=${FILES_LIST:-"${CURRENT_DIR}/temp/files.list"}
 
 
-mkdir airgap-files
+mkdir "$AIRGAP_FILES_DIR"
 
 # Function to add images from helm charts to the images list
 add_helm_images() {
   local chart_path=$1
   echo "Processing images from chart: $chart_path"
-  helm images get "$chart_path" >> "$IMAGES_FROM_FILE"
+  helm images get "$chart_path" >> "$IMAGE_LIST"
 }
 
 # Function to process Helm charts and prepare the images list
 prepare_images_list() {
-  cp "$IMAGES_FROM_FILE" airgap-files/
+  cp $TEMP_IMAGE_LIST $IMAGE_LIST
 
   # List of helm chart paths
   local helm_charts=(
@@ -89,7 +90,7 @@ download_images() {
         sleep 2
       }
     done
-  done < "$IMAGES_FROM_FILE"
+  done < "$IMAGE_LIST"
 
   sudo docker stop $REGISTRY_NAME && sudo docker rm $REGISTRY_NAME
   echo "Succeeded to register container images to local registry."
