@@ -43,4 +43,4 @@ astrago:
     imageTag: "stag-beef"
   frontend:
     repository: "harbor.xiilab.com:32443/astrago/frontend"
-    imageTag: stag-97a9
+    imageTag: stag-5b49
