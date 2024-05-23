@@ -33,7 +33,7 @@ gpu-operator:
   mig:
     strategy: single
 
-  devicePlugin:
-    config:
-      name: "nvidia-plugin-configs"
-      default: "mps_config.yaml"
+#  devicePlugin:
+#    config:
+#      name: "nvidia-plugin-configs"
+#      default: "mps_config.yaml"
