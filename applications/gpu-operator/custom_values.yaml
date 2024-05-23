@@ -33,6 +33,6 @@ gpu-operator:
   mig:
     strategy: single
 
-  devicePlugin:
-    config:
-      name: "nvidia-plugin-configs"
+#  devicePlugin:
+#    config:
+#      name: "nvidia-plugin-configs"
