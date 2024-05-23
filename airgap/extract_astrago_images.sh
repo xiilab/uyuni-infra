@@ -16,6 +16,9 @@ gpuoperator_extract_images() {
     .. | select(has("repository") and has("image") and has("version")) | 
     .repository + "/" + .image + ":" + .version
   ' >> "$ADDITIONAL_IMAGE_FILE"
+  helm template $chart_path | yq eval -r '
+      .. | select((has("image") and (has("repository") | not) and (has("version") | not))) | .image? | select(.)
+  ' | sort | uniq | sed '1d' | grep -v 'vgpu-manager' >> "$ADDITIONAL_IMAGE_FILE"
 }
 
 # Function to process Helm charts and prepare the images list
