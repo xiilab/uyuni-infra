@@ -5052,6 +5052,9 @@ spec:
         value: all
       - name: NVIDIA_DRIVER_CAPABILITIES
         value: all
+    config:
+      name: nvidia-plugin-configs
+      default: mps_config.yaml
   dcgm:
     enabled: false
     repository: nvcr.io/nvidia/cloud-native
