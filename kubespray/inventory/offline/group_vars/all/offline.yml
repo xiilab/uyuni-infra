@@ -1,9 +1,5 @@
-#
-# offline.yml sample
-#
-
-http_server: "http://"
-registry_host: "YOUR_HOST:35000"
+http_server: "http://192.168.56.11"
+registry_host: "192.168.56.11:35000"
 
 # Insecure registries for containerd
 containerd_registries_mirrors:
@@ -40,7 +36,6 @@ runc_download_url: "{{ files_repo }}/runc/{{ runc_version }}/runc.{{ image_arch 
 nerdctl_download_url: "{{ files_repo }}/nerdctl-{{ nerdctl_version }}-{{ ansible_system | lower }}-{{ image_arch }}.tar.gz"
 containerd_download_url: "{{ files_repo }}/containerd-{{ containerd_version }}-linux-{{ image_arch }}.tar.gz"
 
----
 ## Global Offline settings
 ### Private Container Image Registry
 # registry_host: "myprivateregisry.com"
