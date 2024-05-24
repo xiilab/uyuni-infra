@@ -39,6 +39,7 @@ prepare_images_list() {
   done
   gpuoperator_extract_images "$CURRENT_DIR/../applications/gpu-operator/custom-gpu-operator"
   echo "jacobcarlborg/docker-alpine-wget:latest" >> "$ADDITIONAL_IMAGE_FILE"
+  echo "busybox:latest" >> "$ADDITIONAL_IMAGE_FILE"
   echo "Finished Extract Image List"
 }
 
