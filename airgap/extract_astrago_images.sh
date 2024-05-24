@@ -38,6 +38,7 @@ prepare_images_list() {
     add_helm_images "$chart"
   done
   gpuoperator_extract_images "$CURRENT_DIR/../applications/gpu-operator/custom-gpu-operator"
+  echo "jacobcarlborg/docker-alpine-wget:latest" >> "$ADDITIONAL_IMAGE_FILE"
   echo "Finished Extract Image List"
 }
 

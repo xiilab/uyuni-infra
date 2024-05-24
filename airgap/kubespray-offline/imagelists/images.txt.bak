@@ -14,7 +14,6 @@ quay.io/prometheus-operator/prometheus-operator:v0.70.0
 quay.io/prometheus/prometheus:v2.48.1
 registry.k8s.io/ingress-nginx/kube-webhook-certgen:v20221220-controller-v1.5.1-58-g787ea74b6
 registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.10.1
-jacobcarlborg/docker-alpine-wget:latest
 docker.io/bitnami/keycloak:22.0.5-debian-11-r2
 docker.io/bitnami/postgresql:16.1.0-debian-11-r9
 docker.io/bitnami/mariadb:10.11.4-debian-11-r46
@@ -28,6 +27,7 @@ xiilab/astrago:time-prediction-v0.2
 xiilab/astrago:v1.0.8
 nvcr.io/nvidia/cuda:12.4.1-base-ubi8
 nvcr.io/nvidia/cloud-native/gpu-operator-validator:v24.3.0
+nvcr.io/nvidia/driver:550.54.15
 nvcr.io/nvidia/cloud-native/k8s-driver-manager:v0.6.8
 nvcr.io/nvidia/cloud-native/k8s-driver-manager:v0.6.8
 nvcr.io/nvidia/cloud-native/k8s-kata-manager:v0.2.0
@@ -42,6 +42,8 @@ nvcr.io/nvidia/k8s/dcgm-exporter:3.3.5-3.4.1-ubuntu22.04
 nvcr.io/nvidia/k8s-device-plugin:v0.15.0-ubi8
 nvcr.io/nvidia/cloud-native/k8s-mig-manager:v0.7.0-ubuntu20.04
 nvcr.io/nvidia/cloud-native/gpu-operator-validator:v24.3.0
+nvcr.io/nvidia/cloud-native/gdrdrv:v2.4.1
 nvcr.io/nvidia/kubevirt-gpu-device-plugin:v1.2.7
 nvcr.io/nvidia/gpu-operator:v24.3.0
 registry.k8s.io/nfd/node-feature-discovery:v0.15.4
+jacobcarlborg/docker-alpine-wget:latest
