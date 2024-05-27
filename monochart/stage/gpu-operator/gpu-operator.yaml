@@ -5532,6 +5532,9 @@ spec:
         value: all
       - name: NVIDIA_DRIVER_CAPABILITIES
         value: all
+    config:
+      name: nvidia-plugin-config-mps
+      default: mps_2
   dcgm:
     enabled: false
     repository: nvcr.io/nvidia/cloud-native
