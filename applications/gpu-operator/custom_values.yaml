@@ -33,7 +33,7 @@ gpu-operator:
   mig:
     strategy: single
 
-  devicePlugin:
-    config:
-      name: "nvidia-plugin-configs-mps"
-      default: "mps_2"
+#  devicePlugin:
+#    config:
+#      name: "nvidia-plugin-configs-mps"
+#      default: "mps_2"
