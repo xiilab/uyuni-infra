@@ -4069,6 +4069,486 @@ data:
     DCGM_FI_DEV_BRAND,                  label,
     DCGM_FI_DEV_SERIAL,                 label,
 ---
+# Source: custom-gpu-operator/templates/nvidia-plugin-config-mps
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: nvidia-plugin-config-mps
+  namespace: gpu-operator
+  annotations:
+    helm.sh/resource-policy: keep
+data:
+  mps_2: |
+    version: v1
+    flags:
+      migStrategy: none
+    sharing:
+      renameByDefault: true
+      mps:
+        resources:
+        - name: nvidia.com/gpu
+          replicas: 2
+  mps_3: |
+    version: v1
+    flags:
+      migStrategy: none
+    sharing:
+      renameByDefault: true
+      mps:
+        resources:
+        - name: nvidia.com/gpu
+          replicas: 3
+  mps_4: |
+    version: v1
+    flags:
+      migStrategy: none
+    sharing:
+      renameByDefault: true
+      mps:
+        resources:
+        - name: nvidia.com/gpu
+          replicas: 4
+  mps_5: |
+    version: v1
+    flags:
+      migStrategy: none
+    sharing:
+      renameByDefault: true
+      mps:
+        resources:
+        - name: nvidia.com/gpu
+          replicas: 5
+  mps_6: |
+    version: v1
+    flags:
+      migStrategy: none
+    sharing:
+      renameByDefault: true
+      mps:
+        resources:
+        - name: nvidia.com/gpu
+          replicas: 6
+  mps_7: |
+    version: v1
+    flags:
+      migStrategy: none
+    sharing:
+      renameByDefault: true
+      mps:
+        resources:
+        - name: nvidia.com/gpu
+          replicas: 7
+  mps_8: |
+    version: v1
+    flags:
+      migStrategy: none
+    sharing:
+      renameByDefault: true
+      mps:
+        resources:
+        - name: nvidia.com/gpu
+          replicas: 8
+  mps_9: |
+    version: v1
+    flags:
+      migStrategy: none
+    sharing:
+      renameByDefault: true
+      mps:
+        resources:
+        - name: nvidia.com/gpu
+          replicas: 9
+  mps_10: |
+    version: v1
+    flags:
+      migStrategy: none
+    sharing:
+      renameByDefault: true
+      mps:
+        resources:
+        - name: nvidia.com/gpu
+          replicas: 10
+  mps_11: |
+    version: v1
+    flags:
+      migStrategy: none
+    sharing:
+      renameByDefault: true
+      mps:
+        resources:
+        - name: nvidia.com/gpu
+          replicas: 11
+  mps_12: |
+    version: v1
+    flags:
+      migStrategy: none
+    sharing:
+      renameByDefault: true
+      mps:
+        resources:
+        - name: nvidia.com/gpu
+          replicas: 12
+  mps_13: |
+    version: v1
+    flags:
+      migStrategy: none
+    sharing:
+      renameByDefault: true
+      mps:
+        resources:
+        - name: nvidia.com/gpu
+          replicas: 13
+  mps_14: |
+    version: v1
+    flags:
+      migStrategy: none
+    sharing:
+      renameByDefault: true
+      mps:
+        resources:
+        - name: nvidia.com/gpu
+          replicas: 14
+  mps_15: |
+    version: v1
+    flags:
+      migStrategy: none
+    sharing:
+      renameByDefault: true
+      mps:
+        resources:
+        - name: nvidia.com/gpu
+          replicas: 15
+  mps_16: |
+    version: v1
+    flags:
+      migStrategy: none
+    sharing:
+      renameByDefault: true
+      mps:
+        resources:
+        - name: nvidia.com/gpu
+          replicas: 16
+  mps_17: |
+    version: v1
+    flags:
+      migStrategy: none
+    sharing:
+      renameByDefault: true
+      mps:
+        resources:
+        - name: nvidia.com/gpu
+          replicas: 17
+  mps_18: |
+    version: v1
+    flags:
+      migStrategy: none
+    sharing:
+      renameByDefault: true
+      mps:
+        resources:
+        - name: nvidia.com/gpu
+          replicas: 18
+  mps_19: |
+    version: v1
+    flags:
+      migStrategy: none
+    sharing:
+      renameByDefault: true
+      mps:
+        resources:
+        - name: nvidia.com/gpu
+          replicas: 19
+  mps_20: |
+    version: v1
+    flags:
+      migStrategy: none
+    sharing:
+      renameByDefault: true
+      mps:
+        resources:
+        - name: nvidia.com/gpu
+          replicas: 20
+  mps_21: |
+    version: v1
+    flags:
+      migStrategy: none
+    sharing:
+      renameByDefault: true
+      mps:
+        resources:
+        - name: nvidia.com/gpu
+          replicas: 21
+  mps_22: |
+    version: v1
+    flags:
+      migStrategy: none
+    sharing:
+      renameByDefault: true
+      mps:
+        resources:
+        - name: nvidia.com/gpu
+          replicas: 22
+  mps_23: |
+    version: v1
+    flags:
+      migStrategy: none
+    sharing:
+      renameByDefault: true
+      mps:
+        resources:
+        - name: nvidia.com/gpu
+          replicas: 23
+  mps_24: |
+    version: v1
+    flags:
+      migStrategy: none
+    sharing:
+      renameByDefault: true
+      mps:
+        resources:
+        - name: nvidia.com/gpu
+          replicas: 24
+  mps_25: |
+    version: v1
+    flags:
+      migStrategy: none
+    sharing:
+      renameByDefault: true
+      mps:
+        resources:
+        - name: nvidia.com/gpu
+          replicas: 25
+  mps_26: |
+    version: v1
+    flags:
+      migStrategy: none
+    sharing:
+      renameByDefault: true
+      mps:
+        resources:
+        - name: nvidia.com/gpu
+          replicas: 26
+  mps_27: |
+    version: v1
+    flags:
+      migStrategy: none
+    sharing:
+      renameByDefault: true
+      mps:
+        resources:
+        - name: nvidia.com/gpu
+          replicas: 27
+  mps_28: |
+    version: v1
+    flags:
+      migStrategy: none
+    sharing:
+      renameByDefault: true
+      mps:
+        resources:
+        - name: nvidia.com/gpu
+          replicas: 28
+  mps_29: |
+    version: v1
+    flags:
+      migStrategy: none
+    sharing:
+      renameByDefault: true
+      mps:
+        resources:
+        - name: nvidia.com/gpu
+          replicas: 29
+  mps_30: |
+    version: v1
+    flags:
+      migStrategy: none
+    sharing:
+      renameByDefault: true
+      mps:
+        resources:
+        - name: nvidia.com/gpu
+          replicas: 30
+  mps_31: |
+    version: v1
+    flags:
+      migStrategy: none
+    sharing:
+      renameByDefault: true
+      mps:
+        resources:
+        - name: nvidia.com/gpu
+          replicas: 31
+  mps_32: |
+    version: v1
+    flags:
+      migStrategy: none
+    sharing:
+      renameByDefault: true
+      mps:
+        resources:
+        - name: nvidia.com/gpu
+          replicas: 32
+  mps_33: |
+    version: v1
+    flags:
+      migStrategy: none
+    sharing:
+      renameByDefault: true
+      mps:
+        resources:
+        - name: nvidia.com/gpu
+          replicas: 33
+  mps_34: |
+    version: v1
+    flags:
+      migStrategy: none
+    sharing:
+      renameByDefault: true
+      mps:
+        resources:
+        - name: nvidia.com/gpu
+          replicas: 34
+  mps_35: |
+    version: v1
+    flags:
+      migStrategy: none
+    sharing:
+      renameByDefault: true
+      mps:
+        resources:
+        - name: nvidia.com/gpu
+          replicas: 35
+  mps_36: |
+    version: v1
+    flags:
+      migStrategy: none
+    sharing:
+      renameByDefault: true
+      mps:
+        resources:
+        - name: nvidia.com/gpu
+          replicas: 36
+  mps_37: |
+    version: v1
+    flags:
+      migStrategy: none
+    sharing:
+      renameByDefault: true
+      mps:
+        resources:
+        - name: nvidia.com/gpu
+          replicas: 37
+  mps_38: |
+    version: v1
+    flags:
+      migStrategy: none
+    sharing:
+      renameByDefault: true
+      mps:
+        resources:
+        - name: nvidia.com/gpu
+          replicas: 38
+  mps_39: |
+    version: v1
+    flags:
+      migStrategy: none
+    sharing:
+      renameByDefault: true
+      mps:
+        resources:
+        - name: nvidia.com/gpu
+          replicas: 39
+  mps_40: |
+    version: v1
+    flags:
+      migStrategy: none
+    sharing:
+      renameByDefault: true
+      mps:
+        resources:
+        - name: nvidia.com/gpu
+          replicas: 40
+  mps_41: |
+    version: v1
+    flags:
+      migStrategy: none
+    sharing:
+      renameByDefault: true
+      mps:
+        resources:
+        - name: nvidia.com/gpu
+          replicas: 41
+  mps_42: |
+    version: v1
+    flags:
+      migStrategy: none
+    sharing:
+      renameByDefault: true
+      mps:
+        resources:
+        - name: nvidia.com/gpu
+          replicas: 42
+  mps_43: |
+    version: v1
+    flags:
+      migStrategy: none
+    sharing:
+      renameByDefault: true
+      mps:
+        resources:
+        - name: nvidia.com/gpu
+          replicas: 43
+  mps_44: |
+    version: v1
+    flags:
+      migStrategy: none
+    sharing:
+      renameByDefault: true
+      mps:
+        resources:
+        - name: nvidia.com/gpu
+          replicas: 44
+  mps_45: |
+    version: v1
+    flags:
+      migStrategy: none
+    sharing:
+      renameByDefault: true
+      mps:
+        resources:
+        - name: nvidia.com/gpu
+          replicas: 45
+  mps_46: |
+    version: v1
+    flags:
+      migStrategy: none
+    sharing:
+      renameByDefault: true
+      mps:
+        resources:
+        - name: nvidia.com/gpu
+          replicas: 46
+  mps_47: |
+    version: v1
+    flags:
+      migStrategy: none
+    sharing:
+      renameByDefault: true
+      mps:
+        resources:
+        - name: nvidia.com/gpu
+          replicas: 47
+  mps_48: |
+    version: v1
+    flags:
+      migStrategy: none
+    sharing:
+      renameByDefault: true
+      mps:
+        resources:
+        - name: nvidia.com/gpu
+          replicas: 48
+---
 # Source: custom-gpu-operator/charts/gpu-operator/charts/node-feature-discovery/templates/clusterrole.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
