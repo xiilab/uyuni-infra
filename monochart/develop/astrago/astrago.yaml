@@ -609,7 +609,7 @@ spec:
         - name: batch
           securityContext:
             {}
-          image: "harbor.xiilab.com:32443/astrago/batch:dev-694c"
+          image: "harbor.xiilab.com:32443/astrago/batch:dev-42a0"
           imagePullPolicy: Always
 
           env:
@@ -683,7 +683,7 @@ spec:
         - name: core
           securityContext:
             {}
-          image: "harbor.xiilab.com:32443/astrago/core:dev-694c"
+          image: "harbor.xiilab.com:32443/astrago/core:dev-42a0"
           imagePullPolicy: Always
           
           env:
@@ -761,7 +761,7 @@ spec:
         - name: frontend
           securityContext:
             {}
-          image: "harbor.xiilab.com:32443/astrago/frontend:dev-90aed"
+          image: "harbor.xiilab.com:32443/astrago/frontend:dev-2c86"
           imagePullPolicy: Always
           
           env:
@@ -870,7 +870,7 @@ spec:
         - name: monitor
           securityContext:
             {}
-          image: "harbor.xiilab.com:32443/astrago/monitor:dev-694c"
+          image: "harbor.xiilab.com:32443/astrago/monitor:dev-42a0"
           imagePullPolicy: Always
           env:
           - name: SPRING_DATASOURCE_URL
