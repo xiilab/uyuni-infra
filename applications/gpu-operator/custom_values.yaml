@@ -35,5 +35,5 @@ gpu-operator:
 
   devicePlugin:
     config:
-      name: "nvidia-plugin-configs"
+      name: "nvidia-plugin-configs-mps"
       default: "mps_config.yaml"
