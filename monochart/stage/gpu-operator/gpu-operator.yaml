@@ -5534,7 +5534,7 @@ spec:
         value: all
     config:
       name: nvidia-plugin-configs-mps
-      default: 
+      default: mps_2
   dcgm:
     enabled: false
     repository: nvcr.io/nvidia/cloud-native
