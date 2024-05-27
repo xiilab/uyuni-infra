@@ -36,4 +36,3 @@ gpu-operator:
   devicePlugin:
     config:
       name: "nvidia-plugin-config-mps"
-      default: "mps_2"
