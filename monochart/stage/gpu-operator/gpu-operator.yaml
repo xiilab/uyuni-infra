@@ -4114,7 +4114,7 @@ data:
       migStrategy: none
     sharing:
       renameByDefault: true
-      failRequestsGreaterThanOne: true
+      failRequestsGreaterThanOne: false
       mps:
         resources:
         - name: nvidia.com/gpu
