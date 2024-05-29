@@ -11,33 +11,30 @@ core:
     type: NodePort
     port: 8080
     nodePort: 30081
-      
 batch:
   image:
     repository: xiilab/uyuni-backend-batch
     tag: master
   serviceAccount:
-    name: "astrago-sa"      
+    name: "astrago-sa"
   service:
     type: NodePort
     port: 8080
     nodePort: 30082
-
 monitor:
   image:
     repository: xiilab/uyuni-backend-monitor
     tag: master
   serviceAccount:
-    name: "astrago-sa"      
+    name: "astrago-sa"
   service:
     type: NodePort
     port: 8080
     nodePort: 30083
-
 frontend:
   image:
-    repository: xiilab/uyuni-frontend
-    tag: master
+    repository: xiilab/astrago
+    tag: frontend-v1.0.9
   service:
     type: NodePort
     port: 3000
