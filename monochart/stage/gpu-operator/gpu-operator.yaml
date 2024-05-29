@@ -4083,8 +4083,8 @@ data:
     flags:
       migStrategy: none
     sharing:
-      renameByDefault: true
       mps:
+        renameByDefault: true 
         resources:
         - name: nvidia.com/gpu
           replicas: 2
@@ -4093,8 +4093,8 @@ data:
     flags:
       migStrategy: none
     sharing:
-      renameByDefault: true
       mps:
+        renameByDefault: true
         resources:
         - name: nvidia.com/gpu
           replicas: 3
@@ -4103,8 +4103,8 @@ data:
     flags:
       migStrategy: none
     sharing:
-      renameByDefault: true
       mps:
+        renameByDefault: true
         resources:
         - name: nvidia.com/gpu
           replicas: 4
@@ -4113,9 +4113,8 @@ data:
     flags:
       migStrategy: none
     sharing:
-      renameByDefault: true
-      failRequestsGreaterThanOne: false
       mps:
+        renameByDefault: true
         resources:
         - name: nvidia.com/gpu
           replicas: 5
@@ -4124,8 +4123,8 @@ data:
     flags:
       migStrategy: none
     sharing:
-      renameByDefault: true
       mps:
+        renameByDefault: true
         resources:
         - name: nvidia.com/gpu
           replicas: 6
@@ -4134,8 +4133,8 @@ data:
     flags:
       migStrategy: none
     sharing:
-      renameByDefault: true
       mps:
+        renameByDefault: true
         resources:
         - name: nvidia.com/gpu
           replicas: 7
@@ -4144,8 +4143,8 @@ data:
     flags:
       migStrategy: none
     sharing:
-      renameByDefault: true
       mps:
+        renameByDefault: true
         resources:
         - name: nvidia.com/gpu
           replicas: 8
@@ -4154,8 +4153,8 @@ data:
     flags:
       migStrategy: none
     sharing:
-      renameByDefault: true
       mps:
+        renameByDefault: true
         resources:
         - name: nvidia.com/gpu
           replicas: 9
@@ -4164,8 +4163,8 @@ data:
     flags:
       migStrategy: none
     sharing:
-      renameByDefault: true
       mps:
+        renameByDefault: true
         resources:
         - name: nvidia.com/gpu
           replicas: 10
@@ -4174,8 +4173,8 @@ data:
     flags:
       migStrategy: none
     sharing:
-      renameByDefault: true
       mps:
+        renameByDefault: true
         resources:
         - name: nvidia.com/gpu
           replicas: 11
@@ -4184,8 +4183,8 @@ data:
     flags:
       migStrategy: none
     sharing:
-      renameByDefault: true
       mps:
+        renameByDefault: true
         resources:
         - name: nvidia.com/gpu
           replicas: 12
@@ -4194,8 +4193,8 @@ data:
     flags:
       migStrategy: none
     sharing:
-      renameByDefault: true
       mps:
+        renameByDefault: true
         resources:
         - name: nvidia.com/gpu
           replicas: 13
@@ -4204,8 +4203,8 @@ data:
     flags:
       migStrategy: none
     sharing:
-      renameByDefault: true
       mps:
+        renameByDefault: true
         resources:
         - name: nvidia.com/gpu
           replicas: 14
@@ -4214,8 +4213,8 @@ data:
     flags:
       migStrategy: none
     sharing:
-      renameByDefault: true
       mps:
+        renameByDefault: true
         resources:
         - name: nvidia.com/gpu
           replicas: 15
@@ -4224,8 +4223,8 @@ data:
     flags:
       migStrategy: none
     sharing:
-      renameByDefault: true
       mps:
+        renameByDefault: true
         resources:
         - name: nvidia.com/gpu
           replicas: 16
@@ -4234,8 +4233,8 @@ data:
     flags:
       migStrategy: none
     sharing:
-      renameByDefault: true
       mps:
+        renameByDefault: true
         resources:
         - name: nvidia.com/gpu
           replicas: 17
@@ -4244,8 +4243,8 @@ data:
     flags:
       migStrategy: none
     sharing:
-      renameByDefault: true
       mps:
+        renameByDefault: true
         resources:
         - name: nvidia.com/gpu
           replicas: 18
@@ -4254,8 +4253,8 @@ data:
     flags:
       migStrategy: none
     sharing:
-      renameByDefault: true
       mps:
+        renameByDefault: true
         resources:
         - name: nvidia.com/gpu
           replicas: 19
@@ -4264,8 +4263,8 @@ data:
     flags:
       migStrategy: none
     sharing:
-      renameByDefault: true
       mps:
+        renameByDefault: true
         resources:
         - name: nvidia.com/gpu
           replicas: 20
@@ -4274,8 +4273,8 @@ data:
     flags:
       migStrategy: none
     sharing:
-      renameByDefault: true
       mps:
+        renameByDefault: true
         resources:
         - name: nvidia.com/gpu
           replicas: 21
@@ -4284,8 +4283,8 @@ data:
     flags:
       migStrategy: none
     sharing:
-      renameByDefault: true
       mps:
+        renameByDefault: true
         resources:
         - name: nvidia.com/gpu
           replicas: 22
@@ -4294,8 +4293,8 @@ data:
     flags:
       migStrategy: none
     sharing:
-      renameByDefault: true
       mps:
+        renameByDefault: true
         resources:
         - name: nvidia.com/gpu
           replicas: 23
@@ -4304,8 +4303,8 @@ data:
     flags:
       migStrategy: none
     sharing:
-      renameByDefault: true
       mps:
+        renameByDefault: true
         resources:
         - name: nvidia.com/gpu
           replicas: 24
@@ -4314,8 +4313,8 @@ data:
     flags:
       migStrategy: none
     sharing:
-      renameByDefault: true
       mps:
+        renameByDefault: true
         resources:
         - name: nvidia.com/gpu
           replicas: 25
@@ -4324,8 +4323,8 @@ data:
     flags:
       migStrategy: none
     sharing:
-      renameByDefault: true
       mps:
+        renameByDefault: true
         resources:
         - name: nvidia.com/gpu
           replicas: 26
@@ -4334,8 +4333,8 @@ data:
     flags:
       migStrategy: none
     sharing:
-      renameByDefault: true
       mps:
+        renameByDefault: true
         resources:
         - name: nvidia.com/gpu
           replicas: 27
@@ -4344,8 +4343,8 @@ data:
     flags:
       migStrategy: none
     sharing:
-      renameByDefault: true
       mps:
+        renameByDefault: true
         resources:
         - name: nvidia.com/gpu
           replicas: 28
@@ -4354,8 +4353,8 @@ data:
     flags:
       migStrategy: none
     sharing:
-      renameByDefault: true
       mps:
+        renameByDefault: true
         resources:
         - name: nvidia.com/gpu
           replicas: 29
@@ -4364,8 +4363,8 @@ data:
     flags:
       migStrategy: none
     sharing:
-      renameByDefault: true
       mps:
+        renameByDefault: true
         resources:
         - name: nvidia.com/gpu
           replicas: 30
@@ -4374,8 +4373,8 @@ data:
     flags:
       migStrategy: none
     sharing:
-      renameByDefault: true
       mps:
+        renameByDefault: true
         resources:
         - name: nvidia.com/gpu
           replicas: 31
@@ -4384,8 +4383,8 @@ data:
     flags:
       migStrategy: none
     sharing:
-      renameByDefault: true
       mps:
+        renameByDefault: true
         resources:
         - name: nvidia.com/gpu
           replicas: 32
@@ -4394,8 +4393,8 @@ data:
     flags:
       migStrategy: none
     sharing:
-      renameByDefault: true
       mps:
+        renameByDefault: true
         resources:
         - name: nvidia.com/gpu
           replicas: 33
@@ -4404,8 +4403,8 @@ data:
     flags:
       migStrategy: none
     sharing:
-      renameByDefault: true
       mps:
+        renameByDefault: true
         resources:
         - name: nvidia.com/gpu
           replicas: 34
@@ -4414,8 +4413,8 @@ data:
     flags:
       migStrategy: none
     sharing:
-      renameByDefault: true
       mps:
+        renameByDefault: true
         resources:
         - name: nvidia.com/gpu
           replicas: 35
@@ -4424,8 +4423,8 @@ data:
     flags:
       migStrategy: none
     sharing:
-      renameByDefault: true
       mps:
+        renameByDefault: true
         resources:
         - name: nvidia.com/gpu
           replicas: 36
@@ -4434,8 +4433,8 @@ data:
     flags:
       migStrategy: none
     sharing:
-      renameByDefault: true
       mps:
+        renameByDefault: true
         resources:
         - name: nvidia.com/gpu
           replicas: 37
@@ -4444,8 +4443,8 @@ data:
     flags:
       migStrategy: none
     sharing:
-      renameByDefault: true
       mps:
+        renameByDefault: true
         resources:
         - name: nvidia.com/gpu
           replicas: 38
@@ -4454,8 +4453,8 @@ data:
     flags:
       migStrategy: none
     sharing:
-      renameByDefault: true
       mps:
+        renameByDefault: true
         resources:
         - name: nvidia.com/gpu
           replicas: 39
@@ -4464,8 +4463,8 @@ data:
     flags:
       migStrategy: none
     sharing:
-      renameByDefault: true
       mps:
+        renameByDefault: true
         resources:
         - name: nvidia.com/gpu
           replicas: 40
@@ -4474,8 +4473,8 @@ data:
     flags:
       migStrategy: none
     sharing:
-      renameByDefault: true
       mps:
+        renameByDefault: true
         resources:
         - name: nvidia.com/gpu
           replicas: 41
@@ -4484,8 +4483,8 @@ data:
     flags:
       migStrategy: none
     sharing:
-      renameByDefault: true
       mps:
+        renameByDefault: true
         resources:
         - name: nvidia.com/gpu
           replicas: 42
@@ -4494,8 +4493,8 @@ data:
     flags:
       migStrategy: none
     sharing:
-      renameByDefault: true
       mps:
+        renameByDefault: true
         resources:
         - name: nvidia.com/gpu
           replicas: 43
@@ -4504,8 +4503,8 @@ data:
     flags:
       migStrategy: none
     sharing:
-      renameByDefault: true
       mps:
+        renameByDefault: true
         resources:
         - name: nvidia.com/gpu
           replicas: 44
@@ -4514,8 +4513,8 @@ data:
     flags:
       migStrategy: none
     sharing:
-      renameByDefault: true
       mps:
+        renameByDefault: true
         resources:
         - name: nvidia.com/gpu
           replicas: 45
@@ -4524,8 +4523,8 @@ data:
     flags:
       migStrategy: none
     sharing:
-      renameByDefault: true
       mps:
+        renameByDefault: true
         resources:
         - name: nvidia.com/gpu
           replicas: 46
@@ -4534,8 +4533,8 @@ data:
     flags:
       migStrategy: none
     sharing:
-      renameByDefault: true
       mps:
+        renameByDefault: true
         resources:
         - name: nvidia.com/gpu
           replicas: 47
@@ -4544,8 +4543,8 @@ data:
     flags:
       migStrategy: none
     sharing:
-      renameByDefault: true
       mps:
+        renameByDefault: true
         resources:
         - name: nvidia.com/gpu
           replicas: 48
