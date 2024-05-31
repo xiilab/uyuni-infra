@@ -65,5 +65,5 @@ else
            PY=3.12
            ;;
     esac
-    $sudo apt install -y python${PY} python${PY}-venv python${PY}-dev python3-pip python3-selinux podman || exit 1
+    $sudo apt install -y python${PY} python${PY}-venv python${PY}-dev python3-pip python3-selinux podman nfs-kernel-server || exit 1
 fi

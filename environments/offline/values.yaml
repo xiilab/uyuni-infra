@@ -2,10 +2,10 @@
 externalIP:
 # Volume Settings
 nfs:
-  enabled: false
+  enabled: true
   storageClassName: astrago-nfs-csi
-  server:
-  basePath:
+  server: 10.61.3.2
+  basePath: /kube_storage/test-astrago
 local:
   enabled: false
   storageClassName: astrago-local-storage
@@ -45,5 +45,5 @@ astrago:
     repository: "xiilab/astrago"
     imageTag: frontend-seoultech-bd79
 offline:
-  registry: registry:35000
+  registry: 192.168.56.11:35000
   httpServer: http://192.168.56.11 
