@@ -34,13 +34,13 @@ astrago:
     maxLifetime: "3595000"
   core:
     repository: "harbor.xiilab.com:32443/astrago/core"
-    imageTag: "dev-7d94"
+    imageTag: "dev-7e5c"
   batch:
     repository: "harbor.xiilab.com:32443/astrago/batch"
-    imageTag: "dev-7d94"
+    imageTag: "dev-7e5c"
   monitor:
     repository: "harbor.xiilab.com:32443/astrago/monitor"
-    imageTag: "dev-7d94"
+    imageTag: "dev-7e5c"
   frontend:
     repository: "harbor.xiilab.com:32443/astrago/frontend"
     imageTag: dev-c9db
