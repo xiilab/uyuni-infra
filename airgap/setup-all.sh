@@ -1,5 +1,6 @@
 #!/bin/bash
-cd ./kubespray-offline/outputs
+CURRENT_DIR=$(dirname "$(realpath "$0")")
+cd $CURRENT_DIR/kubespray-offline/outputs
 run() {
     echo "=> Running: $*"
     $* || {

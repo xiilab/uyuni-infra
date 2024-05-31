@@ -5,18 +5,18 @@
 # kubespray: required_pkgs
 device-mapper-libs
 nss
-#conntrack
+conntrack
 conntrack-tools
 container-selinux
 libseccomp
 
 # compilers (for cffi, etc)
-#gcc
-#annobin
-#libffi-devel
-#openssl
-#openssl-libs
-#openssl-devel
+gcc
+annobin
+libffi-devel
+openssl
+openssl-libs
+openssl-devel
 
 # kubespray: common_required_pkgs
 curl
@@ -39,5 +39,5 @@ gnupg2
 lvm2
 
 # nfs
-#rpcbind
-#nfs-utils
+rpcbind
+nfs-utils
