@@ -44,7 +44,7 @@ data:
       mps:
         renameByDefault: false
         resources:
-        - name: nvidia.com/mps-10gb
+        - name: nvidia.com/gpu
           replicas: 5
   mps_6: |
     version: v1
