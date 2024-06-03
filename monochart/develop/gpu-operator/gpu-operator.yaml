@@ -4114,7 +4114,7 @@ data:
       migStrategy: none
     sharing:
       mps:
-        renameByDefault: false
+        renameByDefault: true
         resources:
         - name: nvidia.com/gpu
           replicas: 5
