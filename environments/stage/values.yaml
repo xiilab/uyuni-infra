@@ -43,4 +43,4 @@ astrago:
     imageTag: "stag-9ab4"
   frontend:
     repository: "harbor.xiilab.com:32443/astrago/frontend"
-    imageTag: stag-0f16
+    imageTag: stag-a7a8
