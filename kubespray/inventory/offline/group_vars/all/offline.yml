@@ -1,6 +1,3 @@
-http_server: "http://192.168.56.11"
-registry_host: "192.168.56.11:35000"
-
 # Insecure registries for containerd
 containerd_registries_mirrors:
   - prefix: "{{ registry_host }}"

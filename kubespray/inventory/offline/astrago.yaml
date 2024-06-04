@@ -1,4 +1,7 @@
 all:
+  vars:
+    http_server: "http://192.168.56.11"
+    registry_host: "192.168.56.11:35000"
   hosts:
     node1:
       ansible_host: 192.168.56.11

@@ -4,8 +4,8 @@ externalIP:
 nfs:
   enabled: true
   storageClassName: astrago-nfs-csi
-  server: 10.61.3.2
-  basePath: /kube_storage/test-astrago
+  server: 192.168.56.12
+  basePath: /kube_storage
 local:
   enabled: false
   storageClassName: astrago-local-storage
