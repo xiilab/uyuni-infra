@@ -1,43 +1,246 @@
 # Default values for uyuni.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
-core:
-  image:
-    repository: xiilab/astrago
-    tag: core-v1.0.7
+global:
+  imageRegistry: "192.168.56.11:35000"
+  imagePullSecrets: []
+  nameOverride: ""
+  fullnameOverride: ""
+
   serviceAccount:
+    # Specifies whether a service account should be created
+    create: true
+    # Annotations to add to the service account
+    annotations: {}
+    # The name of the service account to use.
+    # If not set and create is true, a name is generated using the fullname template
     name: "astrago-sa"
+
+core:
+  replicaCount: 1
+
+  image:
+    registry: docker.io
+    repository: xiilab/astrago
+    pullPolicy: Always
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "core-v1.0.7"
+
+  imagePullSecrets: []
+  nameOverride: ""
+  fullnameOverride: ""
+
+  podAnnotations: {}
+
+  podSecurityContext: {}
+    # fsGroup: 2000
+
+  securityContext: {}
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: true
+    # runAsUser: 1000
+
   service:
-    type: NodePort
     port: 8080
-    nodePort: 30081
+  resources: {}
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    # limits:
+    #   cpu: 100m
+    #   memory: 128Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 128Mi
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80   
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  existingClaim: astrago-workload-log
+
       
 batch:
   image:
+    registry: 192.168.56.11:35000
     repository: xiilab/astrago
+    pullPolicy: Always
+    # Overrides the image tag whose default is the chart appVersion.    
     tag: batch-v1.0.7
-  serviceAccount:
-    name: "astrago-sa"      
+  podAnnotations: {}
+
+  podSecurityContext: {}
+    # fsGroup: 2000
+
+  securityContext: {}
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: true
+    # runAsUser: 1000
+
+  service:
+    port: 8080
+
+  resources: {}
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    # limits:
+    #   cpu: 100m
+    #   memory: 128Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 128Mi
+
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  existingClaim: astrago-workload-log    
   service:
     type: NodePort
     port: 8080
     nodePort: 30082
 
 monitor:
+  replicaCount: 1
   image:
+    registry: docker.io
     repository: xiilab/astrago
+    pullPolicy: Always
+    # Overrides the image tag whose default is the chart appVersion.    
     tag: monitor-v1.0.7
-  serviceAccount:
-    name: "astrago-sa"      
   service:
     type: NodePort
     port: 8080
     nodePort: 30083
 
+  podAnnotations: {}
+
+  podSecurityContext: {}
+    # fsGroup: 2000
+
+  securityContext: {}
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: true
+    # runAsUser: 1000
+
+  service:
+    type: NodePort
+    port: 8080
+    nodePort: 30083
+
+  resources: {}
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    # limits:
+    #   cpu: 100m
+    #   memory: 128Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 128Mi
+
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+
+  nodeSelector: {}
+  
+  tolerations: []
+ 
+  affinity: {}    
+
 frontend:
   image:
+    registry: docker.io
     repository: xiilab/astrago
     tag: v1.0.8
+  podAnnotations: {}
+
+  podSecurityContext: {}
+    # fsGroup: 2000
+
+  resources: {}
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    # limits:
+    #   cpu: 100m
+    #   memory: 128Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 128Mi
+
+  securityContext: {}
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: true
+    # runAsUser: 1000
+
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+
+  nodeSelector: {}
+
+  tolerations: []
+
+  affinity: {}    
   service:
     type: NodePort
     port: 3000
+
+proxy:
+  image:
+    registry: docker.io
+    repository: nginx
+    tag: 1.26.0-alpine3.19
+
+scheduler:
+  image:
+    registry: registry.k8s.io
+    repository: kube-scheduler
+    tag: v1.28.4
+
+timePrediction:
+  image:
+    registry: docker.io
+    repository: xiilab/astrago
+    tag: time-prediction-v0.2
+
+metricServer:
+  image:
+    registry: registry.k8s.io
+    repository: metrics-server/metrics-server
+    tag: v0.7.0

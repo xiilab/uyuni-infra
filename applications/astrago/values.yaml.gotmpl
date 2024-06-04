@@ -1,3 +1,6 @@
+global:
+  imageRegistry: "{{ .Values.offline.registry | default "" }}"
+
 core:
   replicaCount: 3
   image:

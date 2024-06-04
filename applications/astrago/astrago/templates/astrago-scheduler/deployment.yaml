@@ -30,7 +30,7 @@ spec:
         command:
         - /usr/local/bin/kube-scheduler
         - --config=/etc/kubernetes/binpack-scheduler/gpu-binpack-scheduler-config.yaml
-        image: registry.k8s.io/kube-scheduler:v1.28.4
+        image: "{{ default .Values.scheduler.image.registry .Values.global.imageRegistry }}/{{ .Values.scheduler.image.repository }}:{{ .Values.scheduler.image.tag }}"
         livenessProbe:
           failureThreshold: 8
           httpGet:
