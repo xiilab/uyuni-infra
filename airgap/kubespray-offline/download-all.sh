@@ -23,6 +23,7 @@ else
 fi
 run ./download-kubespray-files.sh
 run ./download-additional-containers.sh
+run ./download-additional-files.sh
 run ./create-repo.sh
 run ./copy-target-scripts.sh
 

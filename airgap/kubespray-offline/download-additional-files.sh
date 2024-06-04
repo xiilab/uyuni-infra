@@ -1,4 +1,4 @@
-FILES_DIR=outputs/files
+FILES_DIR=outputs/download
 
 decide_relative_dir() {
     local url=$1
