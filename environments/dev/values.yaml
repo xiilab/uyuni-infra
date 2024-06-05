@@ -35,18 +35,18 @@ astrago:
   core:
     registry: "harbor.xiilab.com:32443"
     repository: "astrago/core"
-    imageTag: "dev-054e"
+    imageTag: "dev-883b"
   batch:
     registry: "harbor.xiilab.com:32443"
     repository: "astrago/batch"
-    imageTag: "dev-054e"
+    imageTag: "dev-883b"
   monitor:
     registry: "harbor.xiilab.com:32443"
     repository: "astrago/monitor"
-    imageTag: "dev-054e"
+    imageTag: "dev-883b"
   frontend:
     registry: "harbor.xiilab.com:32443"
     repository: "astrago/frontend"
-    imageTag: dev-8f5a
+    imageTag: dev-4458
 offline:
   registry:                # 192.168.56.11:35000
