@@ -113,11 +113,15 @@ data:
         listen 80;
 
         location / {
-          proxy_pass http://astrago-frontend:3000;
+          proxy_pass http://astrago-frontend:3000; 
         }
 
         location /api/v1/core/ {
           proxy_pass http://astrago-backend-core:8080/api/v1/core/;
+          proxy_connect_timeout 300;
+          proxy_send_timeout 300;
+          proxy_read_timeout 300;
+          send_timeout 300;
         }
 
         location /api/v1/monitor/ {
@@ -605,7 +609,7 @@ spec:
         - name: batch
           securityContext:
             {}
-          image: "harbor.xiilab.com:32443/astrago/batch:dev-4e2f"
+          image: "harbor.xiilab.com:32443/astrago/batch:dev-054e"
           imagePullPolicy: Always
 
           env:
@@ -679,7 +683,7 @@ spec:
         - name: core
           securityContext:
             {}
-          image: "harbor.xiilab.com:32443/astrago/core:dev-4e2f"
+          image: "harbor.xiilab.com:32443/astrago/core:dev-054e"
           imagePullPolicy: Always
           
           env:
@@ -757,7 +761,7 @@ spec:
         - name: frontend
           securityContext:
             {}
-          image: "harbor.xiilab.com:32443/astrago/frontend:dev-92a8"
+          image: "harbor.xiilab.com:32443/astrago/frontend:dev-8f5a"
           imagePullPolicy: Always
           
           env:
@@ -797,11 +801,21 @@ spec:
           livenessProbe:
             httpGet:
               path: /
-              port: http
+              port: 3000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 3
           readinessProbe:
             httpGet:
               path: /
-              port: http
+              port: 3000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 3              
           resources:
             {}
 ---
@@ -866,7 +880,7 @@ spec:
         - name: monitor
           securityContext:
             {}
-          image: "harbor.xiilab.com:32443/astrago/monitor:dev-4e2f"
+          image: "harbor.xiilab.com:32443/astrago/monitor:dev-054e"
           imagePullPolicy: Always
           env:
           - name: SPRING_DATASOURCE_URL
