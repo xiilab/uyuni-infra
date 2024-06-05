@@ -14,4 +14,4 @@ spec:
       protocol: TCP
       name: http
   selector: 
-    {{- include "common.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/name: astrago-backend-monitor

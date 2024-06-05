@@ -4,6 +4,7 @@ global:
 core:
   replicaCount: 3
   image:
+    registry: "{{ .Values.astrago.core.registry }}"
     repository: "{{ .Values.astrago.core.repository }}"
     tag: "{{ .Values.astrago.core.imageTag }}"
   env:
@@ -48,6 +49,7 @@ core:
 
 batch:
   image:
+    registry: "{{ .Values.astrago.batch.registry }}"
     repository: "{{ .Values.astrago.batch.repository }}"
     tag: "{{ .Values.astrago.batch.imageTag }}"
   env:
@@ -90,6 +92,7 @@ batch:
 
 monitor:
   image:
+    registry: "{{ .Values.astrago.monitor.registry }}"
     repository: "{{ .Values.astrago.monitor.repository }}"
     tag: "{{ .Values.astrago.monitor.imageTag }}" 
   env:
@@ -108,6 +111,7 @@ monitor:
 
 frontend:
   image:
+    registry: "{{ .Values.astrago.frontend.registry }}"
     repository: "{{ .Values.astrago.frontend.repository }}"
     pullPolicy: Always
     tag: "{{ .Values.astrago.frontend.imageTag }}" 
@@ -148,6 +152,8 @@ frontend:
       value: http://astrago-backend-core:8080
     - name: NODE_TLS_REJECT_UNAUTHORIZED
       value: '0'    
+
+proxy:
   service:
     type: NodePort
     nodePort: {{ .Values.astrago.servicePort  }}

@@ -4,14 +4,14 @@ metadata:
   name: astrago-backend-batch
   namespace: {{ .Release.Namespace }}
   labels:
-    {{- include "common.labels" . | nindent 4 }}
+    app.kubernetes.io/name: astrago-backend-batch
 spec:
   {{- if not .Values.batch.autoscaling.enabled }}
   replicas: {{ .Values.batch.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "common.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/name: astrago-backend-batch
   template:
     metadata:
       {{- with .Values.batch.podAnnotations }}
@@ -19,7 +19,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "common.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/name: astrago-backend-batch
     spec:
       {{- with .Values.batch.imagePullSecrets }}
       imagePullSecrets:
@@ -31,8 +31,8 @@ spec:
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}          
-          image: "{{ default .Values.monitor.image.registry .Values.global.imageRegistry }}/{{ .Values.monitor.image.repository }}:{{ .Values.monitor.image.tag }}"          
+            {{- toYaml .Values.batch.securityContext | nindent 12 }}          
+          image: "{{ default .Values.batch.image.registry .Values.global.imageRegistry }}/{{ .Values.batch.image.repository }}:{{ .Values.batch.image.tag }}"          
           env:
           {{- range $key, $obj := .Values.batch.env }}
             - name: {{ $obj.name }}

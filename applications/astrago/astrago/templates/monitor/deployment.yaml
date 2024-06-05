@@ -4,14 +4,14 @@ metadata:
   name: astrago-backend-monitor
   namespace: {{ .Release.Namespace }}
   labels:
-    {{- include "common.labels" . | nindent 4 }}
+    app.kubernetes.io/name: astrago-backend-monitor
 spec:
   {{- if not .Values.monitor.autoscaling.enabled }}
   replicas: {{ .Values.monitor.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "common.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/name: astrago-backend-monitor
   template:
     metadata:
       {{- with .Values.monitor.podAnnotations }}
@@ -19,7 +19,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "common.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/name: astrago-backend-monitor
     spec:
       {{- with .Values.monitor.imagePullSecrets }}
       imagePullSecrets:

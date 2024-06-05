@@ -4,14 +4,14 @@ metadata:
   name: astrago-frontend
   namespace: {{ .Release.Namespace }}
   labels:
-    {{- include "common.labels" . | nindent 4 }}
+    app.kubernetes.io/name: astrago-frontend
 spec:
   {{- if not .Values.frontend.autoscaling.enabled }}
   replicas: {{ .Values.frontend.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "common.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/name: astrago-frontend
   template:
     metadata:
       {{- with .Values.frontend.podAnnotations }}
@@ -19,7 +19,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "common.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/name: astrago-frontend
     spec:
       {{- with .Values.frontend.imagePullSecrets }}
       imagePullSecrets:
@@ -31,7 +31,7 @@ spec:
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}          
+            {{- toYaml .Values.frontend.securityContext | nindent 12 }}          
           image: "{{ default .Values.frontend.image.registry .Values.global.imageRegistry }}/{{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag }}"          
           env:
           {{- range $key, $obj := .Values.frontend.env }}
@@ -41,7 +41,7 @@ spec:
           
           ports:
             - name: http
-              containerPort: {{ .Values.frontend.service.port }}
+              containerPort: 3000
               protocol: TCP
           livenessProbe:
             httpGet:

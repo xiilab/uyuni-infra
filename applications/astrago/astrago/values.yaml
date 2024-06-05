@@ -26,10 +26,6 @@ core:
     # Overrides the image tag whose default is the chart appVersion.
     tag: "core-v1.0.7"
 
-  imagePullSecrets: []
-  nameOverride: ""
-  fullnameOverride: ""
-
   podAnnotations: {}
 
   podSecurityContext: {}
@@ -44,7 +40,10 @@ core:
     # runAsUser: 1000
 
   service:
+    type: NodePort
     port: 8080
+    nodePort: 30081
+
   resources: {}
     # We usually recommend not to specify default resources and to leave this as a conscious
     # choice for the user. This also increases chances charts run on environments with little
@@ -69,12 +68,20 @@ core:
 
       
 batch:
+  replicaCount: 1
+
   image:
-    registry: 192.168.56.11:35000
+    registry: docker.io
     repository: xiilab/astrago
     pullPolicy: Always
     # Overrides the image tag whose default is the chart appVersion.    
     tag: batch-v1.0.7
+
+  service:
+    type: NodePort
+    port: 8080
+    nodePort: 30082
+
   podAnnotations: {}
 
   podSecurityContext: {}
@@ -87,9 +94,6 @@ batch:
     # readOnlyRootFilesystem: true
     # runAsNonRoot: true
     # runAsUser: 1000
-
-  service:
-    port: 8080
 
   resources: {}
     # We usually recommend not to specify default resources and to leave this as a conscious
@@ -114,10 +118,6 @@ batch:
   tolerations: []
   affinity: {}
   existingClaim: astrago-workload-log    
-  service:
-    type: NodePort
-    port: 8080
-    nodePort: 30082
 
 monitor:
   replicaCount: 1
@@ -127,6 +127,7 @@ monitor:
     pullPolicy: Always
     # Overrides the image tag whose default is the chart appVersion.    
     tag: monitor-v1.0.7
+
   service:
     type: NodePort
     port: 8080
@@ -144,11 +145,6 @@ monitor:
     # readOnlyRootFilesystem: true
     # runAsNonRoot: true
     # runAsUser: 1000
-
-  service:
-    type: NodePort
-    port: 8080
-    nodePort: 30083
 
   resources: {}
     # We usually recommend not to specify default resources and to leave this as a conscious
@@ -176,10 +172,12 @@ monitor:
   affinity: {}    
 
 frontend:
+  replicaCount: 1
   image:
     registry: docker.io
     repository: xiilab/astrago
     tag: v1.0.8
+
   podAnnotations: {}
 
   podSecurityContext: {}
@@ -217,15 +215,16 @@ frontend:
   tolerations: []
 
   affinity: {}    
-  service:
-    type: NodePort
-    port: 3000
 
 proxy:
   image:
     registry: docker.io
     repository: nginx
     tag: 1.26.0-alpine3.19
+  service:
+    type: NodePort
+    port: 80
+    nodePort: 30080
 
 scheduler:
   image:

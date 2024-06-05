@@ -4,14 +4,14 @@ metadata:
   name: astrago-backend-core
   namespace: {{ .Release.Namespace }}
   labels:
-    {{- include "common.labels" . | nindent 4 }}
+    app.kubernetes.io/name: astrago-backend-core
 spec:
   {{- if not .Values.core.autoscaling.enabled }}
   replicas: {{ .Values.core.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "common.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/name: astrago-backend-core
   template:
     metadata:
       {{- with .Values.core.podAnnotations }}
@@ -19,7 +19,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "common.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/name: astrago-backend-core
     spec:
       {{- with .Values.core.imagePullSecrets }}
       imagePullSecrets:
@@ -31,7 +31,7 @@ spec:
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}          
+            {{- toYaml .Values.core.securityContext | nindent 12 }}          
           image: "{{ default .Values.core.image.registry .Values.global.imageRegistry }}/{{ .Values.core.image.repository }}:{{ .Values.core.image.tag }}"
           imagePullPolicy: {{ .Values.core.image.pullPolicy }}
           env:

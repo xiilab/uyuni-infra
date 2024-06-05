@@ -4,8 +4,8 @@ externalIP:
 nfs:
   enabled: true
   storageClassName: astrago-nfs-csi
-  server: 192.168.56.12
-  basePath: /kube_storage
+  server: 10.61.3.19
+  basePath: /kube-storage
 local:
   enabled: false
   storageClassName: astrago-local-storage
@@ -33,17 +33,21 @@ astrago:
     password: xiirocks
     maxLifetime: "3595000"
   core:
+    registry: "docker.io"
     repository: "xiilab/astrago"
     imageTag: "core-v1.0.7"
   batch:
+    registry: "docker.io"
     repository: "xiilab/astrago"
     imageTag: "batch-v1.0.7"
   monitor:
+    registry: "docker.io"
     repository: "xiilab/astrago"
     imageTag: "monitor-v1.0.7"
   frontend:
+    registry: "docker.io"
     repository: "xiilab/astrago"
-    imageTag: frontend-seoultech-bd79
+    imageTag: frontend-v1.0.9
 offline:
-  registry: 192.168.56.11:35000
-  httpServer: http://192.168.56.11 
+  registry: 10.61.3.8:35000
+  httpServer: http://10.61.3.8

@@ -1,7 +1,8 @@
 environments:
-  default:
+  prod:
     values:
-    - environments/default/values.yaml
+    - environments/common/values.yaml
+    - environments/prod/values.yaml
   dev:
     values:
     - environments/common/values.yaml
