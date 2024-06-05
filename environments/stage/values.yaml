@@ -43,4 +43,4 @@ astrago:
     imageTag: "stag-ba6c"
   frontend:
     repository: "harbor.xiilab.com:32443/astrago/frontend"
-    imageTag: stag-feda
+    imageTag: stag-5da6
