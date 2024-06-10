@@ -38,6 +38,7 @@ ipset
 firewalld
 lvm2
 gnupg-agent
+sshpass
 
 # nfs
 nfs-common
