@@ -14,7 +14,7 @@ gpu-operator:
 
   dcgmExporter:
     enabled: true
-    repository: nvcr.io/nvidia/k8s
+    repository: "{{ .Values.offline.registry | default "nvcr.io/nvidia/k8s" }}"
     image: dcgm-exporter
     version: 3.3.0-3.2.0-ubuntu22.04
     imagePullPolicy: IfNotPresent
@@ -42,6 +42,8 @@ gpu-operator:
     repository: "{{ .Values.offline.registry | default "nvcr.io/nvidia" }}"
     image: k8s-device-plugin
     version: v0.15.0-ubi8
+    config:
+      name: "nvidia-plugin-config-mps"
 
   dcgm:
     # disabled by default to use embedded nv-hostengine by exporter
@@ -49,12 +51,6 @@ gpu-operator:
     repository: "{{ .Values.offline.registry | default "nvcr.io/nvidia/cloud-native" }}"
     image: dcgm
     version: 3.3.5-1-ubuntu22.04    
-
-  dcgmExporter:
-    enabled: true
-    repository: "{{ .Values.offline.registry | default "nvcr.io/nvidia/k8s" }}"
-    image: dcgm-exporter
-    version: 3.3.5-3.4.1-ubuntu22.04    
 
   gfd:
     enabled: true
@@ -98,13 +94,13 @@ gpu-operator:
     version: ""    
 
   vgpuDeviceManager:
-    enabled: true
+    enabled: false
     repository: "{{ .Values.offline.registry | default "nvcr.io/nvidia/cloud-native" }}"
     image: vgpu-device-manager
     version: "v0.2.6"
 
   vfioManager:
-    enabled: true
+    enabled: false
     repository: "{{ .Values.offline.registry | default "nvcr.io/nvidia" }}"
     image: cuda
     version: 12.4.1-base-ubi8    
@@ -135,7 +131,3 @@ gpu-operator:
 
   mig:
     strategy: single
-
-  devicePlugin:
-    config:
-      name: "nvidia-plugin-config-mps"
