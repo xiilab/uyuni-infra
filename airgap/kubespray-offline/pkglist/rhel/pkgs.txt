@@ -37,7 +37,20 @@ yum-plugin-versionlock
 firewalld
 gnupg2
 lvm2
+sshpass
 
 # nfs
 rpcbind
 nfs-utils
+
+#development tools
+gcc
+gcc-c++
+make
+autoconf
+automake
+kernel-devel
+patch
+bison
+flex
+libtool

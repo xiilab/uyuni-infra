@@ -39,6 +39,7 @@ firewalld
 lvm2
 gnupg-agent
 sshpass
+build-essential
 
 # nfs
 nfs-common
