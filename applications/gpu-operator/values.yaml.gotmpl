@@ -16,7 +16,7 @@ gpu-operator:
     enabled: true
     repository: "{{ .Values.offline.registry | default "nvcr.io/nvidia/k8s" }}"
     image: dcgm-exporter
-    version: 3.3.0-3.2.0-ubuntu22.04
+    version: 3.3.5-3.4.1-ubuntu22.04
     imagePullPolicy: IfNotPresent
     config:
       name: metrics-config
