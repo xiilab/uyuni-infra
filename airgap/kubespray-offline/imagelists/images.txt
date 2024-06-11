@@ -25,7 +25,7 @@ xiilab/astrago:batch-v1.0.7
 xiilab/astrago:core-v1.0.7
 xiilab/astrago:monitor-v1.0.7
 xiilab/astrago:time-prediction-v0.2
-xiilab/astrago:v1.0.8
+xiilab/astrago:frontend-v1.0.9
 nvcr.io/nvidia/cuda:12.4.1-base-ubi8
 nvcr.io/nvidia/cloud-native/gpu-operator-validator:v24.3.0
 nvcr.io/nvidia/cloud-native/k8s-driver-manager:v0.6.8
