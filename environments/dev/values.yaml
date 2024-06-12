@@ -34,19 +34,20 @@ astrago:
     maxLifetime: "3595000"
   core:
     registry: "harbor.xiilab.com:32443"
-    repository: "harbor.xiilab.com:32443/astrago/core"
+    repository: "astrago/core"
     imageTag: "dev-f0fc"
   batch:
     registry: "harbor.xiilab.com:32443"
-    repository: "harbor.xiilab.com:32443/astrago/batch"
+    repository: "astrago/batch"
     imageTag: "dev-f0fc"
   monitor:
     registry: "harbor.xiilab.com:32443"
-    repository: "harbor.xiilab.com:32443/astrago/monitor"
+    repository: "astrago/monitor"
     imageTag: "dev-f0fc"
   frontend:
     registry: "harbor.xiilab.com:32443"
-    repository: "harbor.xiilab.com:32443/astrago/frontend"
+    repository: "astrago/frontend"
     imageTag: dev-bc6b
 offline:
   registry:                # 192.168.56.11:35000
+  httpServer:              # http://192.168.56.11
