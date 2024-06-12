@@ -33,14 +33,21 @@ astrago:
     password: xiirocks
     maxLifetime: "3595000"
   core:
+    registry: "docker.io"
     repository: "xiilab/astrago"
     imageTag: "core-v1.0.7"
   batch:
+    registry: "docker.io"
     repository: "xiilab/astrago"
     imageTag: "batch-v1.0.7"
   monitor:
+    registry: "docker.io"
     repository: "xiilab/astrago"
     imageTag: "monitor-v1.0.7"
   frontend:
+    registry: "docker.io"
     repository: "xiilab/astrago"
     imageTag: frontend-v1.0.9
+offline:
+  registry:                # 192.168.56.11:35000
+  httpServer:              # http://192.168.56.11

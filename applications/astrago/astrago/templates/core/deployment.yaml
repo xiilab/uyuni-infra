@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: astrago-backend-core
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: astrago-backend-core
+spec:
+  {{- if not .Values.core.autoscaling.enabled }}
+  replicas: {{ .Values.core.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: astrago-backend-core
+  template:
+    metadata:
+      {{- with .Values.core.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        app.kubernetes.io/name: astrago-backend-core
+    spec:
+      {{- with .Values.core.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "common.serviceAccountName" . }}      
+      securityContext:
+        {{- toYaml .Values.core.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.core.securityContext | nindent 12 }}          
+          image: "{{ default .Values.core.image.registry .Values.global.imageRegistry }}/{{ .Values.core.image.repository }}:{{ .Values.core.image.tag }}"
+          imagePullPolicy: {{ .Values.core.image.pullPolicy }}
+          env:
+          {{- range $key, $obj := .Values.core.env }}
+          - name: {{ $obj.name }}
+            value: {{ $obj.value | quote }}
+          {{- end }}
+          volumeMounts:
+            - name: astrago-workload-log
+              mountPath: /root/astrago
+          ports:
+            - name: http
+              containerPort: {{ .Values.core.service.port }}
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.core.resources | nindent 12 }}
+      volumes:
+        - name: astrago-workload-log
+          persistentVolumeClaim:
+            claimName: workload-log-pvc
+      {{- with .Values.core.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.core.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.core.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      terminationGracePeriodSeconds: 10

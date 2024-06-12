@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: astrago-backend-monitor
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: astrago-backend-monitor
+spec:
+  {{- if not .Values.monitor.autoscaling.enabled }}
+  replicas: {{ .Values.monitor.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: astrago-backend-monitor
+  template:
+    metadata:
+      {{- with .Values.monitor.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        app.kubernetes.io/name: astrago-backend-monitor
+    spec:
+      {{- with .Values.monitor.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "common.serviceAccountName" . }}      
+      securityContext:
+        {{- toYaml .Values.monitor.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.monitor.securityContext | nindent 12 }}
+          image: "{{ default .Values.monitor.image.registry .Values.global.imageRegistry }}/{{ .Values.monitor.image.repository }}:{{ .Values.monitor.image.tag }}"            
+          env:
+          {{- range $key, $obj := .Values.monitor.env }}
+          - name: {{ $obj.name }}
+            value: {{ $obj.value | quote }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.monitor.service.port }}
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.monitor.resources | nindent 12 }}
+      {{- with .Values.monitor.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.monitor.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.monitor.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

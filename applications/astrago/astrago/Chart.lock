@@ -2,17 +2,5 @@ dependencies:
 - name: mariadb
   repository: file://./charts/mariadb
   version: 12.2.9
-- name: frontend
-  repository: file://./charts/frontend
-  version: 0.1.0
-- name: monitor
-  repository: file://./charts/monitor
-  version: 0.1.1
-- name: core
-  repository: file://./charts/core
-  version: 0.1.1
-- name: batch
-  repository: file://./charts/batch
-  version: 0.1.1
-digest: sha256:83bec50888244811967ea265040348156fe501078969deef4db6ca96e0672abc
-generated: "2024-04-11T16:25:32.845996+09:00"
+digest: sha256:5d89409a526d0b8949c3cde14f9198f6d91538946339c72cdceda79603047ab9
+generated: "2024-06-04T08:15:12.39576419Z"

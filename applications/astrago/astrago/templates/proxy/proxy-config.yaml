@@ -1,0 +1,80 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: astrago-nginx-config
+  namespace: {{ .Release.Namespace }}
+data:
+  nginx.conf: |
+    # Nginx 설정 파일
+    user nginx;
+    worker_processes auto;
+    error_log /var/log/nginx/error.log;
+    pid /var/run/nginx.pid;
+
+    events {
+        worker_connections 1024;
+    }
+
+    http {
+      include /etc/nginx/mime.types;
+      default_type application/octet-stream;
+
+      log_format main '$remote_addr - $remote_user [$time_local] "$request" '
+      '$status $body_bytes_sent "$http_referer" '
+      '"$http_user_agent" "$http_x_forwarded_for"';
+
+      access_log /var/log/nginx/access.log main;
+
+      sendfile on;
+      tcp_nopush on;
+      tcp_nodelay on;
+      keepalive_timeout 65;
+      proxy_buffer_size   128k;
+      proxy_buffers   4 256k;
+      proxy_busy_buffers_size   256k;
+      large_client_header_buffers  8 8k;
+
+      # 파일 업로드 용량 제한을 100MB로 설정
+      client_max_body_size 0;
+
+      server {
+        listen 80;
+
+        location / {
+          proxy_pass http://astrago-frontend:3000;
+        }
+
+        location /api/v1/core/ {
+          proxy_pass http://astrago-backend-core:8080/api/v1/core/;
+          proxy_connect_timeout 300;
+          proxy_send_timeout 300;
+          proxy_read_timeout 300;
+          send_timeout 300;
+        }
+
+        location /api/v1/monitor/ {
+          proxy_pass http://astrago-backend-monitor:8080/api/v1/core/monitor/;
+        }
+
+        location /api/v1/batch/ {
+          proxy_pass http://astrago-backend-batch:8080/api/v1/batch/;
+        }
+
+        location /api/v1/report/ {
+          proxy_pass http://astrago-backend-monitor:8080/api/v1/monitor/report/;
+        }
+
+        location /api/v1/predict {
+          proxy_pass http://astrago-time-prediction:8000/api/v1/predict/;
+        }
+
+        # 웹소켓 프록시 설정
+        location /ws/workload/ {
+            proxy_pass http://astrago-backend-core:8080/ws/workload/;
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection "upgrade";
+            proxy_set_header Host $host;
+        }
+      }
+    }

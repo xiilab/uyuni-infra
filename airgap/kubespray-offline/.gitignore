@@ -1,0 +1,10 @@
+.idea/
+*.iml
+*~
+
+kubespray*.tar.gz
+kubespray*/
+outputs/
+cache/
+.vagrant/
+.venv/

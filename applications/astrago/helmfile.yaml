@@ -2,6 +2,7 @@ releases:
 - name: astrago-local-volume
   namespace: astrago
   chart: local-volume
+  wait: true
   labels:
     app: astrago
   values:

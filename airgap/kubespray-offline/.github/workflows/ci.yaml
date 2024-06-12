@@ -1,0 +1,77 @@
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    branches:
+      - master
+      - develop
+      - 'feature/**'
+  pull_request:
+    branches:
+      - master
+      - develop
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  ci:
+    name: Test on node ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ ubuntu-22.04 ]
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4
+
+      - name: Cache outputs
+        uses: actions/cache@v4
+        with:
+          path: outputs/
+          key: ${{ runner.os }}-outputs
+
+      # Now use podman instead of docker
+      #- name: Install docker
+      #  run: ./install-docker.sh
+
+      - name: Download all
+        run: ./download-all.sh
+      - name: Show outputs directory size
+        run: du outputs
+
+      - name: Run ci-test.sh
+        run: ./ci-test/ci-test.sh
+
+      #- name: Upload artifacts
+      #  uses: actions/upload-artifact@v2
+      #  with:
+      #    name: outputs
+      #    path: outputs/
+
+  ci-docker:
+    name: Test in docker for ${{ matrix.os }}
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ alma8, alma9, ubuntu-20.04, ubuntu-22.04, ubuntu-24.04 ]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install docker
+        run: ./install-docker.sh
+      - name: Prepare packages
+        run: ./prepare-pkgs.sh
+      - name: Create container image
+        run: ./docker/build-image.sh ${{ matrix.os }}
+      - name: Download in container
+        run: ./docker/download-for-ci-in-docker.sh ${{ matrix.os }}
+      - name: Run ci-tests.sh in container
+        run: ./docker/ci-test-in-docker.sh ${{ matrix.os }}

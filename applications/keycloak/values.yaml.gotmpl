@@ -1,3 +1,6 @@
+global:
+  imageRegistry: "{{ .Values.offline.registry | default "" }}"
+
 proxy: edge
 production: true
 
@@ -30,13 +33,13 @@ extraVolumeMounts:
 
 initContainers:
   - name: download-astra-logintheme
-    image: jacobcarlborg/docker-alpine-wget
+    image: "{{ .Values.offline.registry | default "docker.io" }}/jacobcarlborg/docker-alpine-wget"
     command:
       - sh
     args:
       - -c
       - |
-       echo "check_certificate = off" >> ~/.wgetrc && wget https://github.com/xiilab/uyuni-login-theme/releases/download/{{ .Values.keycloak.themeVersion }}/keycloak-theme.jar -P /theme
+       echo "check_certificate = off" >> ~/.wgetrc && wget "{{ .Values.offline.httpServer | default "https://github.com/xiilab/uyuni-login-theme/releases" }}/download/{{ .Values.keycloak.themeVersion }}/keycloak-theme.jar" -P /theme
 
     volumeMounts:
       - name: theme

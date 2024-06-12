@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  nginx:
+    image: nginx:alpine
+    container_name: airgap-nginx
+    ports:
+    - "28080:80"
+    volumes:
+    - ./airgap-files/offline-files:/usr/share/nginx/html/download
+    - ./nginx.conf:/etc/nginx/nginx.conf
+
+  registry:
+    image: registry:latest
+    container_name: airgap-registry
+    ports:
+    - "25000:5000"
+    volumes:
+    - ./airgap-files/registry:/var/lib/registry

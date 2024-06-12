@@ -1,3 +1,6 @@
+global:
+  imageRegistry: "{{ .Values.offline.registry | default "" }}"
+
 alertmanager:
   config:
     global:

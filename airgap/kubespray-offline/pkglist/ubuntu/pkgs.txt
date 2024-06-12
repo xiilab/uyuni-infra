@@ -1,0 +1,46 @@
+# Do not require docker anymore
+#docker-ce
+#docker-ce-cli
+#containerd.io
+
+# python3 (non version specific)
+python3-minimal
+python3-selinux
+python-cryptography
+
+# kubespray: required_pkgs
+python3-apt
+apt-transport-https
+software-properties-common
+conntrack
+apparmor
+libseccomp2
+
+# compilers (for cffi, etc)
+gcc
+libffi-dev
+libssl-dev
+
+# kubespray: common_required_pkgs
+curl
+rsync
+socat
+unzip
+e2fsprogs
+xfsprogs
+ebtables
+bash-completion
+
+ipvsadm
+ipset
+
+# Others
+firewalld
+lvm2
+gnupg-agent
+sshpass
+build-essential
+
+# nfs
+nfs-common
+nfs-kernel-server

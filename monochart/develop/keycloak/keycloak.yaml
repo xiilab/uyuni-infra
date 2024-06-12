@@ -2731,10 +2731,10 @@ spec:
         - args:
           - -c
           - |
-            echo "check_certificate = off" >> ~/.wgetrc && wget https://github.com/xiilab/uyuni-login-theme/releases/download/v1.1.4/keycloak-theme.jar -P /theme
+            echo "check_certificate = off" >> ~/.wgetrc && wget "https://github.com/xiilab/uyuni-login-theme/releases/download/v1.1.4/keycloak-theme.jar" -P /theme
           command:
           - sh
-          image: jacobcarlborg/docker-alpine-wget
+          image: docker.io/jacobcarlborg/docker-alpine-wget
           name: download-astra-logintheme
           volumeMounts:
           - mountPath: /theme

@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: astrago-backend-batch
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: astrago-backend-batch
+spec:
+  {{- if not .Values.batch.autoscaling.enabled }}
+  replicas: {{ .Values.batch.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: astrago-backend-batch
+  template:
+    metadata:
+      {{- with .Values.batch.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        app.kubernetes.io/name: astrago-backend-batch
+    spec:
+      {{- with .Values.batch.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "common.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.batch.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.batch.securityContext | nindent 12 }}          
+          image: "{{ default .Values.batch.image.registry .Values.global.imageRegistry }}/{{ .Values.batch.image.repository }}:{{ .Values.batch.image.tag }}"          
+          env:
+          {{- range $key, $obj := .Values.batch.env }}
+            - name: {{ $obj.name }}
+              value: {{ $obj.value | quote }}
+          {{- end }}
+          volumeMounts:
+            - name: astrago-workload-log
+              mountPath: /root/astrago
+
+          ports:
+            - name: http
+              containerPort: {{ .Values.batch.service.port }}
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.batch.resources | nindent 12 }}
+      volumes:
+        - name: astrago-workload-log
+          persistentVolumeClaim:
+            claimName: workload-log-pvc
+      {{- with .Values.batch.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.batch.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.batch.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

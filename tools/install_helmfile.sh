@@ -1,3 +1,4 @@
 #!/bin/bash
 
-cp ubuntu/* /usr/local/bin/
+CURRENT_DIR=$(dirname "$(realpath "$0")")
+sudo cp $CURRENT_DIR/ubuntu/* /usr/local/bin/
