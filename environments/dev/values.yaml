@@ -35,19 +35,19 @@ astrago:
   core:
     registry: "harbor.xiilab.com:32443"
     repository: "astrago/core"
-    imageTag: "dev-f0fc"
+    imageTag: "dev-91bc"
   batch:
     registry: "harbor.xiilab.com:32443"
     repository: "astrago/batch"
-    imageTag: "dev-f0fc"
+    imageTag: "dev-91bc"
   monitor:
     registry: "harbor.xiilab.com:32443"
     repository: "astrago/monitor"
-    imageTag: "dev-f0fc"
+    imageTag: "dev-91bc"
   frontend:
     registry: "harbor.xiilab.com:32443"
     repository: "astrago/frontend"
-    imageTag: dev-bc6b
+    imageTag: dev-0e3d
 offline:
   registry:                # 192.168.56.11:35000
   httpServer:              # http://192.168.56.11
