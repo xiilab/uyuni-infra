@@ -15,10 +15,6 @@ environments:
     values:
     - environments/common/values.yaml
     - environments/astrago/values.yaml
-  offline:
-    values:
-    - environments/common/values.yaml
-    - environments/offline/values.yaml     
 
 helmDefaults:
   wait: true

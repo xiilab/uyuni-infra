@@ -2,7 +2,7 @@
 export LANG=en_US.UTF-8
 
 # Fixing the environment name
-environment_name="offline"
+environment_name="astrago"
 
 # Function to print usage
 print_usage() {
@@ -94,14 +94,12 @@ main() {
             print_usage
             ;;
         "env")
+            create_environment_directory
             # Get the external IP address from the user
             get_ip_address external_ip "Enter the connection URL (e.g. 10.61.3.12)"
 
             # Get the volume type from the user
             get_volume_type volume_type
-
-            # Get the offline registry and HTTP server from the user
-            get_offline_settings offline_registry offline_http_server
 
             if [ "$volume_type" == "nfs" ]; then
                 # Get the NFS server IP address from the user
@@ -112,7 +110,6 @@ main() {
 
                 values_file="environments/$environment_name/values.yaml"
 
-                create_environment_directory
                 # Modify externalIP
                 yq -i ".externalIP = \"$external_ip\"" "$values_file"
 
@@ -131,7 +128,6 @@ main() {
 
                 values_file="environments/$environment_name/values.yaml"
 
-                create_environment_directory
                 # Modify externalIP
                 yq -i ".externalIP = \"$external_ip\"" "$values_file"
 
@@ -140,6 +136,9 @@ main() {
                 yq -i ".local.nodeName = \"$node_name\"" "$values_file"
                 yq -i ".local.basePath = \"$local_base_path\"" "$values_file"
             fi
+
+            # Get the offline registry and HTTP server from the user
+            get_offline_settings offline_registry offline_http_server
 
             # Modify offline settings
             yq -i ".offline.registry = \"$offline_registry\"" "$values_file"
