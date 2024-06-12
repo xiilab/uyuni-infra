@@ -1176,25 +1176,6 @@ spec:
             storage: "8Gi"
         storageClassName: astrago-nfs-csi
 ---
-# Source: astrago/templates/ingress.yaml
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: keycloak-ingress
-  namespace: astrago
-spec:
-  ingressClassName: nginx
-  rules:
-  - http:
-      paths:
-      - path: /auth/
-        pathType: Prefix
-        backend:
-          service:
-            name: keycloak-service
-            port:
-              number: 80
----
 # Source: astrago/templates/metric-server.yaml
 apiVersion: apiregistration.k8s.io/v1
 kind: APIService
