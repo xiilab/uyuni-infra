@@ -804,7 +804,7 @@ spec:
         - name: astrago
           securityContext:
             {}          
-          image: "harbor.xiilab.com:32443/harbor.xiilab.com:32443/astrago/frontend:stag-8448"          
+          image: "harbor.xiilab.com:32443/harbor.xiilab.com:32443/astrago/frontend:stag-a26d"          
           env:
           - name: KEYCLOAK_HOST
             value: "http://59.10.103.94:42253"
