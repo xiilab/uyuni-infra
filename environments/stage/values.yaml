@@ -46,7 +46,7 @@ astrago:
     imageTag: "stag-ba6c"
   frontend:
     registry: "harbor.xiilab.com:32443"
-    repository: "harbor.xiilab.com:32443/astrago/frontend"
+    repository: "astrago/frontend"
     imageTag: stag-a26d
 offline:
   registry: # 192.168.56.11:35000
