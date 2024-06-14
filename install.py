@@ -55,10 +55,11 @@ def print_nodes(stdscr):
 
 
 def add_node(stdscr):
-    curses.echo()
+    stdscr.clear()
     h, w = stdscr.getmaxyx()
-    x = w // 2
-    y = h // 2
+    print_nodes(stdscr)
+    x = 0
+    y = 0
 
     stdscr.addstr(y + 0, x, "Node Name: ")
     name = stdscr.getstr(y + 0, x + 11, 20).decode('utf-8')
@@ -96,7 +97,7 @@ def add_node(stdscr):
                 break
 
     while True:
-        stdscr.addstr(y + 3, x, f"Etcd: {etcd_options[etcd_idx]}".ljust(w - x), curses.color_pair(2))
+        stdscr.addstr(y + 3, x, f"Etcd: {etcd_options[etcd_idx]}")
         key = stdscr.getch()
 
         if key == curses.KEY_RIGHT:
@@ -208,6 +209,17 @@ def create_inventory_file():
         yaml.dump(inventory, file, default_flow_style=False)
 
 
+def command(stdscr, cmd):
+    process = subprocess.Popen(cmd, stdout=subprocess.PIPE,
+                               stderr=subprocess.STDOUT,
+                               executable="/bin/bash")
+    read_and_display_output(process, stdscr)
+    process.stdout.close()
+    process.wait()
+    stdscr.addstr(stdscr.getyx()[0] + 1, 0, "Press any key to return to the menu")
+    stdscr.getch()
+
+
 def install_kubernetes_menu(stdscr):
     stdscr.clear()
     current_row = 0
@@ -236,22 +248,15 @@ def install_kubernetes_menu(stdscr):
                 password = stdscr.getstr(1, 23, 20).decode('utf-8')
 
                 # Popen으로 실시간 출력
-                process = subprocess.Popen(["bash", "kubespray/deploy-kubespray.sh", password], stdout=subprocess.PIPE,
-                                           stderr=subprocess.STDOUT,
-                                           executable="/bin/bash")
-                read_and_display_output(process, stdscr)
-                process.stdout.close()
-                process.wait()
-                stdscr.addstr(stdscr.getyx()[0] + 1, 0, "Press any key to return to the menu")
-                stdscr.getch()
+                command(stdscr, ["bash", "kubespray/deploy-kubespray.sh", password])
                 return
             elif current_row == 4:
                 return
 
 
-def install_astrago():
-    subprocess.run(["echo", "Installing Astrago..."])
+def install_astrago(stdscr):
     # 실제 설치 명령을 여기에 추가
+    command(stdscr, ["./deploy_astrago.sh", "env"])
 
 
 def install_nfs():
@@ -261,6 +266,7 @@ def install_nfs():
 
 
 def main(stdscr):
+    curses.echo()
     curses.curs_set(0)
     curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_GREEN)
     curses.init_pair(2, curses.COLOR_RED, curses.COLOR_WHITE)
@@ -279,7 +285,7 @@ def main(stdscr):
             if current_row == 0:
                 install_kubernetes_menu(stdscr)
             elif current_row == 1:
-                install_astrago()
+                install_astrago(stdscr)
             elif current_row == 2:
                 install_nfs()
             elif current_row == 3:
