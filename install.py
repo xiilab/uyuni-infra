@@ -100,16 +100,12 @@ def setting_node_menu(stdscr):
 
 
 def read_and_display_output(process, stdscr):
+    # Poll process for new output until finished
     while True:
-        output = process.stdout.readline()
-        if output:
-            stdscr.addstr(stdscr.getyx()[0], 0, output)
-            stdscr.refresh()
-        error = process.stderr.readline()
-        if error:
-            stdscr.addstr(stdscr.getyx()[0], 0, error)
-            stdscr.refresh()
-        if output == '' and error == '' and process.poll() is not None:
+        nextline = process.stdout.readline()
+        stdscr.addstr(stdscr.getyx()[0], 0, nextline)
+        stdscr.refresh()
+        if nextline == '' and process.poll() is not None:
             break
 
 
@@ -134,7 +130,9 @@ def install_kubernetes_menu(stdscr):
                 stdscr.addstr(0, 0, "Installing Kubernetes...")
                 stdscr.refresh()
                 # Popen으로 실시간 출력
-                process = subprocess.Popen(["sh", "kubespray/deploy-kubespray.sh"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+                process = subprocess.Popen(["sh", "kubespray/deploy-kubespray.sh"], stdout=subprocess.PIPE,
+                                           stderr=subprocess.STDOUT,
+                                           text=True)
                 read_and_display_output(process, stdscr)
 
                 stdscr.addstr(stdscr.getyx()[0] + 1, 0, "Press any key to return to the menu")
