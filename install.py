@@ -149,7 +149,7 @@ def setting_node_menu(stdscr):
 def read_and_display_output(process, stdscr):
     h, w = stdscr.getmaxyx()
     output_lines = []
-    while True:
+    while process.poll() is None:
         output = process.stdout.readline()
         if output:
             output_lines.append(output.decode('utf-8'))
@@ -159,8 +159,6 @@ def read_and_display_output(process, stdscr):
             for idx, line in enumerate(output_lines):
                 stdscr.addstr(idx, 0, line[:w-1])
             stdscr.refresh()
-        if output == '' and process.poll() is not None:
-            break
 
 
 def create_inventory_file():
@@ -235,13 +233,13 @@ def install_kubernetes_menu(stdscr):
                 stdscr.addstr(1, 0, "Input Node's Password: ")
                 password = stdscr.getstr(1, 23, 20).decode('utf-8')
                 curses.echo()
-                stdscr.refresh()
 
                 # Popen으로 실시간 출력
                 process = subprocess.Popen(["bash", "kubespray/deploy-kubespray.sh", password], stdout=subprocess.PIPE,
                                            stderr=subprocess.STDOUT,
                                            executable="/bin/bash")
                 read_and_display_output(process, stdscr)
+                process.stdout.close()
 
                 stdscr.addstr(stdscr.getyx()[0] + 1, 0, "Press any key to return to the menu")
                 stdscr.getch()
