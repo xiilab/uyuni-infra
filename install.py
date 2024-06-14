@@ -56,7 +56,6 @@ def print_nodes(stdscr):
 
 def add_node(stdscr):
     stdscr.clear()
-    h, w = stdscr.getmaxyx()
     print_nodes(stdscr)
     x = 0
     y = 0
@@ -254,9 +253,31 @@ def install_kubernetes_menu(stdscr):
                 return
 
 
+def make_query(stdscr, y, x, query):
+    stdscr.addstr(y + 0, x, query)
+    return stdscr.getstr(y + 0, x + len(query), 20).decode('utf-8')
+
+
 def install_astrago(stdscr):
     # 실제 설치 명령을 여기에 추가
-    command(stdscr, ["./deploy_astrago.sh", "env"])
+    stdscr.clear()
+    x = 0
+    y = 0
+
+    connected_url = make_query(stdscr, y + 0, x, "Connected Url: ")
+    nfs_server_ip = make_query(stdscr, y + 1, x, "Enter the NFS Server IP Address: ")
+    nfs_base_path = make_query(stdscr, y + 2, x, "Enter the base path of NFS: ")
+    with open('environments/prod/values.yaml') as f:
+        helmfile_env = yaml.load(f, Loader=yaml.FullLoader)
+        helmfile_env['externalIP'] = connected_url
+        helmfile_env['nfs']['enabled'] = True
+        helmfile_env['nfs']['server'] = nfs_server_ip
+        helmfile_env['nfs']['basePath'] = nfs_base_path
+
+    os.makedirs('environments/astrago', exist_ok=True)
+    with open('environments/astrago/values.yaml', 'w') as file:
+        yaml.dump(helmfile_env, file, default_flow_style=False, sort_keys=False)
+    command(stdscr, ["bash", "deploy_astrago.sh", "sync"])
 
 
 def install_nfs():
