@@ -153,10 +153,11 @@ def read_and_display_output(process, stdscr):
         output = process.stdout.readline()
         if output:
             output_lines.append(output.decode('utf-8'))
-            if len(output_lines) > h - 2:
+            if len(output_lines) > 255:
                 output_lines.pop(0)
             stdscr.clear()
-            for idx, line in enumerate(output_lines):
+            h, w = stdscr.getmaxyx()            
+            for idx, line in enumerate(output_lines[-h+3:]):
                 stdscr.addstr(idx, 0, line[:w-1])
             stdscr.refresh()
 
@@ -228,11 +229,9 @@ def install_kubernetes_menu(stdscr):
                 create_inventory_file()
                 stdscr.clear()
                 stdscr.addstr(0, 0, "Installing Kubernetes...")
-
-                curses.noecho()
                 stdscr.addstr(1, 0, "Input Node's Password: ")
                 password = stdscr.getstr(1, 23, 20).decode('utf-8')
-                curses.echo()
+                
 
                 # Popen으로 실시간 출력
                 process = subprocess.Popen(["bash", "kubespray/deploy-kubespray.sh", password], stdout=subprocess.PIPE,
@@ -240,7 +239,7 @@ def install_kubernetes_menu(stdscr):
                                            executable="/bin/bash")
                 read_and_display_output(process, stdscr)
                 process.stdout.close()
-
+                process.wait()
                 stdscr.addstr(stdscr.getyx()[0] + 1, 0, "Press any key to return to the menu")
                 stdscr.getch()
                 return
@@ -261,7 +260,7 @@ def install_nfs():
 
 def main(stdscr):
     curses.curs_set(0)
-    curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
+    curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_GREEN)
     curses.init_pair(2, curses.COLOR_RED, curses.COLOR_WHITE)
     current_row = 0
 
