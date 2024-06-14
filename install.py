@@ -30,7 +30,7 @@ def print_nodes(stdscr):
     x = 30
     y = 0
 
-    header = ["   No   ", "     Node Name     ", "   IP Address   ", "   Role   ", " Etcd "]
+    header = ["   No   ", "     Node Name     ", "   IP Address   ", "      Role      ", " Etcd "]
     line_num = len(header[0]) + len(header[1]) + len(header[2]) + len(header[3]) + len(header[4]) + len(header) + 1
     line = ''.center(line_num, '-')
 
@@ -42,7 +42,7 @@ def print_nodes(stdscr):
 
     for idx, row in enumerate(nodes):
         new_row = [
-            str(idx).center(len(header[0])),
+            str(idx + 1).center(len(header[0])),
             row[0].center(len(header[1])),
             row[1].center(len(header[2])),
             row[2].center(len(header[3])),
@@ -147,7 +147,6 @@ def setting_node_menu(stdscr):
 
 
 def read_and_display_output(process, stdscr):
-    h, w = stdscr.getmaxyx()
     output_lines = []
     while process.poll() is None:
         output = process.stdout.readline()
@@ -156,9 +155,9 @@ def read_and_display_output(process, stdscr):
             if len(output_lines) > 255:
                 output_lines.pop(0)
             stdscr.clear()
-            h, w = stdscr.getmaxyx()            
-            for idx, line in enumerate(output_lines[-h+3:]):
-                stdscr.addstr(idx, 0, line[:w-1])
+            h, w = stdscr.getmaxyx()
+            for idx, line in enumerate(output_lines[-h + 3:]):
+                stdscr.addstr(idx, 0, line[:w - 1])
             stdscr.refresh()
 
 
@@ -212,7 +211,7 @@ def create_inventory_file():
 def install_kubernetes_menu(stdscr):
     stdscr.clear()
     current_row = 0
-    menu = ["1. Setting Node", "2. Install Kubernetes", "3. Back"]
+    menu = ["1. Add Node", "2. Remove Node", "3. Edit Node", "4. Install Kubernetes", "5. Back"]
     while True:
         print_sub_menu(stdscr, current_row, menu)
         print_nodes(stdscr)
@@ -224,14 +223,17 @@ def install_kubernetes_menu(stdscr):
             current_row += 1
         elif key == curses.KEY_ENTER or key in [10, 13]:
             if current_row == 0:
-                setting_node_menu(stdscr)
+                add_node(stdscr)
             elif current_row == 1:
+                pass
+            elif current_row == 2:
+                pass
+            elif current_row == 3:
                 create_inventory_file()
                 stdscr.clear()
                 stdscr.addstr(0, 0, "Installing Kubernetes...")
                 stdscr.addstr(1, 0, "Input Node's Password: ")
                 password = stdscr.getstr(1, 23, 20).decode('utf-8')
-                
 
                 # Popen으로 실시간 출력
                 process = subprocess.Popen(["bash", "kubespray/deploy-kubespray.sh", password], stdout=subprocess.PIPE,
@@ -243,7 +245,7 @@ def install_kubernetes_menu(stdscr):
                 stdscr.addstr(stdscr.getyx()[0] + 1, 0, "Press any key to return to the menu")
                 stdscr.getch()
                 return
-            elif current_row == 2:
+            elif current_row == 4:
                 return
 
 
@@ -291,4 +293,3 @@ def main(stdscr):
 
 
 curses.wrapper(main)
-
