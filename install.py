@@ -6,7 +6,7 @@ import yaml
 
 nodes = []
 
-main_menu = ["1. Install Kubernetes", "2. Install Astrago", "3. Install NFS", "4. Cancel"]
+main_menu = ["1. Install Kubernetes", "2. Install Astrago", "3. Install NFS", "4. Close"]
 
 
 def print_menu(stdscr, selected_row_idx):
@@ -125,7 +125,7 @@ def print_sub_menu(stdscr, selected_row_idx, menu):
 
 def setting_node_menu(stdscr):
     current_row = 0
-    menu = ["1. Add Node", "2. Remove Node", "3. Edit Node", "4. Cancel"]
+    menu = ["1. Add Node", "2. Remove Node", "3. Edit Node", "4. Back"]
     while True:
         print_sub_menu(stdscr, current_row, menu)
         print_nodes(stdscr)
@@ -212,7 +212,7 @@ def create_inventory_file():
 def install_kubernetes_menu(stdscr):
     stdscr.clear()
     current_row = 0
-    menu = ["1. Setting Node", "2. Install Kubernetes", "3. Cancel"]
+    menu = ["1. Setting Node", "2. Install Kubernetes", "3. Back"]
     while True:
         print_sub_menu(stdscr, current_row, menu)
         print_nodes(stdscr)
