@@ -105,27 +105,32 @@ class NodeManager:
 class CommandRunner:
     def read_and_display_output(self, process, stdscr):
         output_lines = []
+        max_lines = stdscr.getmaxyx()[0] - 2  # Leave space for the "Press any key" message
+
         while True:
             output = process.stdout.readline()
             if output == '' and process.poll() is not None:
                 break
             if output:
-                output_lines.append(output)
-                if len(output_lines) > 255:
+                output_lines.append(output.strip())
+                if len(output_lines) > max_lines:
                     output_lines.pop(0)
-                stdscr.clear()
-                h, w = stdscr.getmaxyx()
-                for idx, line in enumerate(output_lines[-h + 3:]):
-                    stdscr.addstr(idx, 0, line[:w - 1])
+
+                stdscr.erase()  # Use erase instead of clear to avoid full screen flicker
+                for idx, line in enumerate(output_lines):
+                    stdscr.addstr(idx, 0, line)
                 stdscr.refresh()
+
+        # Display the "Press any key to return to the menu" message
+        stdscr.addstr(len(output_lines) + 1, 0, "Press any key to return to the menu")
+        stdscr.refresh()
+        stdscr.getch()
 
     def run_command(self, stdscr, cmd):
         process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
         self.read_and_display_output(process, stdscr)
         process.stdout.close()
         process.wait()
-        stdscr.addstr(stdscr.getyx()[0] + 1, 0, "Press any key to return to the menu")
-        stdscr.getch()
 
 
 class AstragoInstaller:
@@ -229,25 +234,36 @@ class AstragoInstaller:
                 selected_index += 1
             elif key == curses.KEY_UP and selected_index > 0:
                 selected_index -= 1
+            elif key == ord(' '):
+                name, ip, role, etcd = self.add_node_query(self.node_manager.nodes[selected_index])
+                self.node_manager.edit_node(selected_index, name, ip, role, etcd)
             elif key == curses.KEY_ENTER or key in [10, 13]:
                 break
-            elif key == ord(' '):
-                name, ip, role, etcd = self.add_node_query()
-                self.node_manager.edit_node(selected_index, name, ip, role, etcd)
-                selected_index -= 1
 
-    def add_node_query(self):
+    def add_node_query(self, node=None):
         self.stdscr.clear()
         x = 0
         y = 0
 
-        name = self.make_query(y + 0, x, "Node Name: ")
-        ip = self.make_query(y + 1, x, "IP Address: ")
+        if node:
+            name = node['name']
+            ip = node['ip']
+            roles = node['role'].split(',')
+            etcd = node['etcd']
+        else:
+            name = ""
+            ip = ""
+            roles = []
+            etcd = "N"
+
+        name = self.make_query(y + 0, x, f"Node Name [{name}]: ") or name
+        ip = self.make_query(y + 1, x, f"IP Address [{ip}]: ") or ip
+
         role_options = ["kube-master", "kube-node"]
         etcd_options = ["Y", "N"]
 
-        selected_roles = [False, False]
-        etcd_idx = 0
+        selected_roles = [role in roles for role in role_options]
+        etcd_idx = etcd_options.index(etcd)
         role_idx = 0
 
         while True:
@@ -268,8 +284,6 @@ class AstragoInstaller:
                 role_idx = (role_idx - 1) % len(role_options)
             elif key == ord(' '):
                 selected_roles[role_idx] = not selected_roles[role_idx]
-                if not any(selected_roles):
-                    selected_roles[role_idx] = True  # Ensure at least one is selected
             elif key in [10, 13]:  # Enter key
                 if any(selected_roles):
                     break
@@ -288,11 +302,9 @@ class AstragoInstaller:
         role = ",".join([role_options[i] for i in range(len(role_options)) if selected_roles[i]])
         return name, ip, role, etcd_options[etcd_idx]
 
-
     def add_node(self):
         name, ip, role, etcd = self.add_node_query()
         self.node_manager.add_node(name, ip, role, etcd)
-
 
     def print_sub_menu(self, selected_row_idx, menu):
         self.stdscr.clear()
