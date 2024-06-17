@@ -328,7 +328,6 @@ class AstragoInstaller:
                 elif current_row == 2:
                     self.edit_node()
                 elif current_row == 3:
-                    self.node_manager.create_inventory_file()
                     self.stdscr.clear()
                     self.stdscr.addstr(0, 0, "Installing Kubernetes...")
                     self.stdscr.addstr(1, 0, "Input Node's Password: ")
