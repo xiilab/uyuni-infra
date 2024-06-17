@@ -47,7 +47,7 @@ astrago:
   frontend:
     registry: "harbor.xiilab.com:32443"
     repository: "astrago/frontend"
-    imageTag: dev-4855
+    imageTag: dev-5422
 offline:
   registry: # 192.168.56.11:35000
   httpServer: # http://192.168.56.11
