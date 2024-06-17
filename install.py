@@ -9,8 +9,27 @@ nodes = []
 main_menu = ["1. Install Kubernetes", "2. Install Astrago", "3. Install NFS", "4. Close"]
 
 
+def print_banner(stdscr):
+    stdscr.clear()
+    title = [
+        "    ___         __                         ",
+        "   /   |  _____/ /__________ _____ _____   ",
+        "  / /| | / ___/ __/ ___/ __ `/ __ `/ __ \\ ",
+        " / ___ |(__  ) /_/ /  / /_/ / /_/ / /_/ /  ",
+        "/_/  |_/____/\__/_/   \__,_/\__, /\____/   ",
+        "                           /____/          ",
+    ]
+    h, w = stdscr.getmaxyx()
+    for idx, line in enumerate(title):
+        x = w // 2 - len(line) // 2
+        y = h // 2 - len(title) // 2 + idx - 10
+        stdscr.addstr(y, x, line, curses.color_pair(2))
+    stdscr.refresh()
+
+
 def print_menu(stdscr, selected_row_idx):
     stdscr.clear()
+    print_banner(stdscr)
     h, w = stdscr.getmaxyx()
 
     for idx, row in enumerate(main_menu):
@@ -208,7 +227,7 @@ def create_inventory_file():
         yaml.dump(inventory, file, default_flow_style=False)
 
 
-def command(stdscr, cmd):
+def run_command(stdscr, cmd):
     process = subprocess.Popen(cmd, stdout=subprocess.PIPE,
                                stderr=subprocess.STDOUT,
                                executable="/bin/bash")
@@ -247,15 +266,15 @@ def install_kubernetes_menu(stdscr):
                 password = stdscr.getstr(1, 23, 20).decode('utf-8')
 
                 # Popen으로 실시간 출력
-                command(stdscr, ["bash", "kubespray/deploy-kubespray.sh", password])
+                run_command(stdscr, ["bash", "kubespray/deploy-kubespray.sh", password])
                 return
             elif current_row == 4:
                 return
 
 
 def make_query(stdscr, y, x, query):
-    stdscr.addstr(y + 0, x, query)
-    return stdscr.getstr(y + 0, x + len(query), 20).decode('utf-8')
+    stdscr.addstr(y, x, query)
+    return stdscr.getstr(y, x + len(query), 20).decode('utf-8')
 
 
 def install_astrago(stdscr):
@@ -277,7 +296,7 @@ def install_astrago(stdscr):
     os.makedirs('environments/astrago', exist_ok=True)
     with open('environments/astrago/values.yaml', 'w') as file:
         yaml.dump(helmfile_env, file, default_flow_style=False, sort_keys=False)
-    command(stdscr, ["bash", "deploy_astrago.sh", "sync"])
+    run_command(stdscr, ["bash", "deploy_astrago.sh", "sync"])
 
 
 def install_nfs():
@@ -290,7 +309,7 @@ def main(stdscr):
     curses.echo()
     curses.curs_set(0)
     curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_GREEN)
-    curses.init_pair(2, curses.COLOR_RED, curses.COLOR_WHITE)
+    curses.init_pair(2, curses.COLOR_GREEN, curses.COLOR_BLACK)
     current_row = 0
 
     print_menu(stdscr, current_row)
