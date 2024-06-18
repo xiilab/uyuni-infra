@@ -15,10 +15,7 @@ class NodeManager:
             with open(self.inventory_file, 'r') as f:
                 inventory = yaml.safe_load(f)
                 if inventory and 'all' in inventory and 'hosts' in inventory['all']:
-
                     for node_name, node_info in inventory['all']['hosts'].items():
-                        print(inventory['all']['children']['kube-master']['hosts'].get(node_name))
-                        print(node_info)
                         role = []
                         if node_name in inventory['all']['children']['kube-master']['hosts']:
                             role.append('kube-master')
@@ -117,12 +114,16 @@ class CommandRunner:
                     output_lines.pop(0)
 
                 stdscr.erase()  # Use erase instead of clear to avoid full screen flicker
+                h, w = stdscr.getmaxyx()
                 for idx, line in enumerate(output_lines):
-                    stdscr.addstr(idx, 0, line)
+                    stdscr.addstr(idx, 0, line[:w - 1])
                 stdscr.refresh()
 
         # Display the "Press any key to return to the menu" message
-        stdscr.addstr(len(output_lines) + 1, 0, "Press any key to return to the menu")
+        if len(output_lines) < max_lines:
+            stdscr.addstr(len(output_lines) + 1, 0, "Press any key to return to the menu")
+        else:
+            stdscr.addstr(max_lines, 0, "Press any key to return to the menu")
         stdscr.refresh()
         stdscr.getch()
 
@@ -152,9 +153,12 @@ class AstragoInstaller:
         ]
         h, w = self.stdscr.getmaxyx()
         for idx, line in enumerate(title):
+            if len(line) > w:
+                line = line[:w - 1]
             x = w // 2 - len(line) // 2
             y = h // 2 - len(title) // 2 + idx - 10
-            self.stdscr.addstr(y, x, line, curses.color_pair(2))
+            if y < h and x + len(line) < w:
+                self.stdscr.addstr(y, x, line, curses.color_pair(2))
         self.stdscr.refresh()
 
     def print_menu(self, selected_row_idx):
@@ -163,54 +167,63 @@ class AstragoInstaller:
         h, w = self.stdscr.getmaxyx()
 
         for idx, row in enumerate(self.main_menu):
+            if len(row) > w:
+                row = row[:w - 1]
             x = w // 2 - len(row) // 2
             y = h // 2 - len(self.main_menu) // 2 + idx
-            if idx == selected_row_idx:
-                self.stdscr.attron(curses.color_pair(1))
-                self.stdscr.addstr(y, x, row)
-                self.stdscr.attroff(curses.color_pair(1))
-            else:
-                self.stdscr.addstr(y, x, row)
+            if y < h:
+                if idx == selected_row_idx:
+                    self.stdscr.attron(curses.color_pair(1))
+                    self.stdscr.addstr(y, x, row)
+                    self.stdscr.attroff(curses.color_pair(1))
+                else:
+                    self.stdscr.addstr(y, x, row)
 
         self.stdscr.refresh()
 
-    def print_nodes(self, selected_index=-1):
-        x = 30
-        y = 0
+    def print_nodes(self, y, x, selected_index=-1):
+        h, w = self.stdscr.getmaxyx()
 
-        header = ["   No   ", "     Node Name     ", "   IP Address   ", "          Role          ", " Etcd "]
-        line_num = len(header[0]) + len(header[1]) + len(header[2]) + len(header[3]) + len(header[4]) + len(header) + 1
-        line = ''.center(line_num, '-')
+        header = ["No", "Node Name", "IP Address", "Role", "Etcd"]
+        header_widths = [5, 20, 15, 23, 6]
+        total_width = sum(header_widths) + len(header) - 1
+        if total_width > w:
+            for i in range(len(header_widths)):
+                header_widths[i] = max(1, header_widths[i] * (w - len(header) + 1) // total_width)
 
-        self.stdscr.addstr(y, x, line)
+        line = '+'.join(['-' * header_width for header_width in header_widths])
+
+        self.stdscr.addstr(y, x, '+' + line + '+')
         y += 1
-        self.stdscr.addstr(y, x, "|" + "|".join(header) + "|")
+        self.stdscr.addstr(y, x, '|' + '|'.join(header[i].center(header_widths[i]) for i in range(len(header))) + '|')
         y += 1
-        self.stdscr.addstr(y, x, line)
+        self.stdscr.addstr(y, x, '+' + line + '+')
 
         for idx, row in enumerate(self.node_manager.nodes):
             new_row = [
-                str(idx + 1).center(len(header[0])),
-                row['name'].center(len(header[1])),
-                row['ip'].center(len(header[2])),
-                row['role'].center(len(header[3])),
-                row['etcd'].center(len(header[4]))
+                str(idx + 1).center(header_widths[0]),
+                row['name'].center(header_widths[1]),
+                row['ip'].center(header_widths[2]),
+                row['role'].center(header_widths[3]),
+                row['etcd'].center(header_widths[4])
             ]
             y += 1
-            if selected_index == idx:
-                self.stdscr.addstr(y, x, "|" + "|".join(new_row) + "|",
-                                   curses.color_pair(1))
-            else:
-                self.stdscr.addstr(y, x, "|" + "|".join(new_row) + "|")
+            if y < h - 2:
+                if selected_index == idx:
+                    self.stdscr.addstr(y, x, '|' + '|'.join(new_row) + '|', curses.color_pair(1))
+                else:
+                    self.stdscr.addstr(y, x, '|' + '|'.join(new_row) + '|')
+
         y += 1
-        self.stdscr.addstr(y, x, line)
+        if y < h:
+            self.stdscr.addstr(y, x, '+' + line + '+')
         self.stdscr.refresh()
 
     def remove_node(self):
         selected_index = 0
         while True:
             self.stdscr.clear()
-            self.print_nodes(selected_index)
+            self.print_nodes(0, 0, selected_index)
             key = self.stdscr.getch()
 
             if key == curses.KEY_DOWN and selected_index < len(self.node_manager.nodes) - 1:
@@ -221,13 +234,14 @@ class AstragoInstaller:
                 break
             elif key == ord(' '):
                 self.node_manager.remove_node(selected_index)
-                selected_index -= 1
+                if selected_index > 1:
+                    selected_index -= 1
 
     def edit_node(self):
         selected_index = 0
         while True:
             self.stdscr.clear()
-            self.print_nodes(selected_index)
+            self.print_nodes(0, 0, selected_index)
             key = self.stdscr.getch()
 
             if key == curses.KEY_DOWN and selected_index < len(self.node_manager.nodes) - 1:
@@ -308,15 +322,19 @@ class AstragoInstaller:
 
     def print_sub_menu(self, selected_row_idx, menu):
         self.stdscr.clear()
+        h, w = self.stdscr.getmaxyx()
         for idx, row in enumerate(menu):
-            first_menu_x = 0
-            first_menu_y = idx
-            if idx == selected_row_idx:
-                self.stdscr.attron(curses.color_pair(1))
-                self.stdscr.addstr(first_menu_y, first_menu_x, row)
-                self.stdscr.attroff(curses.color_pair(1))
-            else:
-                self.stdscr.addstr(first_menu_y, first_menu_x, row)
+            if len(row) > w:
+                row = row[:w - 1]
+            x = 0
+            y = idx
+            if y < h:
+                if idx == selected_row_idx:
+                    self.stdscr.attron(curses.color_pair(1))
+                    self.stdscr.addstr(y, x, row)
+                    self.stdscr.attroff(curses.color_pair(1))
+                else:
+                    self.stdscr.addstr(y, x, row)
         self.stdscr.refresh()
 
     def install_kubernetes_menu(self):
@@ -325,7 +343,7 @@ class AstragoInstaller:
         menu = ["1. Add Node", "2. Remove Node", "3. Edit Node", "4. Install Kubernetes", "5. Back"]
         while True:
             self.print_sub_menu(current_row, menu)
-            self.print_nodes()
+            self.print_nodes(y=len(menu), x=0, selected_index=-1)
             key = self.stdscr.getch()
 
             if key == curses.KEY_UP and current_row > 0:
@@ -335,9 +353,9 @@ class AstragoInstaller:
             elif key == curses.KEY_ENTER or key in [10, 13]:
                 if current_row == 0:
                     self.add_node()
-                elif current_row == 1:
+                elif current_row == 1 and len(self.node_manager.nodes) > 0:
                     self.remove_node()
-                elif current_row == 2:
+                elif current_row == 2 and len(self.node_manager.nodes) > 0:
                     self.edit_node()
                 elif current_row == 3:
                     self.stdscr.clear()
@@ -350,7 +368,9 @@ class AstragoInstaller:
                     return
 
     def make_query(self, y, x, query):
-        self.stdscr.addstr(y, x, query)
+        h, w = self.stdscr.getmaxyx()
+        if y < h and x + len(query) < w:
+            self.stdscr.addstr(y, x, query)
         return self.stdscr.getstr(y, x + len(query), 20).decode('utf-8')
 
     def install_astrago(self):
@@ -415,28 +435,3 @@ class AstragoInstaller:
 if __name__ == "__main__":
     installer = AstragoInstaller()
     curses.wrapper(installer.main)
-# if __name__ == "__main__":
-#     # Initialize NodeManager with the inventory file path
-#     manager = NodeManager('inventory.yaml')
-#
-#     # Print nodes initially loaded from the inventory file
-#     print("Nodes from inventory file:")
-#     print(manager)
-#
-#     # Add nodes (example)
-#     manager.add_node('node4', '192.168.56.14', 'kube-node', 'Y')
-#     manager.add_node('node5', '192.168.56.15', 'kube-master,kube-node', 'N')
-#
-#     # Print nodes after adding
-#     print("Nodes after adding:")
-#     print(manager)
-#
-#     # Remove a node (example)
-#     manager.remove_node(0)
-#     print("Nodes after removing:")
-#     print(manager)
-#
-#     # Edit a node (example)
-#     manager.edit_node(0, 'node1', '10.0.0.1', 'kube-master', 'Y')
-#     print("Nodes after editing:")
-#     print(manager)
