@@ -806,7 +806,7 @@ spec:
         - name: astrago
           securityContext:
             {}          
-          image: "harbor.xiilab.com:32443/astrago/frontend:dev-f172"          
+          image: "harbor.xiilab.com:32443/astrago/frontend:dev-c229"          
           env:
           - name: KEYCLOAK_HOST
             value: "http://10.61.3.12:30001"
