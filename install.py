@@ -1,6 +1,7 @@
 import curses
 import os
 import subprocess
+from datetime import datetime, date
 
 import yaml
 
@@ -102,14 +103,14 @@ class NodeManager:
 class CommandRunner:
     def read_and_display_output(self, process, stdscr):
         output_lines = []
-        max_lines = stdscr.getmaxyx()[0] - 2  # Leave space for the "Press any key" message
-
+        max_lines = stdscr.getmaxyx()[0] - 2
         while True:
             output = process.stdout.readline()
             if output == '' and process.poll() is not None:
                 break
             if output:
                 output_lines.append(output.strip())
+
                 if len(output_lines) > max_lines:
                     output_lines.pop(0)
 
@@ -127,8 +128,8 @@ class CommandRunner:
         stdscr.refresh()
         stdscr.getch()
 
-    def run_command(self, stdscr, cmd):
-        process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+    def run_command(self, stdscr, cmd, cwd=""):
+        process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, cwd=cwd)
         self.read_and_display_output(process, stdscr)
         process.stdout.close()
         process.wait()
@@ -150,6 +151,20 @@ class AstragoInstaller:
             "/_/  |_/____/\\__/_/   \\__,_/\\__, /\\____/   ",
             "                           /____/          ",
         ]
+        if datetime.today().month == 10 and datetime.today().day == 31:
+            title = [
+                " ▄▄▄        ██████ ▄▄▄█████▓ ██▀███   ▄▄▄        ▄████  ▒█████  ",
+                "▒████▄    ▒██    ▒ ▓  ██▒ ▓▒▓██ ▒ ██▒▒████▄     ██▒ ▀█▒▒██▒  ██▒",
+                "▒██  ▀█▄  ░ ▓██▄   ▒ ▓██░ ▒░▓██ ░▄█ ▒▒██  ▀█▄  ▒██░▄▄▄░▒██░  ██▒",
+                "░██▄▄▄▄██   ▒   ██▒░ ▓██▓ ░ ▒██▀▀█▄  ░██▄▄▄▄██ ░▓█  ██▓▒██   ██░",
+                " ▓█   ▓██▒▒██████▒▒  ▒██▒ ░ ░██▓ ▒██▒ ▓█   ▓██▒░▒▓███▀▒░ ████▓▒░",
+                " ▒▒   ▓▒█░▒ ▒▓▒ ▒ ░  ▒ ░░   ░ ▒▓ ░▒▓░ ▒▒   ▓▒█░ ░▒   ▒ ░ ▒░▒░▒░ ",
+                "  ▒   ▒▒ ░░ ░▒  ░ ░    ░      ░▒ ░ ▒░  ▒   ▒▒ ░  ░   ░   ░ ▒ ▒░ ",
+                "  ░   ▒   ░  ░  ░    ░        ░░   ░   ░   ▒   ░ ░   ░ ░ ░ ░ ▒  ",
+                "  ░  ░      ░              ░           ░  ░      ░     ░ ░      ",
+            ]
+
+
         h, w = self.stdscr.getmaxyx()
         for idx, line in enumerate(title):
             if len(line) > w:
@@ -165,10 +180,10 @@ class AstragoInstaller:
         self.print_banner()
         h, w = self.stdscr.getmaxyx()
 
+        x = w // 2 - len(menu[0]) // 2
         for idx, row in enumerate(menu):
             if len(row) > w:
                 row = row[:w - 1]
-            x = w // 2 - len(row) // 2
             y = h // 2 - len(menu) // 2 + idx
             if y < h:
                 if idx == selected_row_idx:
@@ -446,7 +461,13 @@ class AstragoInstaller:
         check_install = self.make_query(0, 0, "Check Cluster Table. Are you sure install Kubernetes? [y/N]: ")
         if check_install == 'Y' or check_install == 'y':
             password = self.make_query(1, 0, "Input Node's Password: ")
-            self.command_runner.run_command(self.stdscr, ["bash", "kubespray/deploy-kubespray.sh", password])
+            self.command_runner.run_command(self.stdscr, ["ansible-playbook",
+                                                          "-i", "inventory/mycluster/astrago.yaml",
+                                                          "--become", "--become-user=root",
+                                                          "cluster.yml",
+                                                          "--extra-vars",
+                                                          "ansible_user=root ansible_password={}".format(password)],
+                                            cwd='kubespray')
 
     def install_gpu_driver(self):
         self.stdscr.clear()
