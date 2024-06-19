@@ -111,8 +111,9 @@ class CommandRunner:
             if output:
                 output_lines.append(output.strip())
 
+                max_lines = stdscr.getmaxyx()[0] - 2
                 if len(output_lines) > max_lines:
-                    output_lines.pop(0)
+                    output_lines = output_lines[-max_lines:]
 
                 stdscr.erase()  # Use erase instead of clear to avoid full screen flicker
                 _, w = stdscr.getmaxyx()
@@ -128,7 +129,7 @@ class CommandRunner:
         stdscr.refresh()
         stdscr.getch()
 
-    def run_command(self, stdscr, cmd, cwd=""):
+    def run_command(self, stdscr, cmd, cwd="."):
         process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, cwd=cwd)
         self.read_and_display_output(process, stdscr)
         process.stdout.close()
@@ -163,7 +164,6 @@ class AstragoInstaller:
                 "  ░   ▒   ░  ░  ░    ░        ░░   ░   ░   ▒   ░ ░   ░ ░ ░ ░ ▒  ",
                 "  ░  ░      ░              ░           ░  ░      ░     ░ ░      ",
             ]
-
 
         h, w = self.stdscr.getmaxyx()
         for idx, line in enumerate(title):
@@ -237,7 +237,7 @@ class AstragoInstaller:
         selected_index = 0
         while True:
             self.stdscr.clear()
-            self.stdscr.addstr("Space bar is to remove node, Enter is back")
+            self.stdscr.addstr("Press the space bar to remove a node, Enter to go back")
             self.print_nodes(1, 0, selected_index)
             key = self.stdscr.getch()
 
@@ -256,7 +256,7 @@ class AstragoInstaller:
         selected_index = 0
         while True:
             self.stdscr.clear()
-            self.stdscr.addstr("Space bar is select node to edit, Enter is back")
+            self.stdscr.addstr("Press the space bar to select a node to edit, Enter to go back")
 
             self.print_nodes(1, 0, selected_index)
             key = self.stdscr.getch()
@@ -403,7 +403,7 @@ class AstragoInstaller:
         with open('environments/astrago/values.yaml', 'w') as file:
             yaml.dump(helmfile_env, file, default_flow_style=False, sort_keys=False)
 
-        self.command_runner.run_command(self.stdscr, ["bash", "deploy_astrago.sh", "sync"])
+        self.command_runner.run_command(self.stdscr, ["tools/ubuntu/helmfile", "-b", "tools/ubuntu/helm" "-e", "astrago", "sync"])
 
     def astrago_menu(self):
         self.stdscr.clear()
@@ -430,7 +430,7 @@ class AstragoInstaller:
         inventory_path = '/tmp/nfs_inventory'
         x = 0
         y = 0
-        check_install = self.make_query(0, 0, "Are you sure install NFS-server? [y/N]: ")
+        check_install = self.make_query(0, 0, "Are you sure you want to install NFS-server? [y/N]: ")
         if check_install == 'Y' or check_install == 'y':
             ip_address = self.make_query(y + 1, x, "Input Server IP Address: ")
             base_path = self.make_query(y + 2, x, "Input NFS Base Path: ")
@@ -458,7 +458,8 @@ class AstragoInstaller:
     def install_kubernetes(self):
         self.stdscr.clear()
         self.print_nodes(2, 0)
-        check_install = self.make_query(0, 0, "Check Cluster Table. Are you sure install Kubernetes? [y/N]: ")
+        check_install = self.make_query(0, 0,
+                                        "Check the Cluster Table. Are you sure you want to install Kubernetes? [y/N]: ")
         if check_install == 'Y' or check_install == 'y':
             password = self.make_query(1, 0, "Input Node's Password: ")
             self.command_runner.run_command(self.stdscr, ["ansible-playbook",
@@ -472,7 +473,9 @@ class AstragoInstaller:
     def install_gpu_driver(self):
         self.stdscr.clear()
         self.print_nodes(2, 0)
-        check_install = self.make_query(0, 0, "Check Cluster Table. Are you sure install Gpu Driver? [y/N]: ")
+        check_install = self.make_query(0, 0,
+                                        "Want to install the GPU Driver? "
+                                        "The system will reboot after installation [y/N]: ")
         if check_install == 'Y' or check_install == 'y':
             password = self.make_query(1, 0, "Input Node's Password: ")
             inventory = {
