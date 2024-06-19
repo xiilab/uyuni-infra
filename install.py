@@ -438,7 +438,7 @@ class AstragoInstaller:
                 yaml.dump(inventory, f, default_flow_style=False)
             self.command_runner.run_command(self.stdscr,
                                             ["ansible-playbook", "-i", inventory_path, "ansible/install-nfs.yml",
-                                             "--extra-vars ansible_password={}".format(password)])
+                                             "--extra-vars", "ansible_password={}".format(password)])
 
     def install_kubernetes(self):
         self.stdscr.clear()
@@ -476,7 +476,7 @@ class AstragoInstaller:
             self.command_runner.run_command(self.stdscr,
                                             ["ansible-playbook", "-u", "root", "-i", "/tmp/gpu_inventory",
                                              "ansible/install-gpu-driver.yml",
-                                             "--extra-vars ansible_password={}".format(password)])
+                                             "--extra-vars", "ansible_password={}".format(password)])
 
     def install_gpu_driver_menu(self):
 
