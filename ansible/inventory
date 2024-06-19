@@ -1,0 +1,10 @@
+all:
+  hosts:
+    nfs-server:
+      access_ip: ''
+      ansible_host: ''
+      ansible_user: root
+      ip: ''
+  vars:
+    nfs_exports:
+    - ' *(rw,sync,no_subtree_check,no_root_squash)'

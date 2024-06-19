@@ -1,0 +1,22 @@
+---
+- name: Update package list on different OS families
+  hosts: all
+  become: yes
+  tasks:
+    - name: Update package list on Debian family systems
+      apt:
+        update_cache: yes
+      when: ansible_os_family == 'Debian'
+
+    - name: Update package list on RedHat family systems
+      yum:
+        update_cache: yes
+      when: ansible_os_family == 'RedHat'
+
+- name: Install NVIDIA drivers
+  hosts: all
+  become: yes
+  tasks:
+    - name: Install NVIDIA driver
+      include_role:
+        name: nvidia.nvidia_driver

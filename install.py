@@ -114,7 +114,7 @@ class CommandRunner:
                     output_lines.pop(0)
 
                 stdscr.erase()  # Use erase instead of clear to avoid full screen flicker
-                h, w = stdscr.getmaxyx()
+                _, w = stdscr.getmaxyx()
                 for idx, line in enumerate(output_lines):
                     stdscr.addstr(idx, 0, line[:w - 1])
                 stdscr.refresh()
@@ -138,7 +138,6 @@ class AstragoInstaller:
     def __init__(self):
         self.node_manager = NodeManager('kubespray/inventory/mycluster/astrago.yaml')
         self.command_runner = CommandRunner()
-        self.main_menu = ["1. Install Kubernetes", "2. Install Astrago", "3. Install NFS", "4. Close"]
         self.stdscr = None
 
     def print_banner(self):
@@ -161,16 +160,16 @@ class AstragoInstaller:
                 self.stdscr.addstr(y, x, line, curses.color_pair(2))
         self.stdscr.refresh()
 
-    def print_menu(self, selected_row_idx):
+    def print_menu(self, menu, selected_row_idx):
         self.stdscr.clear()
         self.print_banner()
         h, w = self.stdscr.getmaxyx()
 
-        for idx, row in enumerate(self.main_menu):
+        for idx, row in enumerate(menu):
             if len(row) > w:
                 row = row[:w - 1]
             x = w // 2 - len(row) // 2
-            y = h // 2 - len(self.main_menu) // 2 + idx
+            y = h // 2 - len(menu) // 2 + idx
             if y < h:
                 if idx == selected_row_idx:
                     self.stdscr.attron(curses.color_pair(1))
@@ -284,10 +283,10 @@ class AstragoInstaller:
             self.stdscr.addstr(y + 2, x, "Role: ")
             for idx, option in enumerate(role_options):
                 if selected_roles[idx]:
-                    self.stdscr.addstr(y + 2, x + 7 + idx * 10, "[X] " + option,
+                    self.stdscr.addstr(y + 2, x + 7 + idx * 20, "[X] " + option,
                                        curses.color_pair(2) if idx == role_idx else 0)
                 else:
-                    self.stdscr.addstr(y + 2, x + 7 + idx * 10, "[ ] " + option,
+                    self.stdscr.addstr(y + 2, x + 7 + idx * 20, "[ ] " + option,
                                        curses.color_pair(2) if idx == role_idx else 0)
 
             key = self.stdscr.getch()
@@ -337,10 +336,10 @@ class AstragoInstaller:
                     self.stdscr.addstr(y, x, row)
         self.stdscr.refresh()
 
-    def install_kubernetes_menu(self):
+    def setting_node_menu(self):
         self.stdscr.clear()
         current_row = 0
-        menu = ["1. Add Node", "2. Remove Node", "3. Edit Node", "4. Install Kubernetes", "5. Back"]
+        menu = ["1. Add Node", "2. Remove Node", "3. Edit Node", "4. Back"]
         while True:
             self.print_sub_menu(current_row, menu)
             self.print_nodes(y=len(menu), x=0, selected_index=-1)
@@ -358,13 +357,6 @@ class AstragoInstaller:
                 elif current_row == 2 and len(self.node_manager.nodes) > 0:
                     self.edit_node()
                 elif current_row == 3:
-                    self.stdscr.clear()
-                    self.stdscr.addstr(0, 0, "Installing Kubernetes...")
-                    self.stdscr.addstr(1, 0, "Input Node's Password: ")
-                    password = self.stdscr.getstr(1, 23, 20).decode('utf-8')
-                    self.command_runner.run_command(self.stdscr, ["bash", "kubespray/deploy-kubespray.sh", password])
-                    return
-                elif current_row == 4:
                     return
 
     def make_query(self, y, x, query):
@@ -395,41 +387,150 @@ class AstragoInstaller:
 
         self.command_runner.run_command(self.stdscr, ["bash", "deploy_astrago.sh", "sync"])
 
+    def astrago_menu(self):
+        self.stdscr.clear()
+        current_row = 0
+        menu = ["1. Install Astrago", "2. Uninstall Astrago", "3. Back"]
+        while True:
+            self.print_sub_menu(current_row, menu)
+            key = self.stdscr.getch()
+
+            if key == curses.KEY_UP and current_row > 0:
+                current_row -= 1
+            elif key == curses.KEY_DOWN and current_row < len(menu) - 1:
+                current_row += 1
+            elif key == curses.KEY_ENTER or key in [10, 13]:
+                if current_row == 0:
+                    self.install_astrago()
+                elif current_row == 1:
+                    self.command_runner.run_command(self.stdscr, ["bash", "deploy_astrago.sh", "destroy"])
+                elif current_row == 2:
+                    break
+
     def install_nfs(self):
-        self.command_runner.run_command(self.stdscr, ["ls", "-al"])
+        self.stdscr.clear()
+        x = 0
+        y = 0
+
+        ip_address = self.make_query(y + 0, x, "Input Server IP Address: ")
+        base_path = self.make_query(y + 1, x, "Input NFS Base Path: ")
+        inventory = {
+            'all': {
+                'vars': {},
+                'hosts': {}
+            }
+        }
+        inventory['all']['vars']['nfs_exports'] = ["{} *(rw,sync,no_subtree_check,no_root_squash)".format(base_path)]
+        inventory['all']['hosts']['nfs-server'] = {
+            'access_ip': ip_address,
+            'ansible_host': ip_address,
+            'ip': ip_address,
+            'ansible_user': 'root'
+        }
+        with open('ansible/inventory', 'w') as f:
+            yaml.dump(inventory, f, default_flow_style=False)
+        self.command_runner.run_command(self.stdscr,
+                                        ["ansible-playbook", "-i", "ansible/inventory", "ansible/install-nfs.yml"])
+
+    def install_kubernetes(self):
+        self.stdscr.clear()
+        self.print_nodes(2, 0)
+        check_install = self.make_query(0, 0, "Check Cluster Table. Are you sure install Kubernetes? [Y/n]: ")
+        if check_install == "" or check_install == 'Y' or check_install == 'y':
+            password = self.make_query(1, 0, "Input Node's Password: ")
+            self.command_runner.run_command(self.stdscr, ["bash", "kubespray/deploy-kubespray.sh", password])
+
+    def install_gpu_driver(self):
+        self.stdscr.clear()
+        self.print_nodes(2, 0)
+        check_install = self.make_query(0, 0, "Check Cluster Table. Are you sure install Gpu Driver? [Y/n]: ")
+        if check_install == "" or check_install == 'Y' or check_install == 'y':
+            password = self.make_query(1, 0, "Input Node's Password: ")
+            inventory = {
+                'all': {
+                    'vars': {
+                        "nvidia_driver_branch": "535",
+                        "nvidia_driver_package_state": "present"
+                    },
+                    'hosts': {}
+                }
+            }
+            for node in self.node_manager.list_nodes():
+                inventory['all']['hosts'][node['name']] = {
+                    'ansible_host': node['ip'],
+                    'ip': node['ip'],
+                    'access_ip': node['ip']  # Assuming access_ip is the same as ip for simplicity
+                }
+
+            with open('/tmp/gpu_inventory', 'w') as f:
+                yaml.dump(inventory, f, default_flow_style=False)
+
+            self.command_runner.run_command(self.stdscr,
+                                            ["ansible-playbook", "-u", "root", "-i", "/tmp/gpu_inventory",
+                                             "ansible/install-gpu-driver.yml", "--extra-vars={}".format(password)])
+
+    def install_gpu_driver_menu(self):
+
+        gpu_driver_menu = ["1. 470", "2. 535", "3. back"]
+        current_row = 0
+        while True:
+            self.print_sub_menu(current_row, gpu_driver_menu)
+            key = self.stdscr.getch()
+
+            if key == curses.KEY_UP and current_row > 0:
+                current_row -= 1
+            elif key == curses.KEY_DOWN and current_row < len(gpu_driver_menu) - 1:
+                current_row += 1
+            elif key == curses.KEY_ENTER or key in [10, 13]:
+                if current_row == 0:
+                    self.install_gpu_driver("470")
+                elif current_row == 1:
+                    self.install_gpu_driver("535")
+                elif current_row == 2:
+                    break
 
     def main(self, stdscr):
         self.stdscr = stdscr
+        main_menu = ["1. Setting Nodes",
+                     "2. Install Kubernetes",
+                     "3. Install Astrago",
+                     "4. Install NFS",
+                     "5. Install GPU Driver",
+                     "6. Close"]
         curses.echo()
         curses.curs_set(0)
         curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_GREEN)
         curses.init_pair(2, curses.COLOR_GREEN, curses.COLOR_BLACK)
         current_row = 0
 
-        self.print_menu(current_row)
+        self.print_menu(main_menu, current_row)
 
         while True:
             key = self.stdscr.getch()
 
             if key == curses.KEY_UP and current_row > 0:
                 current_row -= 1
-            elif key == curses.KEY_DOWN and current_row < len(self.main_menu) - 1:
+            elif key == curses.KEY_DOWN and current_row < len(main_menu) - 1:
                 current_row += 1
             elif key == curses.KEY_ENTER or key in [10, 13]:
                 if current_row == 0:
-                    self.install_kubernetes_menu()
+                    self.setting_node_menu()
                 elif current_row == 1:
-                    self.install_astrago()
+                    self.install_kubernetes()
                 elif current_row == 2:
-                    self.install_nfs()
+                    self.install_astrago()
                 elif current_row == 3:
+                    self.install_nfs()
+                elif current_row == 4:
+                    self.install_gpu_driver()
+                elif current_row == 5:
                     break  # Exit the program
 
                 self.stdscr.clear()
-                self.print_menu(current_row)
+                self.print_menu(main_menu, current_row)
                 continue
 
-            self.print_menu(current_row)
+            self.print_menu(main_menu, current_row)
 
 
 if __name__ == "__main__":

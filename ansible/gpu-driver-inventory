@@ -1,0 +1,16 @@
+all:
+  hosts:
+    node1:
+      access_ip: 10.61.3.8
+      ansible_host: 10.61.3.8
+      ip: 10.61.3.8
+      ansible_user: root
+    node2:
+      access_ip: 10.61.3.19
+      ansible_host: 10.61.3.19
+      ip: 10.61.3.19
+      ansible_user: root 
+  vars:
+     nvidia_driver_branch: "535"
+#     nvidia_driver_package_state: "present"
+     nvidia_driver_package_state: "absent"
