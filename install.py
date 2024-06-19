@@ -222,7 +222,8 @@ class AstragoInstaller:
         selected_index = 0
         while True:
             self.stdscr.clear()
-            self.print_nodes(0, 0, selected_index)
+            self.stdscr.addstr("Space bar is to remove node, Enter is back")
+            self.print_nodes(1, 0, selected_index)
             key = self.stdscr.getch()
 
             if key == curses.KEY_DOWN and selected_index < len(self.node_manager.nodes) - 1:
@@ -240,7 +241,9 @@ class AstragoInstaller:
         selected_index = 0
         while True:
             self.stdscr.clear()
-            self.print_nodes(0, 0, selected_index)
+            self.stdscr.addstr("Space bar is select node to edit, Enter is back")
+
+            self.print_nodes(1, 0, selected_index)
             key = self.stdscr.getch()
 
             if key == curses.KEY_DOWN and selected_index < len(self.node_manager.nodes) - 1:
@@ -269,7 +272,7 @@ class AstragoInstaller:
             roles = []
             etcd = "N"
 
-        name = self.make_query(y + 0, x, f"Node Name [{name}]: ") or name
+        name = self.make_query(y + 0, x, f"Name [{name}]: ") or name
         ip = self.make_query(y + 1, x, f"IP Address [{ip}]: ") or ip
 
         role_options = ["kube-master", "kube-node"]
@@ -409,42 +412,47 @@ class AstragoInstaller:
 
     def install_nfs(self):
         self.stdscr.clear()
+        inventory_path = '/tmp/nfs_inventory'
         x = 0
         y = 0
-
-        ip_address = self.make_query(y + 0, x, "Input Server IP Address: ")
-        base_path = self.make_query(y + 1, x, "Input NFS Base Path: ")
-        inventory = {
-            'all': {
-                'vars': {},
-                'hosts': {}
+        check_install = self.make_query(0, 0, "Are you sure install NFS-server? [y/N]: ")
+        if check_install == 'Y' or check_install == 'y':
+            ip_address = self.make_query(y + 1, x, "Input Server IP Address: ")
+            base_path = self.make_query(y + 2, x, "Input NFS Base Path: ")
+            password = self.make_query(y + 3, x, "Input Node's Password: ")
+            inventory = {
+                'all': {
+                    'vars': {},
+                    'hosts': {}
+                }
             }
-        }
-        inventory['all']['vars']['nfs_exports'] = ["{} *(rw,sync,no_subtree_check,no_root_squash)".format(base_path)]
-        inventory['all']['hosts']['nfs-server'] = {
-            'access_ip': ip_address,
-            'ansible_host': ip_address,
-            'ip': ip_address,
-            'ansible_user': 'root'
-        }
-        with open('ansible/inventory', 'w') as f:
-            yaml.dump(inventory, f, default_flow_style=False)
-        self.command_runner.run_command(self.stdscr,
-                                        ["ansible-playbook", "-i", "ansible/inventory", "ansible/install-nfs.yml"])
+            inventory['all']['vars']['nfs_exports'] = [
+                "{} *(rw,sync,no_subtree_check,no_root_squash)".format(base_path)]
+            inventory['all']['hosts']['nfs-server'] = {
+                'access_ip': ip_address,
+                'ansible_host': ip_address,
+                'ip': ip_address,
+                'ansible_user': 'root'
+            }
+            with open(inventory_path, 'w') as f:
+                yaml.dump(inventory, f, default_flow_style=False)
+            self.command_runner.run_command(self.stdscr,
+                                            ["ansible-playbook", "-i", inventory_path, "ansible/install-nfs.yml",
+                                             "--extra-vars={}".format(password)])
 
     def install_kubernetes(self):
         self.stdscr.clear()
         self.print_nodes(2, 0)
-        check_install = self.make_query(0, 0, "Check Cluster Table. Are you sure install Kubernetes? [Y/n]: ")
-        if check_install == "" or check_install == 'Y' or check_install == 'y':
+        check_install = self.make_query(0, 0, "Check Cluster Table. Are you sure install Kubernetes? [y/N]: ")
+        if check_install == 'Y' or check_install == 'y':
             password = self.make_query(1, 0, "Input Node's Password: ")
             self.command_runner.run_command(self.stdscr, ["bash", "kubespray/deploy-kubespray.sh", password])
 
     def install_gpu_driver(self):
         self.stdscr.clear()
         self.print_nodes(2, 0)
-        check_install = self.make_query(0, 0, "Check Cluster Table. Are you sure install Gpu Driver? [Y/n]: ")
-        if check_install == "" or check_install == 'Y' or check_install == 'y':
+        check_install = self.make_query(0, 0, "Check Cluster Table. Are you sure install Gpu Driver? [y/N]: ")
+        if check_install == 'Y' or check_install == 'y':
             password = self.make_query(1, 0, "Input Node's Password: ")
             inventory = {
                 'all': {

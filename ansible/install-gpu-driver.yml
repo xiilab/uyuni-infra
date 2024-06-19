@@ -13,10 +13,22 @@
         update_cache: yes
       when: ansible_os_family == 'RedHat'
 
-- name: Install NVIDIA drivers
+- name: Check and install NVIDIA drivers if necessary
   hosts: all
   become: yes
   tasks:
+    - name: Check if the server has an NVIDIA GPU
+      shell: lspci | grep -i nvidia
+      register: gpu_check
+      ignore_errors: yes
+
+    - name: Check if NVIDIA driver is installed
+      command: nvidia-smi
+      register: nvidia_smi
+      ignore_errors: yes
+      when: gpu_check.rc == 0
+
     - name: Install NVIDIA driver
       include_role:
         name: nvidia.nvidia_driver
+      when: gpu_check.rc == 0 and nvidia_smi.rc != 0
