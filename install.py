@@ -141,7 +141,7 @@ class CommandRunner:
             yaml.dump(helmfile_env, file, default_flow_style=False, sort_keys=False)
         os.putenv('KUBECONFIG', Path.joinpath(Path.cwd(), "kubespray/inventory/mycluster/artifacts/admin.conf"))
         return self._run_command([Path.joinpath(Path.cwd(), "tools/ubuntu/helmfile"), "-b",
-                           Path.joinpath(Path.cwd(), "tools/ubuntu/helm"), "-e", "astrago", "sync"])
+                                  Path.joinpath(Path.cwd(), "tools/ubuntu/helm"), "-e", "astrago", "sync"])
 
     def _save_nfs_inventory(self):
         inventory = {
@@ -164,7 +164,7 @@ class CommandRunner:
     def run_install_nfs(self, password):
         self._save_nfs_inventory()
         return self._run_command(["ansible-playbook", "-i", self.nfs_inventory_path, "ansible/install-nfs.yml",
-                                         "--extra-vars", "ansible_password={}".format(password)])
+                                  "--extra-vars", "ansible_password={}".format(password)])
 
     def _save_gpudriver_inventory(self):
         inventory = {
@@ -276,61 +276,31 @@ class AstragoInstaller:
                     self.stdscr.addstr(y, x, row[:w])
         self.stdscr.refresh()
 
-    def print_nfs_server_table(self, y, x):
+    def print_table(self, y, x, header, data, selected_index=-1):
         h, w = self.stdscr.getmaxyx()
-        header = ["IP Address", "Base Path"]
-        header_widths = [15, 53]
-        total_width = sum(header_widths) + len(header) - 1
+        header_widths = [len(col) for col in header]
+        data_widths = [[len(str(value)) for value in row] for row in data]
+
+        if data_widths:
+            max_widths = [max(header_widths[i], *[row[i] for row in data_widths]) for i in range(len(header))]
+        else:
+            max_widths = header_widths[:]
+
+        total_width = sum(max_widths) + len(header) - 1
         if total_width > w:
-            for i in range(len(header_widths)):
-                header_widths[i] = max(1, header_widths[i] * (w - len(header) + 1) // total_width)
-        line = '+'.join(['-' * header_width for header_width in header_widths])
+            for i in range(len(max_widths)):
+                max_widths[i] = max(1, max_widths[i] * (w - len(header) + 1) // total_width)
+
+        line = '+'.join(['-' * width for width in max_widths])
 
         self.stdscr.addstr(y, x, '+' + line + '+')
         y += 1
-        self.stdscr.addstr(y, x, '|' + '|'.join(header[i].center(header_widths[i]) for i in range(len(header))) + '|')
+        self.stdscr.addstr(y, x, '|' + '|'.join(header[i].center(max_widths[i]) for i in range(len(header))) + '|')
         y += 1
         self.stdscr.addstr(y, x, '+' + line + '+')
 
-        nfs_server_row = [
-            self.data_manager.nfs_server['ip'].center(header_widths[0]),
-            self.data_manager.nfs_server['path'].center(header_widths[1])
-        ]
-        y += 1
-        if y < h - 2:
-            self.stdscr.addstr(y, x, '|' + '|'.join(nfs_server_row) + '|')
-
-        y += 1
-        if y < h:
-            self.stdscr.addstr(y, x, '+' + line + '+')
-        self.stdscr.refresh()
-
-    def print_nodes_table(self, y, x, selected_index=-1):
-        h, w = self.stdscr.getmaxyx()
-
-        header = ["No", "Node Name", "IP Address", "Role", "Etcd"]
-        header_widths = [5, 15, 15, 27, 6]
-        total_width = sum(header_widths) + len(header) - 1
-        if total_width > w:
-            for i in range(len(header_widths)):
-                header_widths[i] = max(1, header_widths[i] * (w - len(header) + 1) // total_width)
-
-        line = '+'.join(['-' * header_width for header_width in header_widths])
-
-        self.stdscr.addstr(y, x, '+' + line + '+')
-        y += 1
-        self.stdscr.addstr(y, x, '|' + '|'.join(header[i].center(header_widths[i]) for i in range(len(header))) + '|')
-        y += 1
-        self.stdscr.addstr(y, x, '+' + line + '+')
-
-        for idx, row in enumerate(self.data_manager.nodes):
-            new_row = [
-                str(idx + 1).center(header_widths[0]),
-                row['name'].center(header_widths[1]),
-                row['ip'].center(header_widths[2]),
-                row['role'].center(header_widths[3]),
-                row['etcd'].center(header_widths[4])
-            ]
+        for idx, row in enumerate(data):
+            new_row = [str(col).center(max_widths[i]) for i, col in enumerate(row)]
             y += 1
             if y < h - 2:
                 if selected_index == idx:
@@ -342,6 +312,27 @@ class AstragoInstaller:
         if y < h:
             self.stdscr.addstr(y, x, '+' + line + '+')
         self.stdscr.refresh()
+
+    def print_nfs_server_table(self, y, x):
+        header = ["IP Address", "Base Path"]
+        data = [(
+            self.data_manager.nfs_server['ip'],
+            self.data_manager.nfs_server['path']
+        )]
+        self.print_table(y, x, header, data)
+
+    def print_nodes_table(self, y, x, selected_index=-1):
+        header = ["No", "Node Name", "IP Address", "Role", "Etcd"]
+        data = []
+        for idx, row in enumerate(self.data_manager.nodes):
+            data.append((
+                str(idx + 1),
+                row['name'],
+                row['ip'],
+                row['role'],
+                row['etcd']
+            ))
+        self.print_table(y, x, header, data, selected_index)
 
     def remove_node(self):
         selected_index = 0
@@ -476,7 +467,7 @@ class AstragoInstaller:
         nfs_base_path = self.data_manager.nfs_server['path']
 
         if not nfs_server_ip or not nfs_base_path:
-            self.stdscr.addstr(0, 0, "you must setting nfs server")
+            self.stdscr.addstr(0, 0, "You have to set the NFS server")
             self.stdscr.addstr(1, 0, "Press any key to return to the menu")
             self.stdscr.getch()
             return None
@@ -502,7 +493,7 @@ class AstragoInstaller:
         self.stdscr.clear()
         self.print_nodes_table(2, 0)
         check_install = self.make_query(0, 0,
-                                        "Want to install the GPU Driver? "
+                                        "Install the GPU Driver? "
                                         "The system will reboot after installation [y/N]: ")
         if check_install == 'Y' or check_install == 'y':
             password = self.make_query(1, 0, "Input Node's Password: ")
@@ -513,7 +504,7 @@ class AstragoInstaller:
         self.print_nodes_table(2, 0)
 
         check_install = self.make_query(0, 0,
-                                        "Check the Cluster Table. Are you sure you want to install Kubernetes? [y/N]: ")
+                                        "Check the Node Table. Are you sure you want to install Kubernetes? [y/N]: ")
         if check_install == 'Y' or check_install == 'y':
             password = self.make_query(1, 0, "Input Node's Password: ")
             self.read_and_display_output(self.command_runner.run_kubespray_install(password))
@@ -524,7 +515,7 @@ class AstragoInstaller:
         menu = ["1. Add Node", "2. Remove Node", "3. Edit Node", "4. Back"]
         while True:
             self.print_sub_menu(current_row, menu)
-            self.print_nodes_table(y=len(menu), x=0, selected_index=-1)
+            self.print_nodes_table(len(menu), 0, selected_index=-1)
             key = self.stdscr.getch()
 
             if key == curses.KEY_UP and current_row > 0:
@@ -575,50 +566,33 @@ class AstragoInstaller:
                     break
 
     def install_astrago_menu(self):
-        current_row = 0
-        menu = ["1. Setting NFS Server",
-                "2. Install Astrago",
-                "3. Back"]
-        self.print_menu(menu, current_row)
-        while True:
-            key = self.stdscr.getch()
-
-            if key == curses.KEY_UP and current_row > 0:
-                current_row -= 1
-            elif key == curses.KEY_DOWN and current_row < len(menu) - 1:
-                current_row += 1
-            elif key == curses.KEY_ENTER or key in [10, 13]:
-                if current_row == 0:
-                    self.setting_nfs_menu()
-                elif current_row == 1:
-                    self.install_astrago()
-                elif current_row == 2:
-                    break
-
-            self.print_menu(menu, current_row)
+        menu = ["1. Set NFS Server", "2. Install Astrago", "3. Back"]
+        self.navigate_menu(menu, {
+            0: self.setting_nfs_menu,
+            1: self.install_astrago
+        })
 
     def install_kubernetes_menu(self):
+        menu = ["1. Set Nodes", "2. Install Kubernetes", "3. Install GPU Driver (Optional)", "4. Back"]
+        self.navigate_menu(menu, {
+            0: self.setting_node_menu,
+            1: self.install_kubernetes,
+            2: self.install_gpu_driver
+        })
+
+    def navigate_menu(self, menu, handlers):
         current_row = 0
-        menu = ["1. Setting Nodes",
-                "2. Install Kubernetes",
-                "3. Install GPU Driver(Optional)",
-                "4. Back"]
         self.print_menu(menu, current_row)
         while True:
             key = self.stdscr.getch()
-
             if key == curses.KEY_UP and current_row > 0:
                 current_row -= 1
             elif key == curses.KEY_DOWN and current_row < len(menu) - 1:
                 current_row += 1
             elif key == curses.KEY_ENTER or key in [10, 13]:
-                if current_row == 0:
-                    self.setting_node_menu()
-                elif current_row == 1:
-                    self.install_kubernetes()
-                elif current_row == 2:
-                    self.install_gpu_driver()
-                elif current_row == 3:
+                if current_row in handlers:
+                    handlers[current_row]()
+                if current_row == len(menu) - 1:
                     break
             self.print_menu(menu, current_row)
 
@@ -631,29 +605,10 @@ class AstragoInstaller:
         curses.curs_set(0)
         curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_GREEN)
         curses.init_pair(2, curses.COLOR_GREEN, curses.COLOR_BLACK)
-        current_row = 0
-
-        self.print_menu(main_menu, current_row)
-
-        while True:
-            key = self.stdscr.getch()
-
-            if key == curses.KEY_UP and current_row > 0:
-                current_row -= 1
-            elif key == curses.KEY_DOWN and current_row < len(main_menu) - 1:
-                current_row += 1
-            elif key == curses.KEY_ENTER or key in [10, 13]:
-                if current_row == 0:
-                    self.install_kubernetes_menu()
-                elif current_row == 1:
-                    self.install_astrago_menu()
-                elif current_row == 2:
-                    break
-                self.stdscr.clear()
-                self.print_menu(main_menu, current_row)
-                continue
-
-            self.print_menu(main_menu, current_row)
+        self.navigate_menu(main_menu, {
+            0: self.install_kubernetes_menu,
+            1: self.install_astrago_menu
+        })
 
 
 if __name__ == "__main__":
