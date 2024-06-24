@@ -6,6 +6,8 @@ from pathlib import Path
 
 import yaml
 
+ESCAPE_CODE = -1
+
 
 class DataManager:
     def __init__(self):
@@ -161,10 +163,13 @@ class CommandRunner:
         with open(self.nfs_inventory_path, 'w') as f:
             yaml.dump(inventory, f, default_flow_style=False)
 
-    def run_install_nfs(self, password):
+    def run_install_nfs(self, username, password):
         self._save_nfs_inventory()
-        return self._run_command(["ansible-playbook", "-i", self.nfs_inventory_path, "ansible/install-nfs.yml",
-                                  "--extra-vars", "ansible_password={}".format(password)])
+        return self._run_command(["ansible-playbook", "-i", self.nfs_inventory_path,
+                                  "--become", "--become-user=root",
+                                  "ansible/install-nfs.yml",
+                                  "--extra-vars",
+                                  "ansible_user={} ansible_password={}".format(username, password)])
 
     def _save_gpudriver_inventory(self):
         inventory = {
@@ -186,12 +191,14 @@ class CommandRunner:
         with open(self.gpu_inventory_path, 'w') as f:
             yaml.dump(inventory, f, default_flow_style=False)
 
-    def run_install_gpudriver(self, password):
+    def run_install_gpudriver(self, username, password):
         self._save_gpudriver_inventory()
         return self._run_command(
-            ["ansible-playbook", "-u", "root", "-i", self.gpu_inventory_path,
+            ["ansible-playbook", "-i", self.gpu_inventory_path,
+             "--become", "--become-user=root",
              "ansible/install-gpu-driver.yml",
-             "--extra-vars", "ansible_password={}".format(password)])
+             "--extra-vars",
+             "ansible_user={} ansible_password={}".format(username, password)])
 
 
 class AstragoInstaller:
@@ -338,7 +345,7 @@ class AstragoInstaller:
         selected_index = 0
         while True:
             self.stdscr.clear()
-            self.stdscr.addstr("Press the space bar to remove a node, Enter to go back")
+            self.stdscr.addstr("Press the enter to remove a node, Backspace key to go back")
             self.print_nodes_table(1, 0, selected_index)
             key = self.stdscr.getch()
 
@@ -347,25 +354,52 @@ class AstragoInstaller:
             elif key == curses.KEY_UP and selected_index > 0:
                 selected_index -= 1
             elif key == curses.KEY_ENTER or key in [10, 13]:
-                break
-            elif key == ord(' '):
                 self.data_manager.remove_node(selected_index)
                 if selected_index >= 1:
                     selected_index -= 1
+            elif key == curses.KEY_BACKSPACE or key == 27:
+                break
+
+    def input_node(self, node=None):
+        if node is None:
+            node = {
+                'name': '',
+                'ip': '',
+                'role': '',
+                'etcd': 'Y'
+            }
+        self.stdscr.clear()
+        name = self.make_query(0, 0, f"Name[{node['name']}]: ") or node['name']
+        if name == ESCAPE_CODE:
+            return None
+        ip = self.make_query(1, 0, f"IP Address[{node['ip']}]: ") or node['ip']
+        if ip == ESCAPE_CODE:
+            return None
+        role = self.select_checkbox(2, 0, f"Role: ", ["kube-master", "kube-node"], node['role'].split(',')) or node[
+            'role']
+        if role == ESCAPE_CODE:
+            return None
+        etcd = self.select_YN(3, 0, f"Etcd: ", node['etcd']) or node['etcd']
+        if etcd == ESCAPE_CODE:
+            return None
+        return {
+            'name': name,
+            'ip': ip,
+            'role': role,
+            'etcd': etcd
+        }
 
     def add_node(self):
-        self.stdscr.clear()
-        name = self.make_query(0, 0, f"Name: ")
-        ip = self.make_query(1, 0, f"IP Address: ")
-        role = self.select_checkbox(2, 0, "Role: ", ["kube-master", "kube-node"])
-        etcd = self.select_YN(3, 0, "Etcd: ")
-        self.data_manager.add_node(name, ip, role, etcd)
+        node = self.input_node()
+        if node is None:
+            return None
+        self.data_manager.add_node(node['name'], node['ip'], node['role'], node['etcd'])
 
     def edit_node(self):
         selected_index = 0
         while True:
             self.stdscr.clear()
-            self.stdscr.addstr("Press the space bar to select a node to edit, Enter to go back")
+            self.stdscr.addstr("Press the Enter to select a node to edit, Backspace to go back")
 
             self.print_nodes_table(1, 0, selected_index)
             key = self.stdscr.getch()
@@ -374,16 +408,14 @@ class AstragoInstaller:
                 selected_index += 1
             elif key == curses.KEY_UP and selected_index > 0:
                 selected_index -= 1
-            elif key == ord(' '):
+            elif key == curses.KEY_ENTER or key in [10, 13]:
                 self.stdscr.clear()
                 selected_node = self.data_manager.nodes[selected_index]
-                name = self.make_query(0, 0, f"Name[{selected_node['name']}]: ") or selected_node['name']
-                ip = self.make_query(1, 0, f"IP Address[{selected_node['ip']}]: ") or selected_node['ip']
-                role = self.select_checkbox(2, 0, "Role: ", ["kube-master", "kube-node"],
-                                            selected_node['role'].split(','))
-                etcd = self.select_YN(3, 0, "Etcd: ", selected_node['etcd'])
-                self.data_manager.edit_node(selected_index, name, ip, role, etcd)
-            elif key == curses.KEY_ENTER or key in [10, 13]:
+                node = self.input_node(selected_node)
+                if node is None:
+                    return None
+                self.data_manager.edit_node(selected_index, node['name'], node['ip'], node['role'], node['etcd'])
+            elif key == curses.KEY_BACKSPACE or key == 27:
                 break
 
     def select_YN(self, y, x, query, selected_option='Y'):
@@ -399,6 +431,8 @@ class AstragoInstaller:
                 option_idx = (option_idx - 1) % len(options)
             elif key in [10, 13]:  # Enter key
                 return options[option_idx]
+            elif key == curses.KEY_BACKSPACE or key == 27:
+                return ESCAPE_CODE
         return options[option_idx]
 
     def select_checkbox(self, y, x, query, options, default_check=[]):
@@ -424,6 +458,8 @@ class AstragoInstaller:
             elif key in [10, 13]:  # Enter key
                 if any(selected_roles):
                     break
+            elif key == curses.KEY_BACKSPACE or key == 27:
+                return ESCAPE_CODE
         return ",".join([options[i] for i in range(len(options)) if selected_roles[i]])
 
     def print_sub_menu(self, menu, selected_row_idx):
@@ -459,7 +495,7 @@ class AstragoInstaller:
             if key == curses.KEY_ENTER or key in [10, 13]:
                 break
             if key == 27:
-                return -1
+                return ESCAPE_CODE
 
         return ''.join(input_line)
 
@@ -483,32 +519,32 @@ class AstragoInstaller:
     def install_nfs(self):
 
         self.stdscr.clear()
-        x = 0
-        y = 0
-        self.print_nfs_server_table(y + 2, 0)
+        self.print_nfs_server_table(3, 0)
         check_install = self.make_query(0, 0, "Are you sure you want to install NFS-server? [y/N]: ")
         if check_install == 'Y' or check_install == 'y':
-            password = self.make_query(y + 1, x, "Input Node's Password: ")
-            self.read_and_display_output(self.command_runner.run_install_nfs(password))
+            username = self.make_query(1, 0, "Input Node's Username: ")
+            password = self.make_query(2, 0, "Input Node's Password: ")
+            self.read_and_display_output(self.command_runner.run_install_nfs(username, password))
 
     def install_gpu_driver(self):
         self.stdscr.clear()
-        self.print_nodes_table(2, 0)
+        self.print_nodes_table(3, 0)
         check_install = self.make_query(0, 0,
-                                        "Install the GPU Driver? "
-                                        "The system will reboot after installation [y/N]: ")
+                                        "Install the GPU driver? "
+                                        "the system will reboot [y/N]: ")
         if check_install == 'Y' or check_install == 'y':
-            password = self.make_query(1, 0, "Input Node's Password: ")
-            self.read_and_display_output(self.command_runner.run_install_gpudriver(password))
+            username = self.make_query(1, 0, "Input Node's Username: ")
+            password = self.make_query(2, 0, "Input Node's Password: ")
+            self.read_and_display_output(self.command_runner.run_install_gpudriver(username, password))
 
     def install_kubernetes(self):
         self.stdscr.clear()
         self.print_nodes_table(3, 0)
 
         check_install = self.make_query(0, 0,
-                                        "Check the Node Table. Are you sure you want to install Kubernetes? [y/N]: ")
+                                        "Check the Node Table. Install Kubernetes? [y/N]: ")
         if check_install == 'Y' or check_install == 'y':
-            username = self.make_query(1, 0, "Input Node's Password: ")
+            username = self.make_query(1, 0, "Input Node's Username: ")
             password = self.make_query(2, 0, "Input Node's Password: ")
             self.read_and_display_output(self.command_runner.run_kubespray_install(username, password))
 
@@ -523,23 +559,23 @@ class AstragoInstaller:
 
     def set_nfs_query(self):
         self.stdscr.clear()
-        x = 0
-        y = 0
-
         ip = self.data_manager.nfs_server['ip']
         path = self.data_manager.nfs_server['path']
-        ip = self.make_query(y + 0, x, f"IP Address [{ip}]: ") or ip
-        path = self.make_query(y + 1, x, f"Base Path [{path}]: ") or path
+        ip = self.make_query(0, 0, f"IP Address [{ip}]: ") or ip
+        if ip == ESCAPE_CODE:
+            return None
+        path = self.make_query(1, 0, f"Base Path [{path}]: ") or path
+        if path == ESCAPE_CODE:
+            return None
         self.data_manager.set_nfs_server(ip, path)
 
     def setting_nfs_menu(self):
         self.stdscr.clear()
         menu = ["1. Setting NFS Server", "2. Install NFS Server(Optional)", "3. Back"]
-        self.print_nfs_server_table(y=len(menu), x=0)
         self.navigate_sub_menu(menu, {
             0: self.set_nfs_query,
             1: self.install_nfs
-        })
+        }, self.print_nfs_server_table)
 
     def install_astrago_menu(self):
         menu = ["1. Set NFS Server", "2. Install Astrago", "3. Back"]
@@ -579,6 +615,9 @@ class AstragoInstaller:
                     handlers[current_row]()
                 if current_row == len(menu) - 1:
                     break
+            elif key == curses.KEY_BACKSPACE or key == 27:
+                break
+                curses.KEY_CANCEL
 
     def navigate_menu(self, menu, handlers):
         current_row = 0
@@ -600,6 +639,8 @@ class AstragoInstaller:
                     handlers[current_row]()
                 if current_row == len(menu) - 1:
                     break
+            elif key == curses.KEY_BACKSPACE or key == 27:
+                break
             self.print_menu(menu, current_row)
 
     def main(self, stdscr):
@@ -608,6 +649,7 @@ class AstragoInstaller:
                      "2. Astrago",
                      "3. Close"]
         curses.echo()
+        curses.set_escdelay(1)
         curses.curs_set(0)
         curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_GREEN)
         curses.init_pair(2, curses.COLOR_GREEN, curses.COLOR_BLACK)
