@@ -422,7 +422,8 @@ class AstragoInstaller:
         options = ['Y', 'N']
         option_idx = options.index(selected_option)
         while True:
-            self.stdscr.addstr(y, x, f"{query}: {options[option_idx]}")
+            self.stdscr.addstr(y, x, f"{query}: ")
+            self.stdscr.addstr(y, x + len(query), f"◀ {options[option_idx]} ▶", curses.color_pair(2))
             key = self.stdscr.getch()
 
             if key == curses.KEY_RIGHT:
@@ -485,11 +486,11 @@ class AstragoInstaller:
         input_line = []
         while True:
             self.stdscr.clrtoeol()
-            self.stdscr.addstr(y, x + len(query), ''.join(input_line))
+            self.stdscr.addstr(y, x + len(query), ''.join(input_line), curses.color_pair(2))
             key = self.stdscr.getch()
             if 33 <= key <= 126:
                 input_line.append(chr(key))
-            if key == curses.KEY_BACKSPACE:
+            if key in (curses.KEY_BACKSPACE, 127):
                 if input_line:
                     input_line.pop(len(input_line) - 1)
             if key == curses.KEY_ENTER or key in [10, 13]:
@@ -510,17 +511,14 @@ class AstragoInstaller:
             self.stdscr.getch()
             return None
 
-        x = 0
-        y = 0
-
-        connected_url = self.make_query(y + 0, x, "Connected Url: ")
+        connected_url = self.make_query(0, 0, "Enter Connected Url: ")
         self.read_and_display_output(self.command_runner.run_install_astrago(connected_url))
 
     def install_nfs(self):
 
         self.stdscr.clear()
         self.print_nfs_server_table(3, 0)
-        check_install = self.make_query(0, 0, "Are you sure you want to install NFS-server? [y/N]: ")
+        check_install = self.make_query(0, 0, "Are you sure want to install NFS-server? [y/N]: ")
         if check_install == 'Y' or check_install == 'y':
             username = self.make_query(1, 0, "Input Node's Username: ")
             password = self.make_query(2, 0, "Input Node's Password: ")

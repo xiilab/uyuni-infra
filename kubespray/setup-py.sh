@@ -4,6 +4,13 @@
 
 IS_OFFLINE=${IS_OFFLINE:-false}
 
+dpkg -s python3.11 &> /dev/null
+
+if [ $? -eq 0 ]; then
+   echo "Python 3.11 is already installed."
+   exit 0
+fi
+
 # Install python and dependencies
 echo "===> Install python, venv, etc"
 if [ -e /etc/redhat-release ]; then
