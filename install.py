@@ -115,14 +115,14 @@ class CommandRunner:
         with open(self.kubespray_inventory_path, 'w') as f:
             yaml.dump(inventory, f, default_flow_style=False)
 
-    def run_kubespray_install(self, password):
+    def run_kubespray_install(self, username, password):
         self._save_kubespray_inventory()
         return self._run_command(["ansible-playbook",
                                   "-i", self.kubespray_inventory_path,
                                   "--become", "--become-user=root",
                                   "cluster.yml",
                                   "--extra-vars",
-                                  "ansible_user=root ansible_password={}".format(password)],
+                                  "ansible_user={} ansible_password={}".format(username, password)],
                                  cwd='kubespray')
 
     def _run_command(self, cmd, cwd="."):
@@ -350,8 +350,16 @@ class AstragoInstaller:
                 break
             elif key == ord(' '):
                 self.data_manager.remove_node(selected_index)
-                if selected_index > 1:
+                if selected_index >= 1:
                     selected_index -= 1
+
+    def add_node(self):
+        self.stdscr.clear()
+        name = self.make_query(0, 0, f"Name: ")
+        ip = self.make_query(1, 0, f"IP Address: ")
+        role = self.select_checkbox(2, 0, "Role: ", ["kube-master", "kube-node"])
+        etcd = self.select_YN(3, 0, "Etcd: ")
+        self.data_manager.add_node(name, ip, role, etcd)
 
     def edit_node(self):
         selected_index = 0
@@ -367,79 +375,58 @@ class AstragoInstaller:
             elif key == curses.KEY_UP and selected_index > 0:
                 selected_index -= 1
             elif key == ord(' '):
-                name, ip, role, etcd = self.add_node_query(self.data_manager.nodes[selected_index])
+                self.stdscr.clear()
+                selected_node = self.data_manager.nodes[selected_index]
+                name = self.make_query(0, 0, f"Name[{selected_node['name']}]: ") or selected_node['name']
+                ip = self.make_query(1, 0, f"IP Address[{selected_node['ip']}]: ") or selected_node['ip']
+                role = self.select_checkbox(2, 0, "Role: ", ["kube-master", "kube-node"],
+                                            selected_node['role'].split(','))
+                etcd = self.select_YN(3, 0, "Etcd: ", selected_node['etcd'])
                 self.data_manager.edit_node(selected_index, name, ip, role, etcd)
             elif key == curses.KEY_ENTER or key in [10, 13]:
                 break
 
-    def add_node_query(self, node=None):
-        self.stdscr.clear()
-        x = 0
-        y = 0
-
-        if node:
-            name = node['name']
-            ip = node['ip']
-            roles = node['role'].split(',')
-            etcd = node['etcd']
-        else:
-            name = ""
-            ip = ""
-            roles = []
-            etcd = "N"
-
-        name = self.make_query(y + 0, x, f"Name [{name}]: ") or name
-        ip = self.make_query(y + 1, x, f"IP Address [{ip}]: ") or ip
-
-        role_options = ["kube-master", "kube-node"]
-        etcd_options = ["Y", "N"]
-
-        selected_roles = [role in roles for role in role_options]
-        etcd_idx = etcd_options.index(etcd)
-        role_idx = 0
-
+    def select_YN(self, y, x, query, selected_option='Y'):
+        options = ['Y', 'N']
+        option_idx = options.index(selected_option)
         while True:
-            self.stdscr.addstr(y + 2, x, "Role: ")
-            for idx, option in enumerate(role_options):
-                if selected_roles[idx]:
-                    self.stdscr.addstr(y + 2, x + 7 + idx * 20, "[V] " + option,
-                                       curses.color_pair(2) if idx == role_idx else 0)
-                else:
-                    self.stdscr.addstr(y + 2, x + 7 + idx * 20, "[ ] " + option,
-                                       curses.color_pair(2) if idx == role_idx else 0)
-
+            self.stdscr.addstr(y, x, f"{query}: {options[option_idx]}")
             key = self.stdscr.getch()
 
             if key == curses.KEY_RIGHT:
-                role_idx = (role_idx + 1) % len(role_options)
+                option_idx = (option_idx + 1) % len(options)
             elif key == curses.KEY_LEFT:
-                role_idx = (role_idx - 1) % len(role_options)
+                option_idx = (option_idx - 1) % len(options)
+            elif key in [10, 13]:  # Enter key
+                return options[option_idx]
+        return options[option_idx]
+
+    def select_checkbox(self, y, x, query, options, default_check=[]):
+        selected_roles = [option in default_check for option in options]
+        role_idx = 0
+        while True:
+            self.stdscr.addstr(y, x, query)
+            for idx, option in enumerate(options):
+                if selected_roles[idx]:
+                    self.stdscr.addstr(y, x + len(query) + idx * 20, "[V] " + option,
+                                       curses.color_pair(2) if idx == role_idx else 0)
+                else:
+                    self.stdscr.addstr(y, x + len(query) + idx * 20, "[ ] " + option,
+                                       curses.color_pair(2) if idx == role_idx else 0)
+
+            key = self.stdscr.getch()
+            if key == curses.KEY_RIGHT:
+                role_idx = (role_idx + 1) % len(options)
+            elif key == curses.KEY_LEFT:
+                role_idx = (role_idx - 1) % len(options)
             elif key == ord(' '):
                 selected_roles[role_idx] = not selected_roles[role_idx]
             elif key in [10, 13]:  # Enter key
                 if any(selected_roles):
                     break
+        return ",".join([options[i] for i in range(len(options)) if selected_roles[i]])
 
-        while True:
-            self.stdscr.addstr(y + 3, x, f"Etcd: {etcd_options[etcd_idx]}")
-            key = self.stdscr.getch()
-
-            if key == curses.KEY_RIGHT:
-                etcd_idx = (etcd_idx + 1) % len(etcd_options)
-            elif key == curses.KEY_LEFT:
-                etcd_idx = (etcd_idx - 1) % len(etcd_options)
-            elif key in [10, 13]:  # Enter key
-                break
-
-        role = ",".join([role_options[i] for i in range(len(role_options)) if selected_roles[i]])
-        return name, ip, role, etcd_options[etcd_idx]
-
-    def add_node(self):
-        name, ip, role, etcd = self.add_node_query()
-        self.data_manager.add_node(name, ip, role, etcd)
-
-    def print_sub_menu(self, selected_row_idx, menu):
-        self.stdscr.clear()
+    def print_sub_menu(self, menu, selected_row_idx):
         h, w = self.stdscr.getmaxyx()
         for idx, row in enumerate(menu):
             if len(row) > w:
@@ -455,11 +442,26 @@ class AstragoInstaller:
                     self.stdscr.addstr(y, x, row)
         self.stdscr.refresh()
 
-    def make_query(self, y, x, query, length=20):
+    def make_query(self, y, x, query):
         h, w = self.stdscr.getmaxyx()
         if y < h and x + len(query) < w:
             self.stdscr.addstr(y, x, query)
-        return self.stdscr.getstr(y, x + len(query), length).decode('utf-8')
+        input_line = []
+        while True:
+            self.stdscr.clrtoeol()
+            self.stdscr.addstr(y, x + len(query), ''.join(input_line))
+            key = self.stdscr.getch()
+            if 33 <= key <= 126:
+                input_line.append(chr(key))
+            if key == curses.KEY_BACKSPACE:
+                if input_line:
+                    input_line.pop(len(input_line) - 1)
+            if key == curses.KEY_ENTER or key in [10, 13]:
+                break
+            if key == 27:
+                return -1
+
+        return ''.join(input_line)
 
     def install_astrago(self):
         self.stdscr.clear()
@@ -501,69 +503,43 @@ class AstragoInstaller:
 
     def install_kubernetes(self):
         self.stdscr.clear()
-        self.print_nodes_table(2, 0)
+        self.print_nodes_table(3, 0)
 
         check_install = self.make_query(0, 0,
                                         "Check the Node Table. Are you sure you want to install Kubernetes? [y/N]: ")
         if check_install == 'Y' or check_install == 'y':
-            password = self.make_query(1, 0, "Input Node's Password: ")
-            self.read_and_display_output(self.command_runner.run_kubespray_install(password))
+            username = self.make_query(1, 0, "Input Node's Password: ")
+            password = self.make_query(2, 0, "Input Node's Password: ")
+            self.read_and_display_output(self.command_runner.run_kubespray_install(username, password))
 
     def setting_node_menu(self):
         self.stdscr.clear()
-        current_row = 0
         menu = ["1. Add Node", "2. Remove Node", "3. Edit Node", "4. Back"]
-        while True:
-            self.print_sub_menu(current_row, menu)
-            self.print_nodes_table(len(menu), 0, selected_index=-1)
-            key = self.stdscr.getch()
+        self.navigate_sub_menu(menu, {
+            0: self.add_node,
+            1: self.remove_node,
+            2: self.edit_node
+        }, self.print_nodes_table)
 
-            if key == curses.KEY_UP and current_row > 0:
-                current_row -= 1
-            elif key == curses.KEY_DOWN and current_row < len(menu) - 1:
-                current_row += 1
-            elif key == curses.KEY_ENTER or key in [10, 13]:
-                if current_row == 0:
-                    self.add_node()
-                elif current_row == 1 and len(self.data_manager.nodes) > 0:
-                    self.remove_node()
-                elif current_row == 2 and len(self.data_manager.nodes) > 0:
-                    self.edit_node()
-                elif current_row == 3:
-                    return
-
-    def set_nfs_query(self, nfs_server=None):
+    def set_nfs_query(self):
         self.stdscr.clear()
         x = 0
         y = 0
-        ip = nfs_server['ip']
-        path = nfs_server['path']
+
+        ip = self.data_manager.nfs_server['ip']
+        path = self.data_manager.nfs_server['path']
         ip = self.make_query(y + 0, x, f"IP Address [{ip}]: ") or ip
         path = self.make_query(y + 1, x, f"Base Path [{path}]: ") or path
-        return ip, path
+        self.data_manager.set_nfs_server(ip, path)
 
     def setting_nfs_menu(self):
         self.stdscr.clear()
-        current_row = 0
         menu = ["1. Setting NFS Server", "2. Install NFS Server(Optional)", "3. Back"]
-        while True:
-            self.print_sub_menu(current_row, menu)
-            self.print_nfs_server_table(y=len(menu), x=0)
-
-            key = self.stdscr.getch()
-
-            if key == curses.KEY_UP and current_row > 0:
-                current_row -= 1
-            elif key == curses.KEY_DOWN and current_row < len(menu) - 1:
-                current_row += 1
-            elif key == curses.KEY_ENTER or key in [10, 13]:
-                if current_row == 0:
-                    ip, path = self.set_nfs_query(self.data_manager.nfs_server)
-                    self.data_manager.set_nfs_server(ip, path)
-                elif current_row == 1:
-                    self.install_nfs()
-                elif current_row == 2:
-                    break
+        self.print_nfs_server_table(y=len(menu), x=0)
+        self.navigate_sub_menu(menu, {
+            0: self.set_nfs_query,
+            1: self.install_nfs
+        })
 
     def install_astrago_menu(self):
         menu = ["1. Set NFS Server", "2. Install Astrago", "3. Back"]
@@ -580,6 +556,30 @@ class AstragoInstaller:
             2: self.install_gpu_driver
         })
 
+    def navigate_sub_menu(self, menu, handlers, table_handler=None):
+        current_row = 0
+        while True:
+            self.stdscr.clear()
+            self.print_sub_menu(menu, current_row)
+            if table_handler is not None:
+                table_handler(len(menu), 0)
+            key = self.stdscr.getch()
+            if key == curses.KEY_UP and current_row > 0:
+                current_row -= 1
+            elif key == curses.KEY_DOWN and current_row < len(menu) - 1:
+                current_row += 1
+            elif key in range(49, 49 + len(menu)):
+                current_row = key - 48 - 1
+                if current_row in handlers:
+                    handlers[current_row]()
+                if current_row == len(menu) - 1:
+                    break
+            elif key == curses.KEY_ENTER or key in [10, 13]:
+                if current_row in handlers:
+                    handlers[current_row]()
+                if current_row == len(menu) - 1:
+                    break
+
     def navigate_menu(self, menu, handlers):
         current_row = 0
         self.print_menu(menu, current_row)
@@ -589,6 +589,12 @@ class AstragoInstaller:
                 current_row -= 1
             elif key == curses.KEY_DOWN and current_row < len(menu) - 1:
                 current_row += 1
+            elif key in range(49, 49 + len(menu)):
+                current_row = key - 48 - 1
+                if current_row in handlers:
+                    handlers[current_row]()
+                if current_row == len(menu) - 1:
+                    break
             elif key == curses.KEY_ENTER or key in [10, 13]:
                 if current_row in handlers:
                     handlers[current_row]()
