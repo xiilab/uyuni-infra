@@ -1,5 +1,6 @@
 import curses
 import os
+import re
 import subprocess
 from datetime import datetime
 from pathlib import Path
@@ -7,6 +8,9 @@ from pathlib import Path
 import yaml
 
 ESCAPE_CODE = -1
+REGEX_NODE_NAME = r'^[a-zA-Z0-9-]+$'
+REGEX_IP_ADDRESS = r'^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}$'
+REGEX_PATH = r'^\/(?:[a-zA-Z0-9_-]+\/?)*$'
 
 
 class DataManager:
@@ -369,19 +373,19 @@ class AstragoInstaller:
                 'etcd': 'Y'
             }
         self.stdscr.clear()
-        name = self.make_query(0, 0, f"Name[{node['name']}]: ") or node['name']
+        name = self.make_query(0, 0, f"Name[{node['name']}]: ", default_value=node['name'], valid_regex=REGEX_NODE_NAME)
         if name == ESCAPE_CODE:
-            return None
-        ip = self.make_query(1, 0, f"IP Address[{node['ip']}]: ") or node['ip']
+            return ESCAPE_CODE
+        ip = self.make_query(1, 0, f"IP Address[{node['ip']}]: ", default_value=node['ip'],
+                             valid_regex=REGEX_IP_ADDRESS)
         if ip == ESCAPE_CODE:
-            return None
-        role = self.select_checkbox(2, 0, f"Role: ", ["kube-master", "kube-node"], node['role'].split(',')) or node[
-            'role']
+            return ESCAPE_CODE
+        role = self.select_checkbox(2, 0, f"Role: ", ["kube-master", "kube-node"], node['role'].split(','))
         if role == ESCAPE_CODE:
-            return None
-        etcd = self.select_YN(3, 0, f"Etcd: ", node['etcd']) or node['etcd']
+            return ESCAPE_CODE
+        etcd = self.select_YN(3, 0, f"Etcd: ", node['etcd'])
         if etcd == ESCAPE_CODE:
-            return None
+            return ESCAPE_CODE
         return {
             'name': name,
             'ip': ip,
@@ -391,7 +395,7 @@ class AstragoInstaller:
 
     def add_node(self):
         node = self.input_node()
-        if node is None:
+        if node == ESCAPE_CODE:
             return None
         self.data_manager.add_node(node['name'], node['ip'], node['role'], node['etcd'])
 
@@ -412,9 +416,8 @@ class AstragoInstaller:
                 self.stdscr.clear()
                 selected_node = self.data_manager.nodes[selected_index]
                 node = self.input_node(selected_node)
-                if node is None:
-                    return None
-                self.data_manager.edit_node(selected_index, node['name'], node['ip'], node['role'], node['etcd'])
+                if node != ESCAPE_CODE:
+                    self.data_manager.edit_node(selected_index, node['name'], node['ip'], node['role'], node['etcd'])
             elif key == curses.KEY_BACKSPACE or key == 27:
                 break
 
@@ -479,12 +482,12 @@ class AstragoInstaller:
                     self.stdscr.addstr(y, x, row)
         self.stdscr.refresh()
 
-    def make_query(self, y, x, query):
+    def make_query(self, y, x, query, default_value=None, valid_regex=None):
         h, w = self.stdscr.getmaxyx()
-        if y < h and x + len(query) < w:
-            self.stdscr.addstr(y, x, query)
         input_line = []
         while True:
+            if y < h and x + len(query) < w:
+                self.stdscr.addstr(y, x, query)
             self.stdscr.clrtoeol()
             self.stdscr.addstr(y, x + len(query), ''.join(input_line), curses.color_pair(2))
             key = self.stdscr.getch()
@@ -494,7 +497,12 @@ class AstragoInstaller:
                 if input_line:
                     input_line.pop(len(input_line) - 1)
             if key == curses.KEY_ENTER or key in [10, 13]:
-                break
+                if input_line:
+                    if not valid_regex or re.fullmatch(valid_regex, ''.join(input_line)):
+                        return ''.join(input_line)
+                else:
+                    if default_value is not None:
+                        return default_value
             if key == 27:
                 return ESCAPE_CODE
 
@@ -518,7 +526,7 @@ class AstragoInstaller:
 
         self.stdscr.clear()
         self.print_nfs_server_table(3, 0)
-        check_install = self.make_query(0, 0, "Are you sure want to install NFS-server? [y/N]: ")
+        check_install = self.make_query(0, 0, "Are you sure want to install NFS-server? [y/N]: ", default_value='N')
         if check_install == 'Y' or check_install == 'y':
             username = self.make_query(1, 0, "Input Node's Username: ")
             password = self.make_query(2, 0, "Input Node's Password: ")
@@ -529,7 +537,7 @@ class AstragoInstaller:
         self.print_nodes_table(3, 0)
         check_install = self.make_query(0, 0,
                                         "Install the GPU driver? "
-                                        "the system will reboot [y/N]: ")
+                                        "the system will reboot [y/N]: ", default_value='N')
         if check_install == 'Y' or check_install == 'y':
             username = self.make_query(1, 0, "Input Node's Username: ")
             password = self.make_query(2, 0, "Input Node's Password: ")
@@ -540,7 +548,7 @@ class AstragoInstaller:
         self.print_nodes_table(3, 0)
 
         check_install = self.make_query(0, 0,
-                                        "Check the Node Table. Install Kubernetes? [y/N]: ")
+                                        "Check the Node Table. Install Kubernetes? [y/N]: ", default_value='N')
         if check_install == 'Y' or check_install == 'y':
             username = self.make_query(1, 0, "Input Node's Username: ")
             password = self.make_query(2, 0, "Input Node's Password: ")
@@ -559,10 +567,10 @@ class AstragoInstaller:
         self.stdscr.clear()
         ip = self.data_manager.nfs_server['ip']
         path = self.data_manager.nfs_server['path']
-        ip = self.make_query(0, 0, f"IP Address [{ip}]: ") or ip
+        ip = self.make_query(0, 0, f"IP Address [{ip}]: ", default_value=ip, valid_regex=REGEX_IP_ADDRESS)
         if ip == ESCAPE_CODE:
             return None
-        path = self.make_query(1, 0, f"Base Path [{path}]: ") or path
+        path = self.make_query(1, 0, f"Base Path [{path}]: ", default_value=path, valid_regex=REGEX_PATH)
         if path == ESCAPE_CODE:
             return None
         self.data_manager.set_nfs_server(ip, path)
