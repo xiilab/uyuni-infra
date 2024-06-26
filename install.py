@@ -2,7 +2,7 @@ import curses
 import os
 import re
 import subprocess
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
 import yaml
@@ -249,7 +249,10 @@ class AstragoInstaller:
             "/_/  |_/____/\\__/_/   \\__,_/\\__, /\\____/   ",
             "                           /____/          ",
         ]
-        if datetime.today().month == 10 and datetime.today().day == 31:
+        now_utc = datetime.now(timezone.utc)
+        now_kst = now_utc + timedelta(hours=9)
+        current_hour = now_kst.hour
+        if current_hour >= 21:
             title = [
                 " ▄▄▄        ██████ ▄▄▄█████▓ ██▀███   ▄▄▄        ▄████  ▒█████  ",
                 "▒████▄    ▒██    ▒ ▓  ██▒ ▓▒▓██ ▒ ██▒▒████▄     ██▒ ▀█▒▒██▒  ██▒",
