@@ -520,6 +520,8 @@ class AstragoInstaller:
             return None
 
         connected_url = self.make_query(0, 0, "Enter Connected Url: ")
+        if connected_url == ESCAPE_CODE:
+            return None
         self.read_and_display_output(self.command_runner.run_install_astrago(connected_url))
 
     def install_nfs(self):
@@ -529,7 +531,11 @@ class AstragoInstaller:
         check_install = self.make_query(0, 0, "Are you sure want to install NFS-server? [y/N]: ", default_value='N')
         if check_install == 'Y' or check_install == 'y':
             username = self.make_query(1, 0, "Input Node's Username: ")
+            if username == ESCAPE_CODE:
+                return None
             password = self.make_query(2, 0, "Input Node's Password: ")
+            if password == ESCAPE_CODE:
+                return None
             self.read_and_display_output(self.command_runner.run_install_nfs(username, password))
 
     def install_gpu_driver(self):
@@ -540,7 +546,11 @@ class AstragoInstaller:
                                         "the system will reboot [y/N]: ", default_value='N')
         if check_install == 'Y' or check_install == 'y':
             username = self.make_query(1, 0, "Input Node's Username: ")
+            if username == ESCAPE_CODE:
+                return None
             password = self.make_query(2, 0, "Input Node's Password: ")
+            if password == ESCAPE_CODE:
+                return None
             self.read_and_display_output(self.command_runner.run_install_gpudriver(username, password))
 
     def install_kubernetes(self):
@@ -551,7 +561,11 @@ class AstragoInstaller:
                                         "Check the Node Table. Install Kubernetes? [y/N]: ", default_value='N')
         if check_install == 'Y' or check_install == 'y':
             username = self.make_query(1, 0, "Input Node's Username: ")
+            if username == ESCAPE_CODE:
+                return None
             password = self.make_query(2, 0, "Input Node's Password: ")
+            if password == ESCAPE_CODE:
+                return None
             self.read_and_display_output(self.command_runner.run_kubespray_install(username, password))
 
     def setting_node_menu(self):
