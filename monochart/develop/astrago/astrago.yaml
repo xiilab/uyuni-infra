@@ -669,7 +669,7 @@ spec:
         - name: astrago
           securityContext:
             {}          
-          image: "harbor.xiilab.com:32443/astrago/batch:dev-f177"          
+          image: "harbor.xiilab.com:32443/astrago/batch:dev-b687"          
           env:
             - name: SPRING_DATASOURCE_URL
               value: "jdbc:mariadb://astrago-mariadb:3306/astrago"
@@ -735,7 +735,7 @@ spec:
         - name: astrago
           securityContext:
             {}          
-          image: "harbor.xiilab.com:32443/astrago/core:dev-f177"
+          image: "harbor.xiilab.com:32443/astrago/core:dev-b687"
           imagePullPolicy: Always
           env:
           - name: SPRING_DATASOURCE_URL
@@ -804,7 +804,7 @@ spec:
         - name: astrago
           securityContext:
             {}          
-          image: "harbor.xiilab.com:32443/astrago/frontend:dev-9ba1"          
+          image: "harbor.xiilab.com:32443/astrago/frontend:dev-c65b"          
           env:
           - name: KEYCLOAK_HOST
             value: "http://10.61.3.12:30001"
@@ -961,7 +961,7 @@ spec:
         - name: astrago
           securityContext:
             {}
-          image: "harbor.xiilab.com:32443/astrago/monitor:dev-f177"            
+          image: "harbor.xiilab.com:32443/astrago/monitor:dev-b687"            
           env:
           - name: SPRING_DATASOURCE_URL
             value: "jdbc:mariadb://astrago-mariadb:3306/astrago"
