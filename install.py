@@ -328,7 +328,7 @@ class AstragoInstaller:
         self.stdscr.refresh()
 
     def print_nfs_server_table(self, y, x):
-        header = ["IP Address", "Base Path"]
+        header = ["NFS IP Address", "NFS Base Path"]
         data = [(
             self.data_manager.nfs_server['ip'],
             self.data_manager.nfs_server['path']
@@ -522,6 +522,8 @@ class AstragoInstaller:
             self.stdscr.getch()
             return None
 
+        self.print_nfs_server_table(1, 0)
+
         connected_url = self.make_query(0, 0, "Enter Connected Url: ")
         if connected_url == ESCAPE_CODE:
             return None
@@ -683,5 +685,4 @@ class AstragoInstaller:
 
 
 if __name__ == "__main__":
-    installer = AstragoInstaller()
-    curses.wrapper(installer.main)
+    curses.wrapper(AstragoInstaller().main)
