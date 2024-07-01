@@ -145,7 +145,9 @@ class CommandRunner:
         os.makedirs('environments/astrago', exist_ok=True)
         with open('environments/astrago/values.yaml', 'w') as file:
             yaml.dump(helmfile_env, file, default_flow_style=False, sort_keys=False)
-        os.putenv('KUBECONFIG', Path.joinpath(Path.cwd(), "kubespray/inventory/mycluster/artifacts/admin.conf"))
+        
+        if Path(Path.joinpath(Path.cwd(), "kubespray/inventory/mycluster/artifacts/admin.conf")).is_file():
+            os.putenv('KUBECONFIG', Path.joinpath(Path.cwd(), "kubespray/inventory/mycluster/artifacts/admin.conf"))
         return self._run_command([Path.joinpath(Path.cwd(), "tools/ubuntu/helmfile"), "-b",
                                   Path.joinpath(Path.cwd(), "tools/ubuntu/helm"), "-e", "astrago", "sync"])
 
