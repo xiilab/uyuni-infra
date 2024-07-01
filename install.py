@@ -566,10 +566,10 @@ class AstragoInstaller:
         check_install = self.make_query(0, 0,
                                         "Check the Node Table. Install Kubernetes? [y/N]: ", default_value='N')
         if check_install == 'Y' or check_install == 'y':
-            username = self.make_query(1, 0, "Input Node's Username: ")
+            username = self.make_query(1, 0, "Input Node's Username: ", default_value='')
             if username == ESCAPE_CODE:
                 return None
-            password = self.make_query(2, 0, "Input Node's Password: ")
+            password = self.make_query(2, 0, "Input Node's Password: ", default_value='')
             if password == ESCAPE_CODE:
                 return None
             self.read_and_display_output(self.command_runner.run_kubespray_install(username, password))

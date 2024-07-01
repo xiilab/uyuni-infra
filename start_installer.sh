@@ -1,7 +1,10 @@
 #!/bin/bash
 
+export LC_ALL=C.UTF-8
+export LANG=C.UTF-8
+export LANGUAGE=C.UTF-8
+
 CURRENT_DIR=$(dirname "$(realpath "$0")")
-#!/bin/bash
 
 . /etc/os-release
 
@@ -63,9 +66,6 @@ if ! command -v sshpass &> /dev/null; then
 else
     echo "sshpass is already installed."
 fi
-
-
-export LC_ALL=en_US.UTF-8
 
 python3.11 -m venv ~/.venv/3.11
 source ~/.venv/3.11/bin/activate
