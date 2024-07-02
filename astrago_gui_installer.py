@@ -227,7 +227,7 @@ class AstragoInstaller:
                 self.stdscr.erase()  # Use erase instead of clear to avoid full screen flicker
                 _, w = self.stdscr.getmaxyx()
                 for idx, line in enumerate(output_lines):
-                    self.stdscr.addstr(idx, 0, line[:w - 1])
+                    self.stdscr.addstr(idx, 0, line[:w - 1], curses.color_pair(2))
                 self.stdscr.refresh()
         process.stdout.close()
         process.wait()
@@ -235,7 +235,7 @@ class AstragoInstaller:
         output_lines.append("Press any key to return to the menu")
         h, w = self.stdscr.getmaxyx()
         for idx, line in enumerate(output_lines[-h + 1:]):
-            self.stdscr.addstr(idx, 0, line[:w - 1])
+            self.stdscr.addstr(idx, 0, line[:w - 1], curses.color_pair(2))
         self.stdscr.refresh()
         curses.flushinp()
         self.stdscr.getch()
