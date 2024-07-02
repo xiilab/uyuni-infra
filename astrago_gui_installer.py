@@ -530,49 +530,31 @@ class AstragoInstaller:
             return None
         self.read_and_display_output(self.command_runner.run_install_astrago(connected_url))
 
-    def install_nfs(self):
-
+    def install_ansible_query(self, query, install_method, show_table):
         self.stdscr.clear()
-        self.print_nfs_server_table(3, 0)
-        check_install = self.make_query(0, 0, "Are you sure want to install NFS-server? [y/N]: ", default_value='N')
+        if show_table is not None:
+            show_table(3, 0)
+        check_install = self.make_query(0, 0, query, default_value='N')
         if check_install == 'Y' or check_install == 'y':
-            username = self.make_query(1, 0, "Input Node's Username: ")
+            username = self.make_query(1, 0, "Input SSH Username: ")
             if username == ESCAPE_CODE:
                 return None
-            password = self.make_query(2, 0, "Input Node's Password: ")
+            password = self.make_query(2, 0, "Input SSH Password: ")
             if password == ESCAPE_CODE:
                 return None
-            self.read_and_display_output(self.command_runner.run_install_nfs(username, password))
+            self.read_and_display_output(install_method(username, password))
+
+    def install_nfs(self):
+        self.install_ansible_query("Are you sure want to install NFS-server? [y/N]: ",
+                                   self.command_runner.run_install_nfs, self.print_nfs_server_table)
 
     def install_gpu_driver(self):
-        self.stdscr.clear()
-        self.print_nodes_table(3, 0)
-        check_install = self.make_query(0, 0,
-                                        "Install the GPU driver? "
-                                        "the system will reboot [y/N]: ", default_value='N')
-        if check_install == 'Y' or check_install == 'y':
-            username = self.make_query(1, 0, "Input Node's Username: ")
-            if username == ESCAPE_CODE:
-                return None
-            password = self.make_query(2, 0, "Input Node's Password: ")
-            if password == ESCAPE_CODE:
-                return None
-            self.read_and_display_output(self.command_runner.run_install_gpudriver(username, password))
+        self.install_ansible_query("Install the GPU driver? the system will reboot [y/N]: ",
+                                   self.command_runner.run_install_gpudriver, self.print_nodes_table)
 
     def install_kubernetes(self):
-        self.stdscr.clear()
-        self.print_nodes_table(3, 0)
-
-        check_install = self.make_query(0, 0,
-                                        "Check the Node Table. Install Kubernetes? [y/N]: ", default_value='N')
-        if check_install == 'Y' or check_install == 'y':
-            username = self.make_query(1, 0, "Input Node's Username: ", default_value='')
-            if username == ESCAPE_CODE:
-                return None
-            password = self.make_query(2, 0, "Input Node's Password: ", default_value='')
-            if password == ESCAPE_CODE:
-                return None
-            self.read_and_display_output(self.command_runner.run_kubespray_install(username, password))
+        self.install_ansible_query("Check the Node Table. Install Kubernetes? [y/N]: ",
+                                   self.command_runner.run_kubespray_install, self.print_nodes_table)
 
     def setting_node_menu(self):
         self.stdscr.clear()
